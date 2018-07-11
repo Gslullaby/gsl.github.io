@@ -3,12 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle:
-description:
+title: Gsl's Blog
+subtitle: 年轻人要认真
 keywords:
-author: John Doe
-language:
+author: 何从
+language: zh
 timezone:
 
 # URL
@@ -17,6 +16,63 @@ url: http://yoursite.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
+
+# Custom Setting Start
+
+# 网站综合内容设置
+SEOTitle: Gsl的博客 | Gsl's Blog
+header-img: img/home-bg.jpg
+email: deemo.caidao@gmail.com
+description: "何从的博客"
+keyword: "腾讯"
+
+# SNS settings
+# 一些社交平台地址，支持以下几种：
+weibo_username:     563378718
+zhihu_username:     ai-er-lan-xue-da
+github_username:    Gslullaby
+twitter_username:   iconie_alloy
+facebook_username:  xiaotao.nie.5
+linkedin_username:  小涛-聂-80964aba
+
+# Build settings
+anchorjs: true                          # if you want to customize anchor. check out line:181 of `post.html`
+sidebar-avatar: img/avatar.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+
+# Friends
+# 友情链接
+friends: [
+    {
+        title: "github",
+        href: "https://github.com/"
+    },{
+        title: "It helps SEO",
+        href: "#"
+    }
+]
+
+comment:
+  type: gitment
+  id: 41344cdf3454a546e67b
+  secret: 72715eff19130b6b92b25934d4e582980395b33c
+  owner: Gslullaby
+  repo: gsl-blog
+
+donate:
+  img: img/donate.jpg
+  content: 感谢鼓励
+
+# The following content is not recommended to modify
+# 搜索数据文件路径设置，不建议改动：
+search:
+  path: search.json
+  field: post
+
+# 文章样式(是否首行缩进)：
+post_style:
+  indent: indent
+
+# Custom Setting End
 
 # Directory
 source_dir: source
@@ -43,7 +99,7 @@ highlight:
   line_number: true
   auto_detect: false
   tab_replace:
-  
+
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
 # per_page: Posts displayed per page. (0 = disable pagination)
@@ -52,7 +108,7 @@ index_generator:
   path: ''
   per_page: 10
   order_by: -date
-  
+
 # Category & Tag
 default_category: uncategorized
 category_map:
@@ -73,7 +129,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: hexo-theme-aircloud
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
