@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Gsl
-subtitle:
+title: 何从
+subtitle: 莫强求，莫将就
 description:
 keywords:
-author:
+author: 何从
 language: zh-Hans
 timezone:
 
@@ -81,3 +81,11 @@ deploy:
   type: git
   repo: https://github.com/Gslullaby/Gslullaby.github.io.git
   branch: master
+
+
+# Search
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
