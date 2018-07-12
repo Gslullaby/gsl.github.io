@@ -7,7 +7,7 @@ title: Gsl's Blog
 subtitle: 年轻人要认真
 keywords:
 author: 何从
-language: zh
+language: zh-Hans
 timezone:
 
 # URL
@@ -70,7 +70,7 @@ search:
 
 # 文章样式(是否首行缩进)：
 post_style:
-  indent: indent
+indent: indent
 
 # Custom Setting End
 
@@ -129,7 +129,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: hexo-theme-aircloud
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
