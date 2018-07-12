@@ -3,17 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 何从
-subtitle: 莫强求，莫将就
+title: Gsl's blog
+subtitle: Keep Trying
 description:
 keywords:
 author: 何从
+signature: 随行、随记
 language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://gslullaby.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -89,3 +90,5 @@ search:
   field: post
   format: html
   limit: 10000
+
+# SEO 优化
