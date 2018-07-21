@@ -9,7 +9,7 @@ keywords:
 - Hexo
 - GitHub Pages
 - Blog
-description: 搭建个人blog
+description: 网上关于GitHub Pages + Hexo搭建博客的教程较多，因此此文旨在查缺补漏，记录整个流程，汇总一些参考的优质blog，以及梳理我在搭建过程中遇到的问题。
 ---
 网上关于GitHub Pages + Hexo搭建博客的教程较多，因此此文旨在查缺补漏，记录整个流程，汇总一些参考的优质blog，以及梳理我在搭建过程中遇到的问题。
 
