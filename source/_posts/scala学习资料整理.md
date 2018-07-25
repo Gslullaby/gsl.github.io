@@ -10,7 +10,6 @@ description:
 **[twitter - Effective Scala](http://twitter.github.io/effectivescala/)** Twitter的Scala最佳实践    
 
 ## 优质blog
-[王宏江scala系列](https://hongjiang.info/scala/)
-
+**[王宏江scala系列](https://hongjiang.info/scala/)**
 
 ##### 持续更新中...
