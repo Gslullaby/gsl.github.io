@@ -1,8 +1,13 @@
 ---
 title: scala学习资料整理
 date: 2018-07-21 15:57:35
-tags: scala
-keywords: scala 学习资料
+tags:
+- scala
+categories:
+- scala
+keywords:
+- scala
+- 学习资料
 description:
 ---
 ## 基础
