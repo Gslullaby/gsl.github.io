@@ -16,5 +16,15 @@ description:
 
 ## 优质blog
 **[王宏江scala系列](https://hongjiang.info/scala/)**
+**[李浩毅blog](http://www.lihaoyi.com/)
+
+#### 集合
+**[Scala中的集合](https://scala.cool/)**
+**[Why scala.collection.Traversable Is Bad Design
+](https://alexn.org/blog/2017/01/13/traversable.html)**
+**[Scala Collection的性能(李浩毅blog的译文)](http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/)**
+
+#### 零散
+**[Scala中的下划线](https://my.oschina.net/joymufeng/blog/863823)**
 
 ##### 持续更新中...
