@@ -11,5 +11,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: https://gslullaby.github.io/sitemap.xml
-Sitemap: https://gslullaby.github.io/baidusitemap.xml
+Sitemap: https://lipengw.github.io/sitemap.xml
+Sitemap: https://lipengw.github.io/baidusitemap.xml
