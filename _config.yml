@@ -14,7 +14,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://lipengw.github.io
+url: https://lipengw.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -82,7 +82,6 @@ deploy:
 - type: git
   repo: https://github.com/LiPengW/LiPengW.github.io.git
   branch: master
-- type: baidu_url_submitter
 
 
 # Search
