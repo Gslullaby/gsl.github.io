@@ -4,12 +4,12 @@
 
 # Site
 title: Gsl's blog
-subtitle: Keep Trying
+subtitle: 静待花开
 description:
 keywords:
 author: 何从
-signature: 随行、随记
-language: zh-Hans
+signature: 逆风而行，更需要凝神静气、脚踏实地。
+language: en
 timezone:
 
 # URL
@@ -74,7 +74,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next
+theme: next-new
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
