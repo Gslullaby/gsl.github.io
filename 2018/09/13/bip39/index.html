@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lipengw.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识 原文链接 概要此篇BIP介绍如何为确定性钱包生成助记词或者助记句（一组容易记忆的单词）本文包括两部分：  生成助记词 将助记词转化为二进制种子。种子可以用于生成BIP 32">
+<meta name="keywords" content="BIP,区块链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BIP 39">
+<meta property="og:url" content="https://lipengw.github.io/2018/09/13/bip39/index.html">
+<meta property="og:site_name" content="Gsl&#39;s blog">
+<meta property="og:description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识 原文链接 概要此篇BIP介绍如何为确定性钱包生成助记词或者助记句（一组容易记忆的单词）本文包括两部分：  生成助记词 将助记词转化为二进制种子。种子可以用于生成BIP 32">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://lipengw.github.io/2018/09/13/bip39/ENT-CS-MS.png">
+<meta property="og:updated_time" content="2019-08-18T06:57:05.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BIP 39">
+<meta name="twitter:description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识 原文链接 概要此篇BIP介绍如何为确定性钱包生成助记词或者助记句（一组容易记忆的单词）本文包括两部分：  生成助记词 将助记词转化为二进制种子。种子可以用于生成BIP 32">
+<meta name="twitter:image" content="https://lipengw.github.io/2018/09/13/bip39/ENT-CS-MS.png">
+
+<link rel="canonical" href="https://lipengw.github.io/2018/09/13/bip39/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>BIP 39 | Gsl's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Gsl's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">静待花开</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lipengw.github.io/2018/09/13/bip39/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="何从">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gsl's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BIP 39
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-13 11:16:33" itemprop="dateCreated datePublished" datetime="2018-09-13T11:16:33+08:00">2018-09-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-08-18 14:57:05" itemprop="dateModified" datetime="2019-08-18T14:57:05+08:00">2019-08-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识</p>
+<p><a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>此篇BIP介绍如何为确定性钱包生成助记词或者助记句（一组容易记忆的单词）<br>本文包括两部分：</p>
+<ol>
+<li>生成助记词</li>
+<li>将助记词转化为二进制种子。种子可以用于生成BIP 32中所描述的确定性钱包</li>
+</ol>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>原生的二进制信息/十六进制的钱包种子，对人们来说是很难记录并保存的，而且在保存的过程中也容易出错。如果换成一组单词或句子，则友好的多。句子可以很方便的写在纸上或其他隐秘的地方</p>
+<h2 id="生成助记词"><a href="#生成助记词" class="headerlink" title="生成助记词"></a>生成助记词</h2><h4 id="第一步-–-生成初始熵"><a href="#第一步-–-生成初始熵" class="headerlink" title="第一步 – 生成初始熵"></a>第一步 – 生成初始熵</h4><p>熵的位数必须为32的整数倍。熵越长，越安全，相应的助记词也就越多。这里定位熵的长度为ENT，ENT的取值范围为128位-256位</p>
+<h4 id="第二步-–-计算校验和"><a href="#第二步-–-计算校验和" class="headerlink" title="第二步 – 计算校验和"></a>第二步 – 计算校验和</h4><p>计算方式，对初始熵计算SHA256 hash，取其前 ENT/32 位作为校验和CS。</p>
+<h4 id="第三部-–-生成助记词"><a href="#第三部-–-生成助记词" class="headerlink" title="第三部 – 生成助记词"></a>第三部 – 生成助记词</h4><p>然后将校验和拼接在初始熵的尾部，即ENT+CS位数据，再划分为整数个11bit组，即（ENT+CS）/ 11组，记为MS，每个组可以编码为0-2047中的一个正整数，刚好对应于助记词表中的一个单词的下标。然后将分组按照下标转换为一组助记词</p>
+<p>下图描述了ENT，CS，MS的关系    </p>
+<img src="/2018/09/13/bip39/ENT-CS-MS.png">
+
+<h4 id="助记词表"><a href="#助记词表" class="headerlink" title="助记词表"></a>助记词表</h4><p>一个理想的助记词表应该拥有以下特性</p>
+<ol>
+<li><p>选词聪明</p>
+<blockquote>
+<p>所选的词应该满足通过单词的前四个字符就可以确定该单词    </p>
+</blockquote>
+</li>
+<li><p>避免相近次出现</p>
+<blockquote>
+<p>如’build’/‘built’、’woman’/‘women’、’quick’/‘quickly’。这类相似词，不仅让记忆句子变得困难，而且也更容易出错</p>
+</blockquote>
+</li>
+<li><p>助记词列表需要排序</p>
+<blockquote>
+<p>有序的助记词列表，可以让词查找更加有效率，同时也可以使用前缀树，以便更好的压缩</p>
+</blockquote>
+</li>
+</ol>
+<p>注：助记词表可以包含本地字符，但是必须使用（NFKD）UTF-8编码</p>
+<h2 id="助记词转化为种子（seed）"><a href="#助记词转化为种子（seed）" class="headerlink" title="助记词转化为种子（seed）"></a>助记词转化为种子（seed）</h2><p>有些用户可能想用passphrase对助记词进行加密。如果没有设置passphrase则使用“”空字符代替<br>生成种子使用的是<strong>PBKDF2</strong>算法该算法的<br>该算法的输入为</p>
+<ul>
+<li>助记词作为password参数</li>
+<li>“mnemonic”+passphrase作为salt参数</li>
+<li>迭代次数设置为2048</li>
+<li>使用HMAC-SHA512作为伪随机数生成函数    </li>
+</ul>
+<p>输出为</p>
+<ul>
+<li>512位的种子</li>
+</ul>
+<p>种子用于生成BIP 32中描述的确定性钱包（HD Wallet）    </p>
+<p>由于seed的生成完全独立于mnemonic的生成，这使得代码非常简洁。并且对助记词没有任何限制，用户可以实现自己的单词表，甚至是整个助记词的生成</p>
+<p>虽然可以使用其他算法生成的助记符，但不建议这样做，并且APP中必须使用助记词表计算助记词的校验和，如果无效则应该提示用户。</p>
+<p>注：错误的passphrase虽然也能生成有效的seed，并且生成钱包，但只有正确的passphrase生成的seed，才能获取到拥有财产的钱包</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/区块链/" rel="tag"># 区块链</a>
+              <a href="/tags/BIP/" rel="tag"># BIP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/07/23/scala中的函数/" rel="prev" title="scala中的函数">
+      <i class="fa fa-chevron-left"></i> scala中的函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/09/27/bip32/" rel="next" title="BIP 32">
+      BIP 32 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概要"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动机"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成助记词"><span class="nav-number">3.</span> <span class="nav-text">生成助记词</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步-–-生成初始熵"><span class="nav-number">3.0.1.</span> <span class="nav-text">第一步 – 生成初始熵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步-–-计算校验和"><span class="nav-number">3.0.2.</span> <span class="nav-text">第二步 – 计算校验和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三部-–-生成助记词"><span class="nav-number">3.0.3.</span> <span class="nav-text">第三部 – 生成助记词</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#助记词表"><span class="nav-number">3.0.4.</span> <span class="nav-text">助记词表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#助记词转化为种子（seed）"><span class="nav-number">4.</span> <span class="nav-text">助记词转化为种子（seed）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">何从</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">何从</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

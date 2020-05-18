@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lipengw.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="此篇为BIP 32的译文，介绍分层确定性钱包原文链接 概述本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包 该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现     本文分为两部分  第一部分主要介绍如何从单一种子派生出一颗秘钥树 第二部分主要介绍如何利用派生">
+<meta name="keywords" content="BIP,区块链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BIP 32">
+<meta property="og:url" content="https://lipengw.github.io/2018/09/27/bip32/index.html">
+<meta property="og:site_name" content="Gsl&#39;s blog">
+<meta property="og:description" content="此篇为BIP 32的译文，介绍分层确定性钱包原文链接 概述本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包 该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现     本文分为两部分  第一部分主要介绍如何从单一种子派生出一颗秘钥树 第二部分主要介绍如何利用派生">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://lipengw.github.io/2018/09/27/bip32/derivation.png">
+<meta property="og:updated_time" content="2019-08-18T06:57:05.170Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BIP 32">
+<meta name="twitter:description" content="此篇为BIP 32的译文，介绍分层确定性钱包原文链接 概述本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包 该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现     本文分为两部分  第一部分主要介绍如何从单一种子派生出一颗秘钥树 第二部分主要介绍如何利用派生">
+<meta name="twitter:image" content="https://lipengw.github.io/2018/09/27/bip32/derivation.png">
+
+<link rel="canonical" href="https://lipengw.github.io/2018/09/27/bip32/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>BIP 32 | Gsl's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Gsl's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">静待花开</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lipengw.github.io/2018/09/27/bip32/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="何从">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gsl's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BIP 32
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-27 17:29:35" itemprop="dateCreated datePublished" datetime="2018-09-27T17:29:35+08:00">2018-09-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-08-18 14:57:05" itemprop="dateModified" datetime="2019-08-18T14:57:05+08:00">2019-08-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
+<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
+<p>本文分为两部分</p>
+<ul>
+<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
+<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
+</ul>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
+<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
+<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
+<ul>
+<li>整数模数曲线顺序（用n表示）</li>
+<li>曲线上点的坐标</li>
+<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
+</ul>
+<p>作为标准的转换函数，我们假设</p>
+<ul>
+<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
+<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
+<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
+<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
+<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
+</ul>
+<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
+<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
+<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
+</ol>
+<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
+<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
+</ol>
+<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
+<ol>
+<li>返回值K = point(k)</li>
+<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
+</ol>
+<p>两种通过父私钥计算子公钥的方法</p>
+<ol>
+<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
+<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
+</ol>
+<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
+<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
+<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
+<ul>
+<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
+<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
+</ul>
+<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
+<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
+<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
+<p>密钥id的钱32位称为指纹</p>
+<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
+<ol>
+<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
+<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
+<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
+<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
+<li>32byte：链码</li>
+<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
+</ol>
+<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
+<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
+<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
+<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
+<ol>
+<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
+<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
+<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
+<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
+</ol>
+<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
+<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
+
+<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
+<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
+<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
+<ul>
+<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
+<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
+</ul>
+<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
+<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
+<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
+<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
+<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/区块链/" rel="tag"># 区块链</a>
+              <a href="/tags/BIP/" rel="tag"># BIP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/09/13/bip39/" rel="prev" title="BIP 39">
+      <i class="fa fa-chevron-left"></i> BIP 39
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/18/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动机"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#非确定性钱包的缺点"><span class="nav-number">2.0.1.</span> <span class="nav-text">非确定性钱包的缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#确定性钱包及非确定钱包"><span class="nav-number">2.0.2.</span> <span class="nav-text">确定性钱包及非确定钱包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#密钥生成规范"><span class="nav-number">3.</span> <span class="nav-text">密钥生成规范</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#约定"><span class="nav-number">3.0.1.</span> <span class="nav-text">约定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展密钥"><span class="nav-number">3.0.2.</span> <span class="nav-text">扩展密钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子密钥派生函数（CKD：child-key-derivation）"><span class="nav-number">3.0.3.</span> <span class="nav-text">子密钥派生函数（CKD：child key derivation）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#父私钥-gt-子私钥"><span class="nav-number">3.0.3.0.1.</span> <span class="nav-text">父私钥 -&gt; 子私钥</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#父公钥-gt-子公钥"><span class="nav-number">3.0.3.0.2.</span> <span class="nav-text">父公钥 -&gt; 子公钥</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#父私钥-gt-子公钥"><span class="nav-number">3.0.3.0.3.</span> <span class="nav-text">父私钥 -&gt; 子公钥</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#父公钥-gt-子私钥"><span class="nav-number">3.0.3.0.4.</span> <span class="nav-text">父公钥 -&gt; 子私钥</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#密钥树"><span class="nav-number">3.0.4.</span> <span class="nav-text">密钥树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#密钥id"><span class="nav-number">3.0.5.</span> <span class="nav-text">密钥id</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展密钥序列化格式"><span class="nav-number">3.0.6.</span> <span class="nav-text">扩展密钥序列化格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主密钥生成"><span class="nav-number">3.0.7.</span> <span class="nav-text">主密钥生成</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分层确定性钱包结构"><span class="nav-number">4.</span> <span class="nav-text">分层确定性钱包结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#范例钱包的结构"><span class="nav-number">4.0.1.</span> <span class="nav-text">范例钱包的结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用例"><span class="nav-number">5.</span> <span class="nav-text">用例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#全钱包共享"><span class="nav-number">5.0.1.</span> <span class="nav-text">全钱包共享</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#审计"><span class="nav-number">5.0.2.</span> <span class="nav-text">审计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#公司多部门场景"><span class="nav-number">5.0.3.</span> <span class="nav-text">公司多部门场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合作企业间交易"><span class="nav-number">5.0.4.</span> <span class="nav-text">合作企业间交易</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不安全的收款人"><span class="nav-number">5.0.5.</span> <span class="nav-text">不安全的收款人</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">何从</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">何从</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

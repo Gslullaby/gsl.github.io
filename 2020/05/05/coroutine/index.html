@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lipengw.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱 协程的定义协程: Coroutine协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。 定义Wiki:  :  Coroutines are computer program components">
+<meta name="keywords" content="coroutine,kotlin,协程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是协程？">
+<meta property="og:url" content="https://lipengw.github.io/2020/05/05/coroutine/index.html">
+<meta property="og:site_name" content="Gsl&#39;s blog">
+<meta property="og:description" content="Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱 协程的定义协程: Coroutine协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。 定义Wiki:  :  Coroutines are computer program components">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-05-17T09:11:47.437Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="什么是协程？">
+<meta name="twitter:description" content="Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱 协程的定义协程: Coroutine协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。 定义Wiki:  :  Coroutines are computer program components">
+
+<link rel="canonical" href="https://lipengw.github.io/2020/05/05/coroutine/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>什么是协程？ | Gsl's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Gsl's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">静待花开</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lipengw.github.io/2020/05/05/coroutine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="何从">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gsl's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          什么是协程？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-05 16:33:57" itemprop="dateCreated datePublished" datetime="2020-05-05T16:33:57+08:00">2020-05-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-17 17:11:47" itemprop="dateModified" datetime="2020-05-17T17:11:47+08:00">2020-05-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
+<h2 id="协程的定义"><a href="#协程的定义" class="headerlink" title="协程的定义"></a>协程的定义</h2><p>协程: Coroutine<br>协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。</p>
+<p>定义<a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">Wiki</a>:  :</p>
+<blockquote>
+<p><strong>Coroutines</strong> are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. Coroutines are well-suited for implementing familiar program components such as cooperative tasks, exceptions, event loops, iterators, infinite lists and pipes    </p>
+</blockquote>
+<blockquote>
+<p>译: 协程时计算机程序的一类组件，通过允许挂起和恢复执行概括了非抢占式（即协作式）多任务的子程序。协程非常适合用于实现一些常见的程序组件，如协作式多任务，异常，事件循环，迭代器，无限列表以及管道</p>
+</blockquote>
+<p>Wiki中对于协程的定义还是挺难理解的，其中的关键词</p>
+<ul>
+<li>子程序（subroutine）  </li>
+<li>挂起（suspend）和恢复（resume）</li>
+<li>抢占式（preemptive）和协作式（cooperative or non-preemptive）  </li>
+</ul>
+<p>如果不先理解这几个关键词的话，是很难搞清楚协程的</p>
+<h4 id="首先是子程序"><a href="#首先是子程序" class="headerlink" title="首先是子程序"></a>首先是子程序</h4><p>《The Art of Computer Programming》(计算机程序设计艺术)一书中对subroutine有详细的解释，以下是原文</p>
+<blockquote>
+<p>When a certain task is to be performed at severial different places in a program, it is usually undesirable to repeat the coding in each place. To avoid this situation, the coding (called a subroutine) can be put into one place only, and a few extra instructions can be added and to restart the outer program properly after the subroutine is finished    </p>
+</blockquote>
+<blockquote>
+<p>译: 当一项确定的任务再程序的不同位置多次执行时，通常重复的代码不是我们想看到的。为了避免这种情况，这段代码（叫做一个子程序）可以被单独放在一个位置，通过少量额外的指令在每个需要执行该此程序的位置添加并执行子程序，并在子程序执行完成后，自动的重启外部程序</p>
+</blockquote>
+<p>这段对于子程序的描述还是很容易理解的，从高级语言的角度来看，子程序就相当于一个函数或方法，对子程序的引用即为对函数或方法的调用。</p>
+<p>子程序的用途书中也有描述，这里简单提一下：子程序的主要优势是避免重复代码，节省程序空间。也间接的节省了时间，如：加载程序需要的时间减少等。子程序也会让构思大型程序变得更容易，debug也会更容易。封装出来的子程序也可以作为开放库对外暴露给其他开发者使用。</p>
+<p>理解了子程序，那么子程序跟协程又有什么关系呢？或者说两者有什么区别呢？同样引用原文给出答案</p>
+<blockquote>
+<p>Subroutines are special case of more general program components, called coroutines. In contrast to the unsymmetric relationship between a main routine and a subroutine, there is complete symmetry between coroutines, which on call each other.    </p>
+<p>We may consider the main program and subroutines as a team of programs, each member of the team having a certain job to do. The main program, in the course of doing its job, will activate the subprogram; the subprogram will perform its own function and then activate the main program. We may stretch our imagination to believe that, from the subroutine’s point of view, when it exits it is calling the main routine; the main routine continues to performs its duty, then ‘exits’ to the subroutine. the subroutine acts, then call the main routine again.</p>
+</blockquote>
+<p>译:     </p>
+<blockquote>
+<p>子程序是通用程序组件（即协程）的一种特例。与主程序与子程序间非对等关系（调用者与被调用者）对比，协程间是完全对等的，他们可以互相调用 </p>
+</blockquote>
+<blockquote>
+<p>我们可以将主程序和子程序看作是程序组，程序组中的每个成员都要完成特定的任务。主程序在完成其任务的过程中，会激活子程序，然后子程序会执行完成它自己的任务，随后再激活主程序让主程序继续执行。拓展下我们的想象力，从子程序的视角出发，在子程序出口位置调用主程序，主程序继续执行其任务，接着主程序’退出’并在出口位置调用子程序，子程序执行，而后再调用主程序</p>
+</blockquote>
+<p>上面第二段的意思是，子程序只有一个入口和出口，而协程可以有多个入口和出口。即子程序被主程序调用后只能从头开始执行（入口）直到执行完成然后退出（出口），而后主程序继续执行。而协程在被调用后，在中途可能会有一个或多个出口（出口点之后仍然有代码待执行），当执行中途遇到出口时，当前协程交出执行权让其他协程执行，当下次再调用该协程时，会从上次的出口点位置继续开始执行后续的代码（上次的出口点即为下次执行的入口点）。这也就解释了第一段中子程序和主程序关系与协程间关系的差别了</p>
+<blockquote>
+<p>Wiki中子程序与协程的比较</p>
+<ul>
+<li>子例程可以调用其他子例程，调用者等待被调用者结束后继续执行，故而子例程的生命期遵循后进先出，即最后一个被调用的子例程最先结束返回。协程的生命期完全由对它们的使用需要来决定</li>
+<li>子例程的起始处是惟一的入口点，每当子例程被调用时，执行都从被调用子例程的起始处开始。协程可以有多个入口点，协程的起始处是第一个入口点，每个yield返回出口点都是再次被调用执行时的入口点。</li>
+<li>子例程只在结束时一次性的返回全部结果值。协程可以在yield时不调用其他协程，而是每次返回一部分的结果值，这种协程常称为生成器或迭代器。</li>
+<li>现代的指令集架构通常提供对调用栈的指令支持，便于实现可递归调用的子例程。在以Scheme为代表的提供续体的语言环境下，恰好可用此控制状态抽象表示来实现协程。</li>
+</ul>
+</blockquote>
+<h4 id="挂起和恢复"><a href="#挂起和恢复" class="headerlink" title="挂起和恢复"></a>挂起和恢复</h4><p>其实在子程序那一部分中已经对挂起和恢复做出了解释。协程拥有多个出口和入口，所谓挂起就是在执行途中遇到出口，当前协程让出执行权，跳转到其他协程继续执行，而恢复就是当再次调用该协程时从上次出口点继续执行后续任务。出口对应挂起，入口对应恢复</p>
+<h4 id="抢占式和协作式"><a href="#抢占式和协作式" class="headerlink" title="抢占式和协作式"></a>抢占式和协作式</h4><p>首先，无论是抢占式还是协作式，都意味着当前Task都不再继续拥有执行权，而两者区别是，抢占式多任务中，当前任务被动的系统剥夺执行权，协作式多任务中，当前任务在不需要系统资源时主动让出执行权    </p>
+<p>抢占式多任务涉及到了中断机制的使用，中断机制可以挂起当前进程并唤起调度器以决定接下来应该调度执行哪个进程。因此，所有进程在一段时间内都会获得一定数量的CPU时间</p>
+<p>抢占式多任务依赖于 CPU 的硬件支持。 因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有 CPU 支持了执行权限后，抢占式调度才成为可能</p>
+<p>不同于抢占式由系统调度进程切换，协作式进程在空闲（idel）或阻塞（block）时会主动的让出执行权（yield）</p>
+<h2 id="协程能解决什么问题呢"><a href="#协程能解决什么问题呢" class="headerlink" title="协程能解决什么问题呢"></a>协程能解决什么问题呢</h2><p>如果从早先协程的设计理念来看，协程是设计用来处理单内核下多任务并发的。协程最本质的特性是可挂起和恢复的特性，拥有多入口多出口。<br>相较于子程序的从头运行至尾，协程有更丰富的过程（有一个或多个运行阶段）,多个任务可以交替执行，使得多任务协作提供成为可能，即协程拥有并发的能力。</p>
+<p>而对于现代的高级语言来说，协程更像是任务，运行在线程之上，在语言级别进行调度。许多语言的也都是多线程 + 协程的的实现，以达到像写同步代码那样处理异步问题。通常异步需要多线程来实现，但是弊端就是多线程调度时，切换上下文较为耗时，而如果通过多线程 + 协程方式来处理异步的话，相当于将系统级的线程调度替换为语言级别的协程调度，一定程度上减少了多线程调度切换上下文的开销。另一方面，多线程方式实现异步最可能面临异步回调，而最熟悉的应该是JS中的回调地狱问题了，而有了协程之后，就可以完美的消除该问题。</p>
+<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>协程从本质上讲依然是一种程序，运行与线程之上。名称以及它表现出来的特征与线程有相似之处，但与线程不同的是，他的调度并不需要系统参与，而是直接在语言级别完成。这也是许多人称协程为用户级线程的原因</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/coroutine/" rel="tag"># coroutine</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/18/hexo_github_pages/" rel="prev" title="GitHub Pages + Hexo搭建博客汇总">
+      <i class="fa fa-chevron-left"></i> GitHub Pages + Hexo搭建博客汇总
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/05/history-of-coroutine/" rel="next" title="转载--计算机语言协程的历史、现在和未来">
+      转载--计算机语言协程的历史、现在和未来 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协程的定义"><span class="nav-number">1.</span> <span class="nav-text">协程的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先是子程序"><span class="nav-number">1.0.1.</span> <span class="nav-text">首先是子程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#挂起和恢复"><span class="nav-number">1.0.2.</span> <span class="nav-text">挂起和恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抢占式和协作式"><span class="nav-number">1.0.3.</span> <span class="nav-text">抢占式和协作式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程能解决什么问题呢"><span class="nav-number">2.</span> <span class="nav-text">协程能解决什么问题呢</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单总结"><span class="nav-number">3.</span> <span class="nav-text">简单总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">何从</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">何从</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
