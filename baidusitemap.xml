@@ -1,184 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-
-    
   <url>
     <loc>https://lipengw.github.io/2020/05/05/coroutine/</loc>
-    <lastmod>2020-05-17T09:11:47.437Z</lastmod>
-    <data>
-        <display>
-        <title>什么是协程？</title>
-        <pubTime>2020-05-05T08:33:57.000Z</pubTime>
-        
-        <tag>coroutine</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
+    <lastmod>2020-05-17</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2020/05/05/history-of-coroutine/</loc>
-    <lastmod>2020-05-11T07:07:43.246Z</lastmod>
-    <data>
-        <display>
-        <title>\[转\]计算机语言协程的历史、现在和未来</title>
-        <pubTime>2020-05-05T09:18:32.000Z</pubTime>
-        
-        <tag>coroutine</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
+    <lastmod>2020-05-11</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</loc>
-    <lastmod>2020-05-05T08:27:41.359Z</lastmod>
-    <data>
-        <display>
-        <title>scala学习资料整理</title>
-        <pubTime>2018-07-21T07:57:35.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://lipengw.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-    
-    
-  <url>
+    <lastmod>2020-05-05</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2018/07/21/scala%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</loc>
-    <lastmod>2019-08-18T06:57:05.180Z</lastmod>
-    <data>
-        <display>
-        <title>scala函数式编程</title>
-        <pubTime>2018-07-21T08:18:04.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-        <tag>函数式</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://lipengw.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
+    <lastmod>2019-08-18</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</loc>
-    <lastmod>2019-08-18T06:57:05.179Z</lastmod>
-    <data>
-        <display>
-        <title>scala中的函数</title>
-        <pubTime>2018-07-23T06:31:46.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://lipengw.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
+    <lastmod>2019-08-18</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2019/08/18/hexo_github_pages/</loc>
-    <lastmod>2019-08-18T06:57:05.176Z</lastmod>
-    <data>
-        <display>
-        <title>GitHub Pages + Hexo搭建博客汇总</title>
-        <pubTime>2019-08-18T06:57:05.176Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-        <tag>GitHub Pages</tag>
-         
-         
-           
-             
-              <breadCrumb title="Web前端" url="https://lipengw.github.io/categories/Web%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
+    <lastmod>2019-08-18</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2019/08/18/hello-world/</loc>
-    <lastmod>2019-08-18T06:57:05.175Z</lastmod>
-    <data>
-        <display>
-        <title>Hello World</title>
-        <pubTime>2019-08-18T06:57:05.175Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-         
-           
-             
-              <breadCrumb title="Web前端" url="https://lipengw.github.io/categories/Web%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
+    <lastmod>2019-08-18</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2018/09/13/bip39/</loc>
-    <lastmod>2019-08-18T06:57:05.173Z</lastmod>
-    <data>
-        <display>
-        <title>BIP 39</title>
-        <pubTime>2018-09-13T03:16:33.000Z</pubTime>
-        
-        <tag>区块链</tag>
-         
-        <tag>BIP</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
+    <lastmod>2019-08-18</lastmod>
+  </url>  <url>
     <loc>https://lipengw.github.io/2018/09/27/bip32/</loc>
-    <lastmod>2019-08-18T06:57:05.170Z</lastmod>
-    <data>
-        <display>
-        <title>BIP 32</title>
-        <pubTime>2018-09-27T09:29:35.000Z</pubTime>
-        
-        <tag>区块链</tag>
-         
-        <tag>BIP</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
+    <lastmod>2019-08-18</lastmod>
+  </url>
 </urlset>
