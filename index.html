@@ -156,6 +156,205 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://gslullaby.github.io/2020/07/20/Gradle-build-lifecycle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="何从">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gsl's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/20/Gradle-build-lifecycle/" class="post-title-link" itemprop="url">Gradle构建的生命周期</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-20 10:33:30" itemprop="dateCreated datePublished" datetime="2020-07-20T10:33:30+08:00">2020-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-07-29 20:21:19" itemprop="dateModified" datetime="2020-07-29T20:21:19+08:00">2020-07-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们之前说过，Gradle的核心是一种基于依赖的编程语言。按照Gradle的术语来说，这意味着你可以定义一系列任务以及它们之间的依赖关系。Gradle会保证这些任务按照他们的依赖关系顺序执行，并且每个任务只会执行一次。这些任务一起构成了一个有向无环图（DAG）。某些构建工具会在构建任务执行阶段，组建依赖图。但是Gradle是在任务执行之前组建出完整的依赖图的。这正是Gradle的核心所在，使得许多不可能的事情成为了可能。    </p>
+<p>由于构建脚本是用于配置依赖图的。因此严格意义上说，构建脚本应该称为构建配置脚本</p>
+<h2 id="构建阶段"><a href="#构建阶段" class="headerlink" title="构建阶段"></a>构建阶段</h2><p>Gradle构建有三个不同的阶段</p>
+<ul>
+<li><p>初始换阶段（Initialization）</p>
+<p>  Gradle支持单/多项目构建。在初始化阶段，Gradle会确定哪些项目要参与到构建中，并且为每个参与构建的项目创建一个Project实例</p>
+</li>
+<li><p>配置阶段（Configuration）   </p>
+<p>  该阶段对Project实例进行配置。即每个参与构建的项目的构建脚本都会被执行</p>
+</li>
+<li><p>执行阶段（Execution）   </p>
+<p>  配置阶段中Gradle创建并配置了一系列任务，最终输出一个任务图（DAG），执行阶段中Gradle会先确定一个DAG的待执行子任务集。子任务集是由gradle命令参数传入的任务名以及当前所在目录确定的。确定了子任务集后，Gradle会按顺序执行其中的每一个任务</p>
+</li>
+</ul>
+<h2 id="Settings-gradle文件"><a href="#Settings-gradle文件" class="headerlink" title="Settings.gradle文件"></a>Settings.gradle文件</h2><p>除了构建脚本（build.gradle）文件，Gradle还定义了一个settings脚本文件。settings文件由Gradle通过命名约定确定。该文件的默认名为settings.gradle。在后续章节中会解释Gradle是如何查找settings文件的。<br>settings脚本在初始化阶段执行。多项目构建必须定义一个settings.gradle文件，文件路径为多项目的根项目目录。之所以该脚本文件是必需的，是因为该脚本定义了那些任务会参与到构建中。对于单项目构建，可以不定义该脚本文件。该文件中，除了定义参与项目外，可能还需要添加一些依赖库到构建脚本的classpath中。下面先来看一个单项目构建的例子    </p>
+<p><em>Example 1. 单项目构建</em> </p>
+<blockquote>
+<p><strong>settings.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print <span class="string">'This is executed during the initialization phase.'</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>build.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">println <span class="string">'This is executed during the configuration phase.'</span></span><br><span class="line"></span><br><span class="line">task configured &#123;</span><br><span class="line">   println <span class="string">'This is also executed during the configuration phase.'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task test &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">       println <span class="string">'This is executed during the execution phase.'</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task testBoth &#123;</span><br><span class="line">   doFirst &#123;</span><br><span class="line">       println <span class="string">'This is executed first during the execution phase.'</span></span><br><span class="line">   &#125;</span><br><span class="line">   doLast &#123;</span><br><span class="line">       println <span class="string">'This is executed last during the execution phase.'</span></span><br><span class="line">   &#125;</span><br><span class="line">   println <span class="string">'This is executed during the configuration phase as well.'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="命令-gradle-test-testboth-的输出"><a href="#命令-gradle-test-testboth-的输出" class="headerlink" title="命令 gradle test testboth 的输出"></a>命令 <code>gradle test testboth</code> 的输出</h4><blockquote>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt; gradle test testBoth   </span><br><span class="line">This is executed during the initialization phase.</span><br><span class="line"> </span><br><span class="line">Configure <span class="string">project :</span>    </span><br><span class="line">This is executed during the configuration phase.    </span><br><span class="line">This is also executed during the configuration phase.    </span><br><span class="line">This is executed during the configuration phase <span class="keyword">as</span> well.</span><br><span class="line"></span><br><span class="line"><span class="string">Task :</span>test   </span><br><span class="line">This is executed during the execution phase.</span><br><span class="line"> </span><br><span class="line"><span class="string">Task :</span>testBoth      </span><br><span class="line">This is executed first during the execution phase.   </span><br><span class="line">This is executed last during the execution phase.</span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL <span class="keyword">in</span> <span class="number">0</span>s   </span><br><span class="line"><span class="number">2</span> actionable <span class="string">tasks:</span> <span class="number">2</span> executed</span><br></pre></td></tr></table></figure>
+
+<p>对于build.gradle来说，其中属性的访问以及方法的调用都是委托给project对象完成的。同样的，对于settings.gradle来说是委托给Settings对象完成的。查看API文档中Settings类以了解更多信息</p>
+<h2 id="多项目构建"><a href="#多项目构建" class="headerlink" title="多项目构建"></a>多项目构建</h2><p>所谓多项目构建，即为一次Gradle执行中会构建多个项目的构建。我们必须在settings脚本中声明参与构建的项目。在专门介绍此主题的一章中，有更多关于多项目生成的内容要说(请参见多项目构建)</p>
+<h3 id="项目位置"><a href="#项目位置" class="headerlink" title="项目位置"></a><strong>项目位置</strong></h3><p>多项目构建总是可以由一个单根树表示。树中的每个元素代表一个项目。每个项目都有一个路径，用于表示该项目在构建树中的位置。大多数情况下，项目的路径即为该项目在文件系统中的真实物理位置。然而，该路径是可配置的。项目树在settings.gradle脚本文件中创建。默认情况下会假定settings.gradle文件目录在根项目目录中。可以在settigns脚本文件中重新定义根项目的目录</p>
+<h3 id="构建项目树"><a href="#构建项目树" class="headerlink" title="构建项目树"></a><strong>构建项目树</strong></h3><p>在settings文件中，可以使用一系列方法来构建项目树。层次化和扁平化的物理布局都得到了支持。</p>
+<h4 id="层次化布局"><a href="#层次化布局" class="headerlink" title="层次化布局"></a>层次化布局</h4><p><em>Example 2. 层次化布局</em></p>
+<blockquote>
+<p><strong>settings.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include <span class="string">'project1'</span>, <span class="string">'project2:child'</span>, <span class="string">'project3:child1'</span></span><br></pre></td></tr></table></figure>
+
+<p><code>include</code> 方法以project路径作为参数。假定project路径即为物理文件系统的相对路径。例如，路径’services:api’默认情况下会映射到’services/api’文件夹（相当于项目根目录）。路径中我们仅需要给出项目树的叶子节点即可。例如路径’service:hotels:api’将会创建三个项目：’services’，’service:hotels’以及’service:hotels:api’。更多关于如何使用project路径，请参阅DSL文档中的<code>Settings.include(java.lang.String[])</code>方法    </p>
+<h4 id="扁平化布局"><a href="#扁平化布局" class="headerlink" title="扁平化布局"></a>扁平化布局</h4><p><em>Example 3. 扁平化布局</em></p>
+<blockquote>
+<p><strong>settings.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">includeFlat <span class="string">'project3'</span>, <span class="string">'project4'</span></span><br></pre></td></tr></table></figure>
+
+<p><code>includeFlat</code>方法以目录名作为参数。这些目录必须为根项目目录的同级目录。这些目录的位置被视为多项目树中根项目的子项目。</p>
+<h3 id="修改项目树中的元素"><a href="#修改项目树中的元素" class="headerlink" title="修改项目树中的元素"></a><strong>修改项目树中的元素</strong></h3><p>在设置文件中创建的多项目树由所谓的项目描述符组成。你可以随时在settings文件中修改这些描述符。可以通过下面的方式访问描述符：<br><em>Example 4.访问项目树的元素</em></p>
+<blockquote>
+<p><strong>settings.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">println rootProject.name</span><br><span class="line">println project(<span class="string">':projectA'</span>).name</span><br></pre></td></tr></table></figure>
+
+<p>使用project描述符可以修改project的名字、目录以及项目对应的build文件</p>
+<p><em>Example 5.修改项目树中的元素</em></p>
+<blockquote>
+<p><strong>settings.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rootProject.name = <span class="string">'main'</span></span><br><span class="line">project(<span class="string">':projectA'</span>).projectDir = <span class="keyword">new</span> File(settingsDir, <span class="string">'../my-project-a'</span>)</span><br><span class="line">project(<span class="string">':projectA'</span>).buildFileName = <span class="string">'projectA.gradle'</span></span><br></pre></td></tr></table></figure>
+
+<p>查看API文档中的<code>ProjectDescriptor</code>类以获取更多信息</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>Gradle是如何知道当前进行单项目构建还是多项目构建的呢？如果从一个包含settings文件的目录触发多项目构建，那么一切都很清楚。但是Gradle允许从任何一个参与构建的子项目触发构建。如果从一个不包含settings.gradle文件的子项目中触发构建，则Gradle会按照以下方式查找settings.gradle文件    </p>
+<ul>
+<li>从master目录下查找，master目录与当前目录在同层级</li>
+<li>如果没找到，则从其父目录中查找</li>
+<li>如果还没找到，则进行单项目构建</li>
+<li>如果找到了一个settings.gradle文件，Gradle首先会检查当前项目是否存在于settings.gradle文件中定义的多项目层级中。如果不是，则将构建作为单项目构建执行。否则，将执行多项目构建</li>
+</ul>
+<p>那么此种行为的目的是什么呢？这是因为Gradle需要确定当前所在的project是否是多项目构建的子项目。如果是，则构建当前子项目以及其所依赖的项目，但是Gradle会为整个多项目构建创建构建配置。如果当前项目有settings.gradle文件，则构建会以如下方式执行</p>
+<ul>
+<li>如果settings.gradle文件未定义多项目层级，则进行单项目构建</li>
+<li>否则进行多项目构建</li>
+</ul>
+<p>对于settings.gradle文件的自动搜索仅适用于物理上层次化或扁平化布局的多项目构建。对于扁平化布局，则必须遵从上述的（”master”）命名约定。Gradle支持多项目构建的任意物理布局，但是对于这种任意布局，需要从settings.gradle所属目录执行构建。关于如何从根目录执行部分构建，请参阅按任务的绝对路径运行任务</p>
+<p>Gradle为每个参与构建的项目创建一个Project对象。对于多项目构建，即为Settings对象中指定的Project以及一个root Project。Project对象的name即为project顶层目录的name，每个Project都有一个父Project（root Project除外）。每个Project都可能拥有子Project</p>
+<h2 id="单项目构建的配置与执行"><a href="#单项目构建的配置与执行" class="headerlink" title="单项目构建的配置与执行"></a>单项目构建的配置与执行</h2><p>对于单项目构建，其初始化阶段之后的工作流是十分简单的。构建脚本按照初始化阶段创建的Project对象执行。然后Gradle按照命令行传入的参数查找需要执行的任务。如果任务存在，则会按照所传入的顺序分别独立执行。多项目构建的配置与执行会在<em>Authoring Multi-Project Builds</em>中讨论</p>
+<h2 id="响应构建脚本中的生命周期"><a href="#响应构建脚本中的生命周期" class="headerlink" title="响应构建脚本中的生命周期"></a>响应构建脚本中的生命周期</h2><p>构建过程中，构建脚本会收到构建的生命周期通知。剋以以两种方式接受通知：</p>
+<ol>
+<li>实现一个特殊的监听器接口</li>
+<li>提供一个通知触发时执行的闭包</li>
+</ol>
+<p>下面的例子中使用了闭包的方式。关于如何使用监听器接口，请参阅API文档</p>
+<h3 id="Project的评估"><a href="#Project的评估" class="headerlink" title="Project的评估"></a><strong>Project的评估</strong></h3><p>在Project评估的前后，我们均会立马收到一个通知。在构建脚本中所有的定义均已应用后，执行可以使用此特性做一些额外操作，如执行附加配置、添加自定义日志或性能分析等</p>
+<p>下面例子中，为每个拥有hasTests属性且值为true的Project添加了一个test任务</p>
+<p><em>Example 6.为拥有特定属性的project添加一个test任务</em></p>
+<blockquote>
+<p><strong>build.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    afterEvaluate &#123;</span><br><span class="line">        <span class="keyword">if</span> (project.hasTests) &#123;</span><br><span class="line">            println <span class="string">"Adding test task to $project"</span></span><br><span class="line">            project.task(<span class="string">'test'</span>) &#123;</span><br><span class="line">                doLast &#123;</span><br><span class="line">                    println <span class="string">"Running tests for $project"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>projectA.gradle</strong></p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hasTest = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="命令gradle-q-test的输出"><a href="#命令gradle-q-test的输出" class="headerlink" title="命令gradle -q test的输出"></a>命令<code>gradle -q test</code>的输出</h4><blockquote>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; gradle -q test    </span><br><span class="line">Adding test task to project <span class="string">':projectA'</span>    </span><br><span class="line">Running tests <span class="keyword">for</span> project <span class="string">':projectA'</span></span><br></pre></td></tr></table></figure>
+
+<p>本例调用了Project.afterEvalute()方法并传入一个闭包，该闭包在相应Project评估完成后执行</p>
+<p>当然在任一Project评估完成后接受通知也是可以的。下面的例子增加了一些Project评估的日志。需要注意的是无论Project评估成功与否，均会收到afterProject通知</p>
+<p><em>Example 7.在每个项目评估完成后都会收到的通知</em></p>
+<blockquote>
+<p><strong>build.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">gradle.afterProject &#123;</span><br><span class="line">   <span class="keyword">if</span> (project.state.failure) &#123;</span><br><span class="line">       println <span class="string">"Evaluation of $project FAILED"</span></span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       println <span class="string">"Evaluation of $project succeeded"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="命令gradle-q-test的输出-1"><a href="#命令gradle-q-test的输出-1" class="headerlink" title="命令gradle -q test的输出"></a>命令<code>gradle -q test</code>的输出</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&gt; gradle -q test</span><br><span class="line">Evaluation of root project <span class="string">'buildProjectEvaluateEvents'</span> succeeded    </span><br><span class="line">Evaluation of project <span class="string">':projectA'</span> succeeded    </span><br><span class="line">Evaluation of project <span class="string">':projectB'</span> FAILED</span><br><span class="line"></span><br><span class="line"><span class="string">FAILURE:</span> Build failed with an exception.</span><br><span class="line"></span><br><span class="line">* <span class="string">Where:</span></span><br><span class="line">Build file <span class="string">'/home/user/gradle/samples/projectB.gradle'</span> <span class="string">line:</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">* What went <span class="string">wrong:</span></span><br><span class="line">A problem occurred evaluating project <span class="string">':projectB'</span>.</span><br><span class="line">broken</span><br><span class="line"></span><br><span class="line">* <span class="string">Try:</span></span><br><span class="line">Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.</span><br><span class="line"></span><br><span class="line">* Get more help at <span class="string">https:</span><span class="comment">//help.gradle.org</span></span><br><span class="line"></span><br><span class="line"> BUILD FAILED <span class="keyword">in</span> <span class="number">0</span>s</span><br></pre></td></tr></table></figure>
+
+<p>也可以通过给Gradle添加一个ProjectEvaluationListener已接受通知事件</p>
+<h3 id="任务的创建"><a href="#任务的创建" class="headerlink" title="任务的创建"></a><strong>任务的创建</strong></h3><p>在一个task被添加到project后，也会立马收到一个通知。在task可用之前，可以为其设置一些默认值或其他操作</p>
+<p>下面例子在每个task创建之后，为其设置了<code>srcDir</code>属性</p>
+<p><em>Example 8.为所有任务设置特性属性</em></p>
+<blockquote>
+<p><strong>build.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tasks.whenTaskAdded &#123; task -&gt;</span><br><span class="line">   task.ext.srcDir = <span class="string">'src/main/java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task a</span><br><span class="line"></span><br><span class="line">println <span class="string">"source dir is $a.srcDir"</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="命令gradle-q-a的输出"><a href="#命令gradle-q-a的输出" class="headerlink" title="命令gradle -q a的输出"></a>命令<code>gradle -q a</code>的输出</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; gradle -q a   </span><br><span class="line">source dir is src<span class="regexp">/main/</span>java</span><br></pre></td></tr></table></figure>
+
+<p>也可以通过向TaskContainer添加一个Action来接受这些事件</p>
+<h3 id="任务图的组建"><a href="#任务图的组建" class="headerlink" title="任务图的组建"></a><strong>任务图的组建</strong></h3><p>任务图组建完成后，也会立即收到一个通知   </p>
+<p>通过向TaskExecutionGraph添加一个TaskExecutionGraphListener以接受这些事件</p>
+<h3 id="任务的执行"><a href="#任务的执行" class="headerlink" title="任务的执行"></a><strong>任务的执行</strong></h3><p>任一任务执行的前后我们都会立即收到通知</p>
+<p>下面例子在每个任务执行的前后输出了日志。注意无论任务执行成功与否均会收到<code>afterTask</code>通知</p>
+<p><em>Example 9.记录每个任务执行的开始与结束</em></p>
+<blockquote>
+<p><strong>build.gradle</strong></p>
+</blockquote>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">task ok</span><br><span class="line"></span><br><span class="line">task broken(<span class="string">dependsOn:</span> ok) &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">'broken'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">gradle.taskGraph.beforeTask &#123; Task task -&gt;</span><br><span class="line">   println <span class="string">"executing $task ..."</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">gradle.taskGraph.afterTask &#123; Task task, TaskState state -&gt;</span><br><span class="line">    <span class="keyword">if</span> (state.failure) &#123;</span><br><span class="line">        println <span class="string">"FAILED"</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        println <span class="string">"done"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="命令gradle-q-broken的输出"><a href="#命令gradle-q-broken的输出" class="headerlink" title="命令gradle -q broken的输出"></a>命令<code>gradle -q broken</code>的输出</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&gt; gradle -q broken    </span><br><span class="line">executing task <span class="string">':ok'</span> ...    </span><br><span class="line">done   </span><br><span class="line">executing task <span class="string">':broken'</span> ...   </span><br><span class="line">FAILED</span><br><span class="line"></span><br><span class="line"><span class="string">FAILURE:</span> Build failed with an exception.</span><br><span class="line"></span><br><span class="line">* <span class="string">Where:</span>   </span><br><span class="line">Build file <span class="string">'/home/user/gradle/samples/build.gradle'</span> <span class="string">line:</span> <span class="number">5</span></span><br><span class="line"></span><br><span class="line">* What went <span class="string">wrong:</span>   </span><br><span class="line">Execution failed <span class="keyword">for</span> task <span class="string">':broken'</span>.   </span><br><span class="line">&gt; broken   </span><br><span class="line"></span><br><span class="line">* <span class="string">Try:</span>    </span><br><span class="line">Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.</span><br><span class="line"></span><br><span class="line">* Get more help at <span class="string">https:</span><span class="comment">//help.gradle.org</span></span><br><span class="line"></span><br><span class="line">BUILD FAILED <span class="keyword">in</span> <span class="number">0</span>s</span><br></pre></td></tr></table></figure>
+
+<p>也可以通过向TaskExecutionGraph添加TaskExecutionListener来接受这些事件</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://gslullaby.github.io/2020/07/17/What-is-Gradle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1188,86 +1387,11 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://gslullaby.github.io/2018/07/21/scala学习资料整理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="何从">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Gsl's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/07/21/scala学习资料整理/" class="post-title-link" itemprop="url">scala学习资料整理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-21 15:57:35" itemprop="dateCreated datePublished" datetime="2018-07-21T15:57:35+08:00">2018-07-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-05 16:27:41" itemprop="dateModified" datetime="2020-05-05T16:27:41+08:00">2020-05-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/scala/" itemprop="url" rel="index"><span itemprop="name">scala</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
-<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br>**<a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></p>
-<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
-</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
-<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
-<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
 
 
 
@@ -1332,7 +1456,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
