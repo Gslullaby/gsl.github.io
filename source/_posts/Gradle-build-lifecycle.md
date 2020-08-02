@@ -32,52 +32,57 @@ settings脚本在初始化阶段执行。多项目构建必须定义一个settin
 
 *Example 1. 单项目构建* 
 > **settings.gradle**
-> ```groovy 
-> print 'This is executed during the initialization phase.'
-> ```
-> **build.gradle**
-> ```groovy
-> println 'This is executed during the configuration phase.'
-> 
-> task configured {
->    println 'This is also executed during the configuration phase.'
-> }
-> 
-> task test {
->    doLast {
->        println 'This is executed during the execution phase.'
->    }
-> }
->
-> task testBoth {
-> 	doFirst {
-> 	  println 'This is executed first during the execution phase.'
-> 	}
->	doLast {
->	  println 'This is executed last during the execution phase.'
->	}
->	println 'This is executed during the configuration phase as well.'
-> }
-> ```
 
-#### 命令```gradle test testboth```的输出
-> \> gradle test testBoth   
-> This is executed during the initialization phase.
-> 
-> \> Configure project :    
-> This is executed during the configuration phase.    
-> This is also executed during the configuration phase.    
-> This is executed during the configuration phase as well.
-> 
-> \> Task :test   
-> This is executed during the execution phase.
-> 
-> \> Task :testBoth      
-> This is executed first during the execution phase.   
-This is executed last during the execution phase.
+ ```groovy 
+ print 'This is executed during the initialization phase.'
+ ```
+> **build.gradle**
+
+ ```groovy
+ println 'This is executed during the configuration phase.'
+ 
+ task configured {
+    println 'This is also executed during the configuration phase.'
+ }
+ 
+ task test {
+    doLast {
+        println 'This is executed during the execution phase.'
+    }
+ }
+
+ task testBoth {
+    doFirst {
+        println 'This is executed first during the execution phase.'
+    }
+    doLast {
+        println 'This is executed last during the execution phase.'
+    }
+    println 'This is executed during the configuration phase as well.'
+ }
+ ```
+
+#### 命令 `gradle test testboth` 的输出
 >
-> BUILD SUCCESSFUL in 0s   
-2 actionable tasks: 2 executed
+```groovy
+> gradle test testBoth   
+This is executed during the initialization phase.
+ 
+Configure project :    
+This is executed during the configuration phase.    
+This is also executed during the configuration phase.    
+This is executed during the configuration phase as well.
+
+Task :test   
+This is executed during the execution phase.
+ 
+Task :testBoth      
+This is executed first during the execution phase.   
+This is executed last during the execution phase.
+
+BUILD SUCCESSFUL in 0s   
+2 actionable tasks: 2 executed    
+```
 
 对于build.gradle来说，其中属性的访问以及方法的调用都是委托给project对象完成的。同样的，对于settings.gradle来说是委托给Settings对象完成的。查看API文档中Settings类以了解更多信息
 
@@ -93,37 +98,46 @@ This is executed last during the execution phase.
 #### 层次化布局
 *Example 2. 层次化布局*
 > **settings.gradle**
-> ```groovy
-> include 'project1', 'project2:child', 'project3:child1'
-> ```
-```include```方法以project路径作为参数。假定project路径即为物理文件系统的相对路径。例如，路径'services:api'默认情况下会映射到'services/api'文件夹（相当于项目根目录）。路径中我们仅需要给出项目树的叶子节点即可。例如路径'service:hotels:api'将会创建三个项目：'services'，'service:hotels'以及'service:hotels:api'。更多关于如何使用project路径，请参阅DSL文档中的```Settings.include(java.lang.String[])```方法    
+
+ ```groovy
+ include 'project1', 'project2:child', 'project3:child1'
+ ```
+
+
+`include` 方法以project路径作为参数。假定project路径即为物理文件系统的相对路径。例如，路径'services:api'默认情况下会映射到'services/api'文件夹（相当于项目根目录）。路径中我们仅需要给出项目树的叶子节点即可。例如路径'service:hotels:api'将会创建三个项目：'services'，'service:hotels'以及'service:hotels:api'。更多关于如何使用project路径，请参阅DSL文档中的`Settings.include(java.lang.String[])`方法    
 
 #### 扁平化布局
 *Example 3. 扁平化布局*
 > **settings.gradle**
-> ```groovy
-> includeFlat 'project3', 'project4'
-> ```
-```includeFlat```方法以目录名作为参数。这些目录必须为根项目目录的同级目录。这些目录的位置被视为多项目树中根项目的子项目。
+
+ ```groovy
+ includeFlat 'project3', 'project4'
+ ```
+
+`includeFlat`方法以目录名作为参数。这些目录必须为根项目目录的同级目录。这些目录的位置被视为多项目树中根项目的子项目。
 
 ### **修改项目树中的元素**
 在设置文件中创建的多项目树由所谓的项目描述符组成。你可以随时在settings文件中修改这些描述符。可以通过下面的方式访问描述符：   
 *Example 4.访问项目树的元素*
 > **settings.gradle**
-> ```groovy
-> println rootProject.name
-> println project(':projectA').name
-> ```
+
+ ```groovy
+ println rootProject.name
+ println project(':projectA').name
+ ```
+
 使用project描述符可以修改project的名字、目录以及项目对应的build文件
 
 *Example 5.修改项目树中的元素*
 > **settings.gradle**
-> ```groovy
-> rootProject.name = 'main'
-> project(':projectA').projectDir = new File(settingsDir, '../my-project-a')
-> project(':projectA').buildFileName = 'projectA.gradle'
-> ```
-查看API文档中的```ProjectDescriptor```类以获取更多信息
+
+ ```groovy
+ rootProject.name = 'main'
+ project(':projectA').projectDir = new File(settingsDir, '../my-project-a')
+ project(':projectA').buildFileName = 'projectA.gradle'
+ ```
+
+查看API文档中的`ProjectDescriptor`类以获取更多信息
 
 ## 初始化
 Gradle是如何知道当前进行单项目构建还是多项目构建的呢？如果从一个包含settings文件的目录触发多项目构建，那么一切都很清楚。但是Gradle允许从任何一个参与构建的子项目触发构建。如果从一个不包含settings.gradle文件的子项目中触发构建，则Gradle会按照以下方式查找settings.gradle文件    
@@ -158,29 +172,35 @@ Gradle为每个参与构建的项目创建一个Project对象。对于多项目�
 
 *Example 6.为拥有特定属性的project添加一个test任务*
 > **build.gradle**
-> ```groovy
-> allprojects {
->     afterEvaluate {
->         if (project.hasTests) {
->             println "Adding test task to $project"
->             project.task('test') {
->                 doLast {
->                     println "Running tests for $project"
->                 }
->             }
->         }
->     }
-> }
-> ```
+
+ ```groovy
+ allprojects {
+     afterEvaluate {
+         if (project.hasTests) {
+             println "Adding test task to $project"
+             project.task('test') {
+                 doLast {
+                     println "Running tests for $project"
+                 }
+             }
+         }
+     }
+ }
+ ```
 > 
 > **projectA.gradle**
-> hasTest = true
 
-#### 命令```gradle -q test```的输出
+```groovy
+ hasTest = true
+```
 
-> \> gradle -q test    
-> Adding test task to project ':projectA'    
-> Running tests for project ':projectA'
+#### 命令`gradle -q test`的输出
+>
+```groovy
+> gradle -q test    
+Adding test task to project ':projectA'    
+Running tests for project ':projectA'
+```
 
 本例调用了Project.afterEvalute()方法并传入一个闭包，该闭包在相应Project评估完成后执行
 
@@ -188,64 +208,70 @@ Gradle为每个参与构建的项目创建一个Project对象。对于多项目�
 
 *Example 7.在每个项目评估完成后都会收到的通知*
 > **build.gradle**
-> ```groovy
-> gradle.afterProject {
->    if (project.state.failure) {
->        println "Evaluation of $project FAILED"
->    } else {
->        println "Evaluation of $project succeeded"
->    }
-> }
-> ```
 
-#### 命令```gradle -q test```的输出
-> \> gradle -q test
+ ```groovy
+ gradle.afterProject {
+    if (project.state.failure) {
+        println "Evaluation of $project FAILED"
+    } else {
+        println "Evaluation of $project succeeded"
+    }
+ }
+ ```
+
+#### 命令`gradle -q test`的输出
+```groovy
+> gradle -q test
 Evaluation of root project 'buildProjectEvaluateEvents' succeeded    
 Evaluation of project ':projectA' succeeded    
 Evaluation of project ':projectB' FAILED
->
-> FAILURE: Build failed with an exception.
->
-> \* Where:
+
+FAILURE: Build failed with an exception.
+
+* Where:
 Build file '/home/user/gradle/samples/projectB.gradle' line: 1
->
-> \* What went wrong:
+
+* What went wrong:
 A problem occurred evaluating project ':projectB'.
-> broken
->
-> \* Try:
+broken
+
+* Try:
 Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
->
-> \* Get more help at https://help.gradle.org
->
-> BUILD FAILED in 0s
+
+* Get more help at https://help.gradle.org
+
+ BUILD FAILED in 0s
+```
 
 也可以通过给Gradle添加一个ProjectEvaluationListener已接受通知事件
 
 ### **任务的创建**
 在一个task被添加到project后，也会立马收到一个通知。在task可用之前，可以为其设置一些默认值或其他操作
 
-下面例子在每个task创建之后，为其设置了```srcDir```属性
+下面例子在每个task创建之后，为其设置了`srcDir`属性
 
 *Example 8.为所有任务设置特性属性*
 > **build.gradle**
-> ```groovy
-> tasks.whenTaskAdded { task ->
->    task.ext.srcDir = 'src/main/java'
-> }
-> ```
-> 
-> task a
->
-> println "source dir is $a.srcDir"
 
-#### 命令```gradle -q a```的输出
-> \> gradle -q a   
-> source dir is src/main/java
+ ```groovy
+ tasks.whenTaskAdded { task ->
+    task.ext.srcDir = 'src/main/java'
+ }
+
+ task a
+
+ println "source dir is $a.srcDir"
+ ```
+
+#### 命令`gradle -q a`的输出
+```groovy
+ > gradle -q a   
+ source dir is src/main/java
+```
 
 也可以通过向TaskContainer添加一个Action来接受这些事件
 
-### **任务图的组建
+### **任务图的组建**
 任务图组建完成后，也会立即收到一个通知   
 
 通过向TaskExecutionGraph添加一个TaskExecutionGraphListener以接受这些事件
@@ -253,55 +279,56 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
 ### **任务的执行**
 任一任务执行的前后我们都会立即收到通知
 
-下面例子在每个任务执行的前后输出了日志。注意无论任务执行成功与否均会收到```afterTask```通知
+下面例子在每个任务执行的前后输出了日志。注意无论任务执行成功与否均会收到`afterTask`通知
 
 *Example 9.记录每个任务执行的开始与结束*
 > **build.gradle**
->
-> ```groovy
-> task ok
-> 
-> task broken(dependsOn: ok) {
->     doLast {
->         throw new RuntimeException('broken')
->     }
-> }
-> 
-> gradle.taskGraph.beforeTask { Task task ->
->    println "executing $task ..."
-> }
-> 
-> gradle.taskGraph.afterTask { Task task, TaskState state ->
->     if (state.failure) {
->         println "FAILED"
->     }
->     else {
->         println "done"
->     }
-> }
-> ```
 
-#### 命令```gradle -q broken```的输出
-> \> gradle -q broken    
-> executing task ':ok' ...    
-> done   
-> executing task ':broken' ...   
-> FAILED
-> 
-> FAILURE: Build failed with an exception.
-> 
-> \* Where:   
-> Build file '/home/user/gradle/samples/build.gradle' line: 5
-> 
-> \* What went wrong:   
-> Execution failed for task ':broken'.   
-> \> broken   
-> 
-> \* Try:    
-> Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
-> 
-> \* Get more help at https://help.gradle.org
-> 
-> BUILD FAILED in 0s
+ ```groovy
+ task ok
+ 
+ task broken(dependsOn: ok) {
+     doLast {
+         throw new RuntimeException('broken')
+     }
+ }
+ 
+ gradle.taskGraph.beforeTask { Task task ->
+    println "executing $task ..."
+ }
+ 
+ gradle.taskGraph.afterTask { Task task, TaskState state ->
+     if (state.failure) {
+         println "FAILED"
+     }
+     else {
+         println "done"
+     }
+ }
+ ```
 
+#### 命令`gradle -q broken`的输出
+```groovy
+ > gradle -q broken    
+ executing task ':ok' ...    
+ done   
+ executing task ':broken' ...   
+ FAILED
+
+ FAILURE: Build failed with an exception.
+ 
+ * Where:   
+ Build file '/home/user/gradle/samples/build.gradle' line: 5
+ 
+ * What went wrong:   
+ Execution failed for task ':broken'.   
+ > broken   
+
+ * Try:    
+ Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+ 
+ * Get more help at https://help.gradle.org
+ 
+ BUILD FAILED in 0s
+```
 也可以通过向TaskExecutionGraph添加TaskExecutionListener来接受这些事件
