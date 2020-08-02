@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"hcendless.ink","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"hcendless.ink","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta property="og:type" content="website">
@@ -36,8 +36,7 @@
   CONFIG.page = {
     sidebar: "",
     isHome : true,
-    isPost : false,
-    lang   : 'en'
+    isPost : false
   };
 </script>
 
@@ -90,12 +89,14 @@
 
   <div class="site-meta">
 
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Gsl's blog</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-      <p class="site-subtitle" itemprop="description">静待花开</p>
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gsl's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">静待花开</p>
   </div>
 
   <div class="site-nav-right">
@@ -105,36 +106,32 @@
 </div>
 
 
-
-
 <nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
+  
+  <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
 
   </li>
   </ul>
+
 </nav>
-
-
-
-
 </div>
     </header>
 
@@ -150,12 +147,14 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content">
             
-      
+
+  <div class="posts-expand">
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2020/07/20/Gradle-build-lifecycle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -168,15 +167,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2020/07/20/Gradle-build-lifecycle/" class="post-title-link" itemprop="url">Gradle构建的生命周期</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -184,11 +183,20 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-31 20:40:03" itemprop="dateModified" datetime="2020-07-31T20:40:03+08:00">2020-07-31</time>
+                <time title="Modified: 2020-08-02 14:49:23" itemprop="dateModified" datetime="2020-08-02T14:49:23+08:00">2020-08-02</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Gradle/" itemprop="url" rel="index"><span itemprop="name">Gradle</span></a>
+                </span>
+            </span>
 
           
 
@@ -351,10 +359,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2020/07/17/What-is-Gradle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -367,20 +375,35 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2020/07/17/What-is-Gradle/" class="post-title-link" itemprop="url">Gradle是什么</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-07-17 14:00:31 / Modified: 18:06:11" itemprop="dateCreated datePublished" datetime="2020-07-17T14:00:31+08:00">2020-07-17</time>
+              <time title="Created: 2020-07-17 14:00:31" itemprop="dateCreated datePublished" datetime="2020-07-17T14:00:31+08:00">2020-07-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-02 14:49:18" itemprop="dateModified" datetime="2020-08-02T14:49:18+08:00">2020-08-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Gradle/" itemprop="url" rel="index"><span itemprop="name">Gradle</span></a>
+                </span>
             </span>
 
           
@@ -477,10 +500,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2020/05/05/history-of-coroutine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -493,15 +516,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2020/05/05/history-of-coroutine/" class="post-title-link" itemprop="url">转载--计算机语言协程的历史、现在和未来</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -509,10 +532,10 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-31 20:40:17" itemprop="dateModified" datetime="2020-07-31T20:40:17+08:00">2020-07-31</time>
+                <time title="Modified: 2020-08-02 14:48:02" itemprop="dateModified" datetime="2020-08-02T14:48:02+08:00">2020-08-02</time>
               </span>
 
           
@@ -562,10 +585,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2020/05/05/coroutine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -578,15 +601,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2020/05/05/coroutine/" class="post-title-link" itemprop="url">什么是协程？</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -594,11 +617,20 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-31 20:40:14" itemprop="dateModified" datetime="2020-07-31T20:40:14+08:00">2020-07-31</time>
+                <time title="Modified: 2020-08-02 14:48:08" itemprop="dateModified" datetime="2020-08-02T14:48:08+08:00">2020-08-02</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coroutine/" itemprop="url" rel="index"><span itemprop="name">Coroutine</span></a>
+                </span>
+            </span>
 
           
 
@@ -681,10 +713,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2019/08/18/hexo_github_pages/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -697,15 +729,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2019/08/18/hexo_github_pages/" class="post-title-link" itemprop="url">GitHub Pages + Hexo搭建博客汇总</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -713,7 +745,7 @@
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
+                <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -755,10 +787,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2018/09/27/bip32/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -771,15 +803,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2018/09/27/bip32/" class="post-title-link" itemprop="url">BIP 32</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -787,11 +819,20 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-08-18 14:57:05" itemprop="dateModified" datetime="2019-08-18T14:57:05+08:00">2019-08-18</time>
+                <time title="Modified: 2020-08-02 14:48:37" itemprop="dateModified" datetime="2020-08-02T14:48:37+08:00">2020-08-02</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
 
           
 
@@ -917,10 +958,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2018/09/13/bip39/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -933,15 +974,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2018/09/13/bip39/" class="post-title-link" itemprop="url">BIP 39</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -949,11 +990,20 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-08-18 14:57:05" itemprop="dateModified" datetime="2019-08-18T14:57:05+08:00">2019-08-18</time>
+                <time title="Modified: 2020-08-02 14:02:48" itemprop="dateModified" datetime="2020-08-02T14:02:48+08:00">2020-08-02</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
 
           
 
@@ -1029,10 +1079,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2018/07/23/scala中的函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1045,15 +1095,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2018/07/23/scala中的函数/" class="post-title-link" itemprop="url">scala中的函数</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -1061,18 +1111,18 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-31 20:40:12" itemprop="dateModified" datetime="2020-07-31T20:40:12+08:00">2020-07-31</time>
+                <time title="Modified: 2020-08-02 14:47:46" itemprop="dateModified" datetime="2020-08-02T14:47:46+08:00">2020-08-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
+                <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/scala/" itemprop="url" rel="index"><span itemprop="name">scala</span></a>
+                  <a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a>
                 </span>
             </span>
 
@@ -1094,12 +1144,12 @@
 <p>可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它</p>
 <h2 id="scala函数基础"><a href="#scala函数基础" class="headerlink" title="scala函数基础"></a>scala函数基础</h2><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
 <li><p>匿名函数</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> (x: Int) =&gt; x + 1</span></span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> (x: Int) =&gt; x + 1</span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
 
 <p>固定写法：左边是参数列表，中间符号=&gt;，右边是函数体<br>匿名函数无函数名，也无需给出函数的结果类型</p>
 </li>
 <li><p>函数字面量</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = (x: Int) =&gt; x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(10)</span></span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> val f = (x: Int) =&gt; x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> f(10)</span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
 
 <p>其中表达式有半部分为一个匿名函数，函数作为一个变量(或不变量)，用变量名+参数表方式调用，与普通方法的调用几乎相同。<br>** 需要注意的是函数字面量声明函数时不需要写出函数的返回值类型，函数体的最后一条表达式的结果会作为返回值返回 **</p>
 </li>
@@ -1112,7 +1162,7 @@
 <p>可以看到其中有一个apply方法(先忽略其他方法)，接受三个泛型参数，所以当我们调用<code>f(1)</code>时，其实是调用了Function1实例的apply方法。</p>
 <h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>在学习过程中，还有一点很困扰，就是我们在类中用def定义的是不是函数，如果不是函数，它又是什么，跟函数又有什么区别呢？<br>首先呢使用def 关键字定义的是方法，不是函数，虽然在实际应用中几乎没有差别，但还是需要了解两者的不同的    </p>
 <p>** 方法 **<br>定义在类中，作为某个对象的成员方法，使用def关键字定义</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def a(x: Int):Int = x + 1</span></span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def a(x: Int):Int = x + 1</span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
 
 <p>** 两者的区别 **</p>
 <ul>
@@ -1120,17 +1170,17 @@
 <li>方法是类的一部分，函数是对象可以赋值给一个val/var</li>
 <li>函数作为对象可以像任何其他数据类型一样被传递和操作，而方法不行，如果想要传递方法，则需要把方法转换为函数</li>
 <li>定义方法时，如果没有参数，则参数表可以省略不写(即方法名后不写())，而函数不行</li>
-<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(x: Int):Int =&gt; x + 1</span></span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
+<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> f(x: Int):Int =&gt; x + 1</span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
 <p>** 两者的转换 **</p>
 <ul>
 <li><p>第一种情况，方法直接转为函数<br>不能将方法直接声明为一个val/var，如下面的写法会编译错误</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m</span></span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def m(x: Int):Int = x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> val f = m</span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
 
 <p>正确写法</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m _</span></span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def m(x: Int):Int = x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> val f = m _</span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
 
 <p>这个转换的其实是使用了部分应用(Partial Applied Function)，下面将会讲到</p>
 </li>
@@ -1156,7 +1206,7 @@
 </li>
 </ul>
 <h4 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h4><p>先看下代码如何实现函数的部分应用吧</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int, z: Int) = x + y + z</span></span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> a(1,2,3)</span></span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = sum(1, _: Int, _: Int)</span></span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> b(2,3)</span></span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def sum(x: Int, y: Int, z: Int) = x + y + z</span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = sum _</span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> a(1,2,3)</span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val b = sum(1, _: Int, _: Int)</span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> b(2,3)</span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
 
 <p>上面代码中出现了两种写法</p>
 <ul>
@@ -1165,7 +1215,7 @@
 </ul>
 <p>部分应用从数学角度理解比较容易，如上面例子中的sum，其实对应于数学中的<code>sum(x,y,z) = x + y + z</code>，这是一个三元函数(既有三个未知数)，而写法二对sum的部分应用，相当于我们现在得知<code>x = 1</code>，则带入函数得<code>sum(y,z) = 1 + y + z</code>，也就是函数f消去了未知元x。** 整体来看函数的部分应用其实就是数学中的消元。 ** 而写法是对未消去任何参数的一种简写</p>
 <h4 id="函数的柯里化"><a href="#函数的柯里化" class="headerlink" title="函数的柯里化"></a>函数的柯里化</h4><p>在scala中函数函数可以有多个参数列表，而函数柯里化就是将函数的多参数列表转换为多个多参数列表。写法如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int) = x + y</span></span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = a.curried</span></span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def sum(x: Int, y: Int) = x + y</span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = sum _</span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val b = a.curried</span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
 
 <p>柯里化是通过调用函数对象的curried方法实现的。也就是说调用的是Function*中的curried方法(Function2-Function22拥有curried方法，Function0及Function1没有，因为无参函数和但参函数不需要也不能柯里化)，以Function2为例，我们看下源码的实现</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function2</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; apply(x1, x2)</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1176,7 +1226,7 @@
 <p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。</p>
 </blockquote>
 <p>示例</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> var more = 1</span></span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val add = (i: Int) =&gt; i + more</span></span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> var more = 1</span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val add = (i: Int) =&gt; i + more</span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
 
 <p>上面例子中add函数的计算依赖于自由变量more，也就是闭包了。闭包很像函数字面量，不同的是，闭包运算的过程不只依赖于输入参数，还需要依赖函数之外的一个或多个自由变量。</p>
 <p>关于闭包的详细解释可以参考<a href="https://zhuanlan.zhihu.com/p/21346046" target="_blank" rel="noopener">知乎-什么是闭包</a>，引用博文中的总结</p>
@@ -1208,10 +1258,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2018/07/21/scala函数式编程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1224,15 +1274,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2018/07/21/scala函数式编程/" class="post-title-link" itemprop="url">scala函数式编程</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -1240,18 +1290,18 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-08-18 14:57:05" itemprop="dateModified" datetime="2019-08-18T14:57:05+08:00">2019-08-18</time>
+                <time title="Modified: 2020-08-02 14:49:01" itemprop="dateModified" datetime="2020-08-02T14:49:01+08:00">2020-08-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
+                <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/scala/" itemprop="url" rel="index"><span itemprop="name">scala</span></a>
+                  <a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a>
                 </span>
             </span>
 
@@ -1306,10 +1356,10 @@
   
   
 
-      
+        
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2018/07/21/scala学习资料整理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1322,15 +1372,15 @@
       <meta itemprop="name" content="Gsl's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
             <a href="/2018/07/21/scala学习资料整理/" class="post-title-link" itemprop="url">scala学习资料整理</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -1338,18 +1388,18 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-05 16:27:41" itemprop="dateModified" datetime="2020-05-05T16:27:41+08:00">2020-05-05</time>
+                <time title="Modified: 2020-08-02 14:48:59" itemprop="dateModified" datetime="2020-08-02T14:48:59+08:00">2020-08-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
+                <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/scala/" itemprop="url" rel="index"><span itemprop="name">scala</span></a>
+                  <a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a>
                 </span>
             </span>
 
@@ -1384,6 +1434,7 @@
   
   
 
+  </div>
 
   
 
@@ -1394,7 +1445,7 @@
 
 <script>
   window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
+    let activeClass = CONFIG.comments.activeClass;
     if (CONFIG.comments.storage) {
       activeClass = localStorage.getItem('comments_active') || activeClass;
     }
@@ -1459,7 +1510,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1472,10 +1523,10 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gslullaby" title="GitHub → https://github.com/gslullaby" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/gslullaby" title="GitHub → https://github.com/gslullaby" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://www.douban.com/people/wlp_caidao" title="豆瓣 → https://www.douban.com/people/wlp_caidao" rel="noopener" target="_blank"><i class="fab fa-douban fa-fw"></i>豆瓣</a>
+        <a href="https://www.douban.com/people/wlp_caidao" title="DouBan → https://www.douban.com/people/wlp_caidao" rel="noopener" target="_blank"><i class="fa fa-fw fa-douban"></i>DouBan</a>
       </span>
   </div>
 
@@ -1495,18 +1546,19 @@
       <div class="footer-inner">
         
 
-        
-
 <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">何从</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
   </div>
 
         
