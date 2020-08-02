@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gslullaby.github.io/2020/05/05/history-of-coroutine/</loc>
+    
+    <lastmod>2020-07-31T12:40:17.632Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gslullaby.github.io/2020/05/05/coroutine/</loc>
+    
+    <lastmod>2020-07-31T12:40:14.229Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gslullaby.github.io/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</loc>
+    
+    <lastmod>2020-07-31T12:40:12.298Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gslullaby.github.io/2020/07/20/Gradle-build-lifecycle/</loc>
     
-    <lastmod>2020-07-29T12:21:19.792Z</lastmod>
+    <lastmod>2020-07-31T12:40:03.999Z</lastmod>
     
   </url>
   
@@ -12,20 +33,6 @@
     <loc>https://gslullaby.github.io/2020/07/17/What-is-Gradle/</loc>
     
     <lastmod>2020-07-17T10:06:11.405Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gslullaby.github.io/2020/05/05/history-of-coroutine/</loc>
-    
-    <lastmod>2020-05-18T03:34:42.504Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gslullaby.github.io/2020/05/05/coroutine/</loc>
-    
-    <lastmod>2020-05-17T09:11:47.437Z</lastmod>
     
   </url>
   
@@ -65,23 +72,9 @@
   </url>
   
   <url>
-    <loc>https://gslullaby.github.io/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</loc>
-    
-    <lastmod>2019-08-18T06:57:05.179Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://gslullaby.github.io/2019/08/18/hexo_github_pages/</loc>
     
     <lastmod>2019-08-18T06:57:05.176Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gslullaby.github.io/2019/08/18/hello-world/</loc>
-    
-    <lastmod>2019-08-18T06:57:05.175Z</lastmod>
     
   </url>
   

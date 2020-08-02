@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"gslullaby.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"gslullaby.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="本文原发于《程序员》2014年11月刊。好文章备份一份 计算机科学是一门应用科学，几乎所有概念都是为了理解或解决实际问题而生的。协程 (Coroutine) 的出现也不例外。协程的概念，最早可以追溯到写作 COBOL 语言编译器中的技术难题。 从磁带到协程COBOL是最早的高级语言之一，编译器则是高级语言必不可少的一部分。现如今，我们对编译器的了解，已经到了可以把核心内容浓缩成一本教科书的程度。然">
@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Gsl&#39;s blog">
 <meta property="og:description" content="本文原发于《程序员》2014年11月刊。好文章备份一份 计算机科学是一门应用科学，几乎所有概念都是为了理解或解决实际问题而生的。协程 (Coroutine) 的出现也不例外。协程的概念，最早可以追溯到写作 COBOL 语言编译器中的技术难题。 从磁带到协程COBOL是最早的高级语言之一，编译器则是高级语言必不可少的一部分。现如今，我们对编译器的了解，已经到了可以把核心内容浓缩成一本教科书的程度。然">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-05-18T03:34:42.504Z">
+<meta property="og:updated_time" content="2020-07-31T12:40:17.632Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="转载--计算机语言协程的历史、现在和未来">
 <meta name="twitter:description" content="本文原发于《程序员》2014年11月刊。好文章备份一份 计算机科学是一门应用科学，几乎所有概念都是为了理解或解决实际问题而生的。协程 (Coroutine) 的出现也不例外。协程的概念，最早可以追溯到写作 COBOL 语言编译器中的技术难题。 从磁带到协程COBOL是最早的高级语言之一，编译器则是高级语言必不可少的一部分。现如今，我们对编译器的了解，已经到了可以把核心内容浓缩成一本教科书的程度。然">
@@ -165,7 +165,7 @@
     <link itemprop="mainEntityOfPage" href="https://gslullaby.github.io/2020/05/05/history-of-coroutine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="何从">
       <meta itemprop="description" content="">
     </span>
@@ -192,7 +192,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-18 11:34:42" itemprop="dateModified" datetime="2020-05-18T11:34:42+08:00">2020-05-18</time>
+                <time title="Modified: 2020-07-31 20:40:17" itemprop="dateModified" datetime="2020-07-31T20:40:17+08:00">2020-07-31</time>
               </span>
 
           
@@ -220,9 +220,7 @@
 <p>实践中，协程的思想频繁应用于任务调度和流处理。例如，Unix管道就可以看成是众多命令间的协同操作。当然，管道的现代实现都以pipe()系统调用和进程间的通信为基础，而非简单遵循协程的yield/resume语法。</p>
 <p>许多协同式多任务操作系统，也可以看成协程运行系统。说到协同式多任务系统，一个常见的误区是认为协同式调度比抢占式调度“低级”，因为我们所熟悉的桌面操作系统，都是从协同式调度（如Windows 3.2、Mac OS 9等）过渡到抢占式多任务系统的。实际上，调度方式并无高下，完全取决于应用场景。抢占式系统允许操作系统剥夺进程执行权限，抢占控制流，因而天然适合服务器和图形操作系统，因为调度器可以优先保证对用户交互和网络事件的快速响应。当年Windows 95刚推出时，抢占式多任务就被作为一大卖点大加宣传。协同式调度则等到进程时间片用完或系统调用时转移执行权限，因此适合实时或分时等对运行时间有保障的系统。</p>
 <p>另外，抢占式系统依赖于CPU的硬件支持。因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有CPU支持了执行权限后，抢占式调度才成为可能。x86系统从80386处理器开始引入Ring机制支持执行权限，这也是为何Windows 95和Linux其实只能运行在80386之后的x86处理器上的原因。而协同式多任务适用于那些没有处理器权限支持的场景，这些场景包括资源受限的嵌入式系统和实时系统。在这些系统中，程序均以协程的方式运行。调度器负责控制流的让出和恢复。通过协程的模型，无需硬件支持，我们就可以在一个“简陋”的处理器上实现多任务系统。许多常见的智能设备，如运动手环，受硬件所限，都采用协同调度架构。</p>
-<h2 id="协程的复兴和现代形式"><a href="#协程的复兴和现代形式" class="headerlink" title="协程的复兴和现代形式"></a>协程的复兴和现代形式</h2><p>编程思想能否普及开来，很大程度上在于应用场景。协程没有能在自顶向下的世界里立足，却在动态语言世界中大放光彩，这里最显著的例子莫过于Python的迭代器和生成器。<br>回想一下在C的世界里，循环的标准写法是</p>
-<figure class="highlight plain"><figcaption><span>(i </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这行代码包含两个独立的逻辑：for循环控制了i的边界条件，++i控制了i的自增逻辑。这行代码适用于C世界里的数组即内存位移的范式，因此适合大多数访问场景。对于STL和复杂数据结构，因为往往只支持顺序访问，循环大多写成：```for (i = A.first(); i.hasNext(); i = i.next()) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
-
+<h2 id="协程的复兴和现代形式"><a href="#协程的复兴和现代形式" class="headerlink" title="协程的复兴和现代形式"></a>协程的复兴和现代形式</h2><p>编程思想能否普及开来，很大程度上在于应用场景。协程没有能在自顶向下的世界里立足，却在动态语言世界中大放光彩，这里最显著的例子莫过于Python的迭代器和生成器。<br>回想一下在C的世界里，循环的标准写法是<br><code>for (i = 0; i &lt; n; ++i) { ... }</code><br>这行代码包含两个独立的逻辑：for循环控制了i的边界条件，++i控制了i的自增逻辑。这行代码适用于C世界里的数组即内存位移的范式，因此适合大多数访问场景。对于STL和复杂数据结构，因为往往只支持顺序访问，循环大多写成：<code>for (i = A.first(); i.hasNext(); i = i.next()) { ... }</code></p>
 <p>这种设计抽象出了一个独立于数据结构的迭代器，专门负责数据结构上元素的访问顺序。迭代器把访问逻辑从数据结构中分离出来，是一个常用的设计模式（GoF 23个设计模式之一），我们在STL和Java Collection中也常常看到迭代器的身影。在适当的时候，我们可以更进一步引入一个语法糖，将循环写成：<code>for i in A.Iterator() {func(i)}</code></p>
 <p>事实上，许多现代语言都支持类似的语法。这种语法抛弃了以i变量作为迭代指针的功能，要求迭代器自身能记住当前迭代位置，调用时返回下一个元素。读者不难看到，这就是我们在文章开始提到的语法分析器的架构。正因为如此，我们可以从协程的角度来理解迭代器：当控制流转换到迭代器时，迭代器负责生成和返回下一个元素。一旦准备就绪，迭代器就让出控制流。在Python中，这种特殊的迭代器实现又被成为生成器。以协程角度切入的好处在于设计大大精简。实际上，在Python中，生成器本身就是一个普通函数，和其他普通函数的唯一不同，在于它的返回语句是协程风格的yield。这里，yield一语双关，既是让出控制流，也是生成迭代器的返回值。</p>
 <p>前文我们仅讨论了生成器最基本的特性。实际上，生成器的强大之处在于我们可以像Unix管道一样串联起来，组成所谓的生成器表达式。如果我们有一个可以生成1，2，3 …的生成器N，则square = (i *<em>2 for i in N)就是一个生成平方数的生成器表达式。注意这里圆括号语法和<a href="http://en.wikipedia.org/wiki/List_comprehension" target="_blank" rel="noopener">list comprehansion</a>方括号语法的区别，square = [i *</em>2 for i in N]是生成一个具体的列表。我们可以串联这些生成器表达式，最终的控制流会在这些串联的部分间转换，无需编写复杂的嵌套调用。当然，yield只是冰山的一角，现代的Python语言还充分利用了yield关键字构建<a href="https://www.python.org/dev/peps/pep-0380/" target="_blank" rel="noopener">yield from</a>语句、(yield)语法等，让我们毫无困难地将协程的思想融入到Python编程中，限于篇幅这里不再展开。</p>
@@ -318,6 +316,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="何从"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">何从</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -326,7 +326,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -344,6 +344,14 @@
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gslullaby" title="GitHub → https://github.com/gslullaby" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.douban.com/people/wlp_caidao" title="豆瓣 → https://www.douban.com/people/wlp_caidao" rel="noopener" target="_blank"><i class="fab fa-douban fa-fw"></i>豆瓣</a>
+      </span>
+  </div>
 
 
 
@@ -372,7 +380,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">何从</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
 
         
@@ -393,7 +401,7 @@
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
 
 
