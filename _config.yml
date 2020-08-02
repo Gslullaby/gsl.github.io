@@ -3,8 +3,8 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Gsl's blog
-subtitle: 静待花开
+title: Gsl's Blog
+subtitle: 逆风而行，更需要凝神静气、脚踏实地。
 description:
 keywords:
 author: 何从
@@ -76,7 +76,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next-new
+theme: hexo-theme-next-7.7.2
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

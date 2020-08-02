@@ -6,6 +6,8 @@ tags:
 keywords:
 - coroutine
 - 协程
+categories:
+- coroutine
 description:
 layout: false
 ---

@@ -7,6 +7,8 @@ tags:
 keywords:
 - BIP
 - 区块链
+categories:
+- 区块链
 description:
 ---
 此篇为BIP 32的译文，介绍分层确定性钱包

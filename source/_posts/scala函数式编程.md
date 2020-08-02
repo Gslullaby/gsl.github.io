@@ -5,7 +5,7 @@ tags:
 - scala
 - 函数式
 categories:
-- scala
+- Scala
 keywords:
 - scala
 - 函数式

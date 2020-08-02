@@ -4,7 +4,7 @@ date: 2018-07-23 14:31:46
 tags:
 - scala
 categories:
-- scala
+- Scala
 keywords:
 - scala
 - 函数

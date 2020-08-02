@@ -5,6 +5,8 @@ tags:
 - gradle
 keywords:
 - gradle
+categories:
+- Gradle
 description:
 ---
 ## 概述

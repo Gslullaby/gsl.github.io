@@ -4,7 +4,7 @@ date: 2018-07-21 15:57:35
 tags:
 - scala
 categories:
-- scala
+- Scala
 keywords:
 - scala
 - 学习资料
