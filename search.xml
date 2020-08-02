@@ -114,113 +114,82 @@
       </tags>
   </entry>
   <entry>
-    <title>BIP 32</title>
-    <url>/2018/09/27/bip32/</url>
-    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
-<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
-<p>本文分为两部分</p>
+    <title>Gradle是什么</title>
+    <url>/2020/07/17/What-is-Gradle/</url>
+    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性    </p>
 <ul>
-<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
-<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
+<li><p>高效率</p>
+<p>  Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）<br>  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的运行效率</p>
+</li>
+<li><p>基于JVM</p>
+<p>  Gradle是运行在JVM之上了（因此没有了跨平台的问题），所以用户需要安装JDK才能使用。对熟悉Java平台的用户来说这是一项福利，因为可以使用标准Java Apis实现构建逻辑，如自定义各种任务类型和插件<br>  虽然Gradle基于JVM，但这并不意味着Gradle只能构建java项目，它甚至可以用来构建native项目</p>
+</li>
+<li><p>约定</p>
+<p>  Gradle借鉴了Maven的经验，通过实现约定使常见类型的项目(如Java项目)变得更容易构建。 使用适当的插件，您可以很容易地为许多项目生成精简的构建脚本。 但是这些约定并不会不限制你：Gradle允许你覆盖它们，添加自己的任务，并对你的基于约定的构建进行许多其他定制。</p>
+</li>
+<li><p>良好的可扩展性</p>
+<p>  你可以很容易地扩展Gradle以提供自己的任务类型，甚至构建模型。 有关这方面的示例，请参阅Android构建支持：它添加了许多新的构建概念，如风格和构建类型。</p>
+</li>
+<li><p>主流IDE均支持Gradle</p>
+<p>  许多主流的IDE均支持Gradle，如Android Studio，IntelliJ IDEA，Eclipse，NetBeans等</p>
+</li>
+<li><p>构建过程可视化</p>
+<p>  构建过程中构建扫描器会生成大量的日志，这些日志可用于定位构建问题。并能很好的反应构建的性能问题。在你构建发生问题咨询别人时，可以将这些构建日志分享给他，以便于定位问题</p>
+</li>
 </ul>
-<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
-<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
-<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
-<ul>
-<li>整数模数曲线顺序（用n表示）</li>
-<li>曲线上点的坐标</li>
-<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
-</ul>
-<p>作为标准的转换函数，我们假设</p>
-<ul>
-<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
-<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
-<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
-<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
-<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
-</ul>
-<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
-<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
-<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
-</ol>
-<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
-<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
-</ol>
-<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
-<ol>
-<li>返回值K = point(k)</li>
-<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
-</ol>
-<p>两种通过父私钥计算子公钥的方法</p>
-<ol>
-<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
-<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
-</ol>
-<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
-<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
-<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
-<ul>
-<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
-<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
-</ul>
-<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
-<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
-<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
-<p>密钥id的钱32位称为指纹</p>
-<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
-<ol>
-<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
-<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
-<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
-<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
-<li>32byte：链码</li>
-<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
-</ol>
-<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
-<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
-<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
-<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
-<ol>
-<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
-<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
-<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
-<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
-</ol>
-<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
-<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
+<h2 id="关于Gradle你需要知道的五件事"><a href="#关于Gradle你需要知道的五件事" class="headerlink" title="关于Gradle你需要知道的五件事"></a>关于Gradle你需要知道的五件事</h2><p>Gradle是一款灵活且强大的构建工具，但是第一次使用它时，你可能会觉得很难上手。当你理解了以下核心原则，你会觉得Gradle变得简单很多，并且你会在不知不觉中熟练使用它</p>
+<h4 id="1-Gradle是一款通用构建工具"><a href="#1-Gradle是一款通用构建工具" class="headerlink" title="1. Gradle是一款通用构建工具"></a>1. Gradle是一款通用构建工具</h4><p>Gradle可用于构建任何软件，因为它对你尝试构建的内容或应该如何构建几乎没有任何假设。一个最值得注意的限制是，依赖管理模块目前只支持Maven、Ivy的兼容仓库以及文件系统    </p>
+<p>这并不意味着需要做大量的工作才能创建一个构建。 Gradle通过插件添加了一层约定和预构建的功能，使得构建常见类型的项目(比如Java库)变得很容易。 你甚至可以创建和发布自定义插件来封装你自己的约定和构建功能。</p>
+<h4 id="2-核心的model基于task"><a href="#2-核心的model基于task" class="headerlink" title="2. 核心的model基于task"></a>2. 核心的model基于task</h4><p>Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务</p>
+<p>下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示</p>
+<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="主密钥生成">
 
-<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
-<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
-<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
+<p>几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。</p>
+<p>任务的组成:</p>
 <ul>
-<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
-<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
+<li>操作 - 执行某些操作，如文件复制或编译源代码等</li>
+<li>输入 - 操作需要用到的值、文件或目录等</li>
+<li>输出 - 操作修改或生成的文件或目录等</li>
 </ul>
-<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
-<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
-<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
-<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
-<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
+<p>实际上，任务的组成完全取决于task需要执行什么操作。某些task甚至没有action，如标准的生命周期task（方便起见仅仅将多个任务整合在一起而存在）</p>
+<p>另外需要注意的是：Gradle的增量构建支持是十分强大且可靠的，所以为了保持构建的高效运行，在不必要的情况下不要执行clean task</p>
+<h4 id="Gradle有几个固定的构建阶段"><a href="#Gradle有几个固定的构建阶段" class="headerlink" title="Gradle有几个固定的构建阶段"></a>Gradle有几个固定的构建阶段</h4><p>理解Gradle分三个阶段评估和执行构建脚本是很重要的</p>
+<ol>
+<li><p>初始化阶段</p>
+<p>为构建设置环境，决定那些project需要参与构建</p>
+</li>
+<li><p>配置阶段</p>
+<p>构造并配置生成的task图，然后根据用户要运行的task确定需要运行哪些task，以及task运行的顺序</p>
+</li>
+<li><p>执行阶段</p>
+<p>运行配置阶段结束时输出的任务</p>
+</li>
+</ol>
+<p>以上这三个阶段组成了构建的生命周期<br>设计良好的构建脚本主要由声明性配置组成，而不是命令性逻辑。在配置阶段对配置项进行评估是很容易理解的。即便如此，很多构建有不少工作（经过评估后在执行阶段）需要做，如通过doLast和doFirst代码块。这一点很重要，因为在配置阶段评估的代码不会看到在执行阶段发生的更改   </p>
+<p>配置阶段另一个非常重要的方面是，每次运行构建时都会对其中涉及的所有内容进行评估。这就是为什么最佳实践是避免在配置阶段做过多工作的原因， 构建扫描器可以帮助你识别这些热点，以及其他功能</p>
+<h4 id="Gradle的扩展方式不止一种"><a href="#Gradle的扩展方式不止一种" class="headerlink" title="Gradle的扩展方式不止一种"></a>Gradle的扩展方式不止一种</h4><p>如果你只用Gradle内建bundle就能构建你的应用，那是极好的，但这几乎不可能。因为大多数构建都有一些特殊需求，这意味着你需要添加自定义构建逻辑  </p>
+<p>Gradle提供了几种机制用以对其进行扩展</p>
+<ul>
+<li>自定义任务类型<br>当你需要执行的操作现有的构建任务满足不了，你可以实现一个你自己的任务类型。通常，最好将自定义任务类型的源文件放在buildSrc目录或打包在插件中。 然后，你就可以像使用Gradle提供的任何任务类型一样使用自定义的任务类型</li>
+<li>自定义任务操作<br>你可以在一个任务的执行前后附加上自定义构建逻辑（通过使用Task.doFirst(),Task.doLast()方法）</li>
+<li>为project和task添加额外属性<br>可以为project或task添加自己的属性，后续你可以在自己的自定义操作或其他任何构建逻辑中使用这些属性。额外属性甚至可以用于那些不是由你创建的task（如Gradle核心插件创建的task）</li>
+<li>自定义约定<br>约定可以很大程度上简化构建，这样用户可以更容易理解并使用他们。 这可以在使用标准项目结构和命名约定的构建中看到，比如Java构建。 你可以编写自己的插件来提供约定-它们只需要为构建的相关方面配置默认值。</li>
+<li>自定义model<br>Gradle允许你在任务、文件和依赖项配置之外的构建中引入新概念。你可以在大多数语言插件中看到这一点，他们将source sets的概念添加到构建中。对构建过程的适当建模可以极大的提高构建的易用性和效率</li>
+</ul>
+<h4 id="构建脚本按照Api进行操作"><a href="#构建脚本按照Api进行操作" class="headerlink" title="构建脚本按照Api进行操作"></a>构建脚本按照Api进行操作</h4><p>可以很容易将Gradle构建脚本视为可执行代码，因为他们本身就是可执行代码。实现细节：设计良好的构建脚本描述构建软件需要哪些步骤，而不是描述这些步骤如何完成工作，这是自定义任务类型及插件的职责</p>
+<blockquote>
+<p>有一种常见的误解，认为Gradle的强大和灵活性来自于它的构建脚本是代码这一事实。 这与事实大相径庭。 提供强大功能的是底层模型和API。 正如我们在最佳实践中建议的那样，你应该避免在构建脚本中放置太多(如果有的话)命令性逻辑。</p>
+</blockquote>
+<p>然而，在一种场景中，将构建脚本视为可执行代码是很有用的：理解构建脚本语法如何映射到Gradle API。API文档（由Javadocs和Groovy DSL Reference组成）列出了方法和属性，并引用了闭包和操作。这些在构建脚本上文中意味着什么呢？查看Groovy Build Script Primer了解该问题的答案，这样您就可以有效地使用API文档</p>
+<blockquote>
+<p>由于Gradle运行在JVM之上，所以构建脚本可以使用标准的Java API。Groovy构建脚本可以使用Groovy API，当然Kotlin构建脚本可以使用Kotlin API</p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>区块链</category>
+        <category>Gradle</category>
       </categories>
       <tags>
-        <tag>区块链</tag>
-        <tag>BIP</tag>
+        <tag>gradle</tag>
       </tags>
   </entry>
   <entry>
@@ -230,7 +199,7 @@
 <p>由于构建脚本是用于配置依赖图的。因此严格意义上说，构建脚本应该称为构建配置脚本</p>
 <h2 id="构建阶段"><a href="#构建阶段" class="headerlink" title="构建阶段"></a>构建阶段</h2><p>Gradle构建有三个不同的阶段</p>
 <ul>
-<li><p>初始换阶段（Initialization）</p>
+<li><p>初始化阶段（Initialization）</p>
 <p>  Gradle支持单/多项目构建。在初始化阶段，Gradle会确定哪些项目要参与到构建中，并且为每个参与构建的项目创建一个Project实例</p>
 </li>
 <li><p>配置阶段（Configuration）   </p>
@@ -370,85 +339,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Gradle是什么</title>
-    <url>/2020/07/17/What-is-Gradle/</url>
-    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性    </p>
-<ul>
-<li><p>高效率</p>
-<p>  Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）<br>  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的运行效率</p>
-</li>
-<li><p>基于JVM</p>
-<p>  Gradle是运行在JVM之上了（因此没有了跨平台的问题），所以用户需要安装JDK才能使用。对熟悉Java平台的用户来说这是一项福利，因为可以使用标准Java Apis实现构建逻辑，如自定义各种任务类型和插件<br>  虽然Gradle基于JVM，但这并不意味着Gradle只能构建java项目，它甚至可以用来构建native项目</p>
-</li>
-<li><p>约定</p>
-<p>  Gradle借鉴了Maven的经验，通过实现约定使常见类型的项目(如Java项目)变得更容易构建。 使用适当的插件，您可以很容易地为许多项目生成精简的构建脚本。 但是这些约定并不会不限制你：Gradle允许你覆盖它们，添加自己的任务，并对你的基于约定的构建进行许多其他定制。</p>
-</li>
-<li><p>良好的可扩展性</p>
-<p>  你可以很容易地扩展Gradle以提供自己的任务类型，甚至构建模型。 有关这方面的示例，请参阅Android构建支持：它添加了许多新的构建概念，如风格和构建类型。</p>
-</li>
-<li><p>主流IDE均支持Gradle</p>
-<p>  许多主流的IDE均支持Gradle，如Android Studio，IntelliJ IDEA，Eclipse，NetBeans等</p>
-</li>
-<li><p>构建过程可视化</p>
-<p>  构建过程中构建扫描器会生成大量的日志，这些日志可用于定位构建问题。并能很好的反应构建的性能问题。在你构建发生问题咨询别人时，可以将这些构建日志分享给他，以便于定位问题</p>
-</li>
-</ul>
-<h2 id="关于Gradle你需要知道的五件事"><a href="#关于Gradle你需要知道的五件事" class="headerlink" title="关于Gradle你需要知道的五件事"></a>关于Gradle你需要知道的五件事</h2><p>Gradle是一款灵活且强大的构建工具，但是第一次使用它时，你可能会觉得很难上手。当你理解了以下核心原则，你会觉得Gradle变得简单很多，并且你会在不知不觉中熟练使用它</p>
-<h4 id="1-Gradle是一款通用构建工具"><a href="#1-Gradle是一款通用构建工具" class="headerlink" title="1. Gradle是一款通用构建工具"></a>1. Gradle是一款通用构建工具</h4><p>Gradle可用于构建任何软件，因为它对你尝试构建的内容或应该如何构建几乎没有任何假设。一个最值得注意的限制是，依赖管理模块目前只支持Maven、Ivy的兼容仓库以及文件系统    </p>
-<p>这并不意味着需要做大量的工作才能创建一个构建。 Gradle通过插件添加了一层约定和预构建的功能，使得构建常见类型的项目(比如Java库)变得很容易。 你甚至可以创建和发布自定义插件来封装你自己的约定和构建功能。</p>
-<h4 id="2-核心的model基于task"><a href="#2-核心的model基于task" class="headerlink" title="2. 核心的model基于task"></a>2. 核心的model基于task</h4><p>Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务</p>
-<p>下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示</p>
-<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="主密钥生成">
-
-<p>几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。</p>
-<p>任务的组成:</p>
-<ul>
-<li>操作 - 执行某些操作，如文件复制或编译源代码等</li>
-<li>输入 - 操作需要用到的值、文件或目录等</li>
-<li>输出 - 操作修改或生成的文件或目录等</li>
-</ul>
-<p>实际上，任务的组成完全取决于task需要执行什么操作。某些task甚至没有action，如标准的生命周期task（方便起见仅仅将多个任务整合在一起而存在）</p>
-<p>另外需要注意的是：Gradle的增量构建支持是十分强大且可靠的，所以为了保持构建的高效运行，在不必要的情况下不要执行clean task</p>
-<h4 id="Gradle有几个固定的构建阶段"><a href="#Gradle有几个固定的构建阶段" class="headerlink" title="Gradle有几个固定的构建阶段"></a>Gradle有几个固定的构建阶段</h4><p>理解Gradle分三个阶段评估和执行构建脚本是很重要的</p>
-<ol>
-<li><p>初始化阶段</p>
-<p>为构建设置环境，决定那些project需要参与构建</p>
-</li>
-<li><p>配置阶段</p>
-<p>构造并配置生成的task图，然后根据用户要运行的task确定需要运行哪些task，以及task运行的顺序</p>
-</li>
-<li><p>执行阶段</p>
-<p>运行配置阶段结束时输出的任务</p>
-</li>
-</ol>
-<p>以上这三个阶段组成了构建的生命周期<br>设计良好的构建脚本主要由声明性配置组成，而不是命令性逻辑。在配置阶段对配置项进行评估是很容易理解的。即便如此，很多构建有不少工作（经过评估后在执行阶段）需要做，如通过doLast和doFirst代码块。这一点很重要，因为在配置阶段评估的代码不会看到在执行阶段发生的更改   </p>
-<p>配置阶段另一个非常重要的方面是，每次运行构建时都会对其中涉及的所有内容进行评估。这就是为什么最佳实践是避免在配置阶段做过多工作的原因， 构建扫描器可以帮助你识别这些热点，以及其他功能</p>
-<h4 id="Gradle的扩展方式不止一种"><a href="#Gradle的扩展方式不止一种" class="headerlink" title="Gradle的扩展方式不止一种"></a>Gradle的扩展方式不止一种</h4><p>如果你只用Gradle内建bundle就能构建你的应用，那是极好的，但这几乎不可能。因为大多数构建都有一些特殊需求，这意味着你需要添加自定义构建逻辑  </p>
-<p>Gradle提供了几种机制用以对其进行扩展</p>
-<ul>
-<li>自定义任务类型<br>当你需要执行的操作现有的构建任务满足不了，你可以实现一个你自己的任务类型。通常，最好将自定义任务类型的源文件放在buildSrc目录或打包在插件中。 然后，你就可以像使用Gradle提供的任何任务类型一样使用自定义的任务类型</li>
-<li>自定义任务操作<br>你可以在一个任务的执行前后附加上自定义构建逻辑（通过使用Task.doFirst(),Task.doLast()方法）</li>
-<li>为project和task添加额外属性<br>可以为project或task添加自己的属性，后续你可以在自己的自定义操作或其他任何构建逻辑中使用这些属性。额外属性甚至可以用于那些不是由你创建的task（如Gradle核心插件创建的task）</li>
-<li>自定义约定<br>约定可以很大程度上简化构建，这样用户可以更容易理解并使用他们。 这可以在使用标准项目结构和命名约定的构建中看到，比如Java构建。 你可以编写自己的插件来提供约定-它们只需要为构建的相关方面配置默认值。</li>
-<li>自定义model<br>Gradle允许你在任务、文件和依赖项配置之外的构建中引入新概念。你可以在大多数语言插件中看到这一点，他们将source sets的概念添加到构建中。对构建过程的适当建模可以极大的提高构建的易用性和效率</li>
-</ul>
-<h4 id="构建脚本按照Api进行操作"><a href="#构建脚本按照Api进行操作" class="headerlink" title="构建脚本按照Api进行操作"></a>构建脚本按照Api进行操作</h4><p>可以很容易将Gradle构建脚本视为可执行代码，因为他们本身就是可执行代码。实现细节：设计良好的构建脚本描述构建软件需要哪些步骤，而不是描述这些步骤如何完成工作，这是自定义任务类型及插件的职责</p>
-<blockquote>
-<p>有一种常见的误解，认为Gradle的强大和灵活性来自于它的构建脚本是代码这一事实。 这与事实大相径庭。 提供强大功能的是底层模型和API。 正如我们在最佳实践中建议的那样，你应该避免在构建脚本中放置太多(如果有的话)命令性逻辑。</p>
-</blockquote>
-<p>然而，在一种场景中，将构建脚本视为可执行代码是很有用的：理解构建脚本语法如何映射到Gradle API。API文档（由Javadocs和Groovy DSL Reference组成）列出了方法和属性，并引用了闭包和操作。这些在构建脚本上文中意味着什么呢？查看Groovy Build Script Primer了解该问题的答案，这样您就可以有效地使用API文档</p>
-<blockquote>
-<p>由于Gradle运行在JVM之上，所以构建脚本可以使用标准的Java API。Groovy构建脚本可以使用Groovy API，当然Kotlin构建脚本可以使用Kotlin API</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Gradle</category>
-      </categories>
-      <tags>
-        <tag>gradle</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>什么是协程？</title>
     <url>/2020/05/05/coroutine/</url>
     <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
@@ -512,6 +402,233 @@
       </categories>
       <tags>
         <tag>coroutine</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BIP 32</title>
+    <url>/2018/09/27/bip32/</url>
+    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
+<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
+<p>本文分为两部分</p>
+<ul>
+<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
+<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
+</ul>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
+<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
+<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
+<ul>
+<li>整数模数曲线顺序（用n表示）</li>
+<li>曲线上点的坐标</li>
+<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
+</ul>
+<p>作为标准的转换函数，我们假设</p>
+<ul>
+<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
+<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
+<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
+<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
+<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
+</ul>
+<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
+<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
+<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
+</ol>
+<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
+<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
+</ol>
+<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
+<ol>
+<li>返回值K = point(k)</li>
+<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
+</ol>
+<p>两种通过父私钥计算子公钥的方法</p>
+<ol>
+<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
+<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
+</ol>
+<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
+<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
+<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
+<ul>
+<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
+<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
+</ul>
+<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
+<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
+<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
+<p>密钥id的钱32位称为指纹</p>
+<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
+<ol>
+<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
+<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
+<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
+<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
+<li>32byte：链码</li>
+<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
+</ol>
+<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
+<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
+<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
+<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
+<ol>
+<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
+<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
+<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
+<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
+</ol>
+<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
+<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
+
+<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
+<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
+<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
+<ul>
+<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
+<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
+</ul>
+<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
+<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
+<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
+<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
+<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
+]]></content>
+      <categories>
+        <category>区块链</category>
+      </categories>
+      <tags>
+        <tag>区块链</tag>
+        <tag>BIP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala中的函数</title>
+    <url>/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>在各类blog及scala书籍中看到的关于函数最多的一句话是</p>
+<blockquote>
+<p>函数是一等公民</p>
+</blockquote>
+<p>可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它</p>
+<h2 id="scala函数基础"><a href="#scala函数基础" class="headerlink" title="scala函数基础"></a>scala函数基础</h2><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
+<li><p>匿名函数</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> (x: Int) =&gt; x + 1</span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
+
+<p>固定写法：左边是参数列表，中间符号=&gt;，右边是函数体<br>匿名函数无函数名，也无需给出函数的结果类型</p>
+</li>
+<li><p>函数字面量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> val f = (x: Int) =&gt; x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> f(10)</span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
+
+<p>其中表达式有半部分为一个匿名函数，函数作为一个变量(或不变量)，用变量名+参数表方式调用，与普通方法的调用几乎相同。<br>** 需要注意的是函数字面量声明函数时不需要写出函数的返回值类型，函数体的最后一条表达式的结果会作为返回值返回 **</p>
+</li>
+<li><p>函数值<br>函数字面量与函数值的关系就像类与对象的关系。函数字面量其实就是一个实现了trait Function*的函数类，在运行时实例化了一个函数类，这个实例就是函数值</p>
+</li>
+</ul>
+<h4 id="函数的本质"><a href="#函数的本质" class="headerlink" title="函数的本质"></a>函数的本质</h4><p>scala不像java有基本类型与引用类型之分，scala中一切皆对象，包括函数也是对象。scala中定义了一系列trait，Function0 - Function22，其中0-22表示参数的个数(至于为什么是到22，理论上讲程序中不会出现多于22个参数的函数)。而函数正是Function<em>的实例。如<code>val f = (x: Int) =&gt; x + 1</code>其实就是Function1的实例。下面看下Function</em>的源码，以Function3为例</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** A function of 3 parameters.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function3</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, -<span class="type">T3</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  <span class="comment">/** Apply the body of this function to the arguments.</span></span><br><span class="line"><span class="comment">   *  @return   the result of function application.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">T1</span>, v2: <span class="type">T2</span>, v3: <span class="type">T3</span>): <span class="type">R</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a curried version of this function.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f(x1)(x2)(x3) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">T3</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; (x3: <span class="type">T3</span>) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a tupled version of this function: instead of 3 arguments,</span></span><br><span class="line"><span class="comment">   *  it accepts a single [[scala.Tuple3]] argument.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f((x1, x2, x3)) == f(Tuple3(x1, x2, x3)) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">tupled</span></span>: <span class="type">Tuple3</span>[<span class="type">T1</span>, <span class="type">T2</span>, <span class="type">T3</span>] =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Tuple3</span>(x1, x2, x3) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>() = <span class="string">"&lt;function3&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到其中有一个apply方法(先忽略其他方法)，接受三个泛型参数，所以当我们调用<code>f(1)</code>时，其实是调用了Function1实例的apply方法。</p>
+<h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>在学习过程中，还有一点很困扰，就是我们在类中用def定义的是不是函数，如果不是函数，它又是什么，跟函数又有什么区别呢？<br>首先呢使用def 关键字定义的是方法，不是函数，虽然在实际应用中几乎没有差别，但还是需要了解两者的不同的    </p>
+<p>** 方法 **<br>定义在类中，作为某个对象的成员方法，使用def关键字定义</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def a(x: Int):Int = x + 1</span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
+
+<p>** 两者的区别 **</p>
+<ul>
+<li>方法使用def关键字定义，而函数不用(函数使用val/var或干脆匿名)</li>
+<li>方法是类的一部分，函数是对象可以赋值给一个val/var</li>
+<li>函数作为对象可以像任何其他数据类型一样被传递和操作，而方法不行，如果想要传递方法，则需要把方法转换为函数</li>
+<li>定义方法时，如果没有参数，则参数表可以省略不写(即方法名后不写())，而函数不行</li>
+<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> f(x: Int):Int =&gt; x + 1</span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>** 两者的转换 **</p>
+<ul>
+<li><p>第一种情况，方法直接转为函数<br>不能将方法直接声明为一个val/var，如下面的写法会编译错误</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def m(x: Int):Int = x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> val f = m</span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
+
+<p>正确写法</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def m(x: Int):Int = x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> val f = m _</span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
+
+<p>这个转换的其实是使用了部分应用(Partial Applied Function)，下面将会讲到</p>
+</li>
+<li><p>第二种情况，需要函数的地方使用方法<br>这种情况下不需要使用下划线，方法会被自动转换为函数，称之为eta转换。关于eta-expansion与eta-conversion的解释可以参考<a href="http://hongjiang.info/scala-eta-conversion/" target="_blank" rel="noopener">王宏江-scala中的eta-conversion</a>与<a href="https://hongjiang.info/eta-conversion-and-eta-expansion/" target="_blank" rel="noopener">王宏江-再谈eta-conversion与eta-expansion</a></p>
+</li>
+</ul>
+<h2 id="scala函数进阶"><a href="#scala函数进阶" class="headerlink" title="scala函数进阶"></a>scala函数进阶</h2><h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><p>引用<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>中高阶函数的定义</p>
+<blockquote>
+<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：    </p>
+</blockquote>
+<ul>
+<li>接受一个或多个函数作为输入    </li>
+<li>输出一个函数    </li>
+</ul>
+<p>定义应该很容易理解，也就是函数可以接受另一个函数作为参数，或者函数的结果类型为函数类型。    </p>
+<ul>
+<li><p>第一种：如数学中的函数<code>f(x) = x + 1</code>， <code>g(x) = x * 2</code>，则<code>f(g(x)) = (x * 2) + 1</code>, 即为高阶函数。用代码实现即为</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>) = x * <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, g: <span class="type">Int</span> =&gt; <span class="type">Int</span>) = g(x) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二种：结果类型为函数类型</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>):(<span class="type">Int</span> =&gt; <span class="type">Int</span>) = &#123;</span><br><span class="line">  <span class="keyword">val</span> k = x * <span class="number">2</span></span><br><span class="line">  (y: <span class="type">Int</span>) =&gt; y + k + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h4><p>先看下代码如何实现函数的部分应用吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def sum(x: Int, y: Int, z: Int) = x + y + z</span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = sum _</span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> a(1,2,3)</span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val b = sum(1, _: Int, _: Int)</span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> b(2,3)</span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中出现了两种写法</p>
+<ul>
+<li>写法一<br><code>val a = sum _</code><br>这行代码表示sum方法的三个参数都为给出，整个参数表都用占位符<code>_</code>代替，所以这行代码的效果其实就是讲方法sum转换为了函数a。与之相同的写法还有<br><code>val a = sum(_)</code></li>
+<li>写法二<br><code>val b = sum(1, _: Int, _: Int)</code><br>这行代码表示，已知三个参数中的x，y和z未给出，用占位符<code>_</code>代替，最后返回一个包含了两个参数的函数b    </li>
+</ul>
+<p>部分应用从数学角度理解比较容易，如上面例子中的sum，其实对应于数学中的<code>sum(x,y,z) = x + y + z</code>，这是一个三元函数(既有三个未知数)，而写法二对sum的部分应用，相当于我们现在得知<code>x = 1</code>，则带入函数得<code>sum(y,z) = 1 + y + z</code>，也就是函数f消去了未知元x。** 整体来看函数的部分应用其实就是数学中的消元。 ** 而写法是对未消去任何参数的一种简写</p>
+<h4 id="函数的柯里化"><a href="#函数的柯里化" class="headerlink" title="函数的柯里化"></a>函数的柯里化</h4><p>在scala中函数函数可以有多个参数列表，而函数柯里化就是将函数的多参数列表转换为多个多参数列表。写法如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def sum(x: Int, y: Int) = x + y</span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = sum _</span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val b = a.curried</span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
+
+<p>柯里化是通过调用函数对象的curried方法实现的。也就是说调用的是Function*中的curried方法(Function2-Function22拥有curried方法，Function0及Function1没有，因为无参函数和但参函数不需要也不能柯里化)，以Function2为例，我们看下源码的实现</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function2</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; apply(x1, x2)</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>curried的实现是将一个多参函数转换为一个单参函数的函数链，对于上面的例子来说就是把<code>sum(x,y)</code>转换成了<code>sum(x)(y)</code>，<code>sum(1)(2)</code>也就是对两个单参函数的依次调用，而<code>sum(1)</code>或者<code>sum(2)</code>其实相当于对sum函数的部分应用，返回值是一个单参函数</p>
+<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>引用别人blog中对闭包的定义</p>
+<blockquote>
+<p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。</p>
+</blockquote>
+<p>示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> var more = 1</span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val add = (i: Int) =&gt; i + more</span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
+
+<p>上面例子中add函数的计算依赖于自由变量more，也就是闭包了。闭包很像函数字面量，不同的是，闭包运算的过程不只依赖于输入参数，还需要依赖函数之外的一个或多个自由变量。</p>
+<p>关于闭包的详细解释可以参考<a href="https://zhuanlan.zhihu.com/p/21346046" target="_blank" rel="noopener">知乎-什么是闭包</a>，引用博文中的总结</p>
+<blockquote>
+<p>最简洁、直击要害的回答，我能想到的分别有这么三句（版权属于 ：</p>
+</blockquote>
+<ul>
+<li>闭包是一个有状态（不消失的私有数据）的函数。</li>
+<li>闭包是一个有记忆的函数。</li>
+<li>闭包相当于一个只有一个方法的紧凑对象（a compact object）。</li>
+</ul>
+<p>上面这三句话是等价的</p>
+<h4 id="嵌套函数"><a href="#嵌套函数" class="headerlink" title="嵌套函数"></a>嵌套函数</h4><p>scala允许在函数内部定义函数，称之为局部函数。它的作用域仅限于外部函数，其他位置无法访问到内部函数，可以达到控制访问的效果<br>示例</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> f = (x:<span class="type">Int</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">val</span> innerAdd = (i: <span class="type">Int</span>) =&gt; i + <span class="number">1</span></span><br><span class="line">  innerAdd(x) + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>关于scala中的函数，就先写这么多吧，等到后面开发应用到其他的知识，在作补充。关于函数的部分应用和柯里化的实际意义，在<a href="../../21/scala函数式编程/">scala函数式编程</a>那篇里写出来<br>，这里就不写了</p>
+]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
       </tags>
   </entry>
   <entry>
@@ -651,123 +768,6 @@
 ]]></content>
       <tags>
         <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>scala中的函数</title>
-    <url>/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>在各类blog及scala书籍中看到的关于函数最多的一句话是</p>
-<blockquote>
-<p>函数是一等公民</p>
-</blockquote>
-<p>可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它</p>
-<h2 id="scala函数基础"><a href="#scala函数基础" class="headerlink" title="scala函数基础"></a>scala函数基础</h2><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
-<li><p>匿名函数</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> (x: Int) =&gt; x + 1</span></span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
-
-<p>固定写法：左边是参数列表，中间符号=&gt;，右边是函数体<br>匿名函数无函数名，也无需给出函数的结果类型</p>
-</li>
-<li><p>函数字面量</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = (x: Int) =&gt; x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(10)</span></span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
-
-<p>其中表达式有半部分为一个匿名函数，函数作为一个变量(或不变量)，用变量名+参数表方式调用，与普通方法的调用几乎相同。<br>** 需要注意的是函数字面量声明函数时不需要写出函数的返回值类型，函数体的最后一条表达式的结果会作为返回值返回 **</p>
-</li>
-<li><p>函数值<br>函数字面量与函数值的关系就像类与对象的关系。函数字面量其实就是一个实现了trait Function*的函数类，在运行时实例化了一个函数类，这个实例就是函数值</p>
-</li>
-</ul>
-<h4 id="函数的本质"><a href="#函数的本质" class="headerlink" title="函数的本质"></a>函数的本质</h4><p>scala不像java有基本类型与引用类型之分，scala中一切皆对象，包括函数也是对象。scala中定义了一系列trait，Function0 - Function22，其中0-22表示参数的个数(至于为什么是到22，理论上讲程序中不会出现多于22个参数的函数)。而函数正是Function<em>的实例。如<code>val f = (x: Int) =&gt; x + 1</code>其实就是Function1的实例。下面看下Function</em>的源码，以Function3为例</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** A function of 3 parameters.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function3</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, -<span class="type">T3</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  <span class="comment">/** Apply the body of this function to the arguments.</span></span><br><span class="line"><span class="comment">   *  @return   the result of function application.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">T1</span>, v2: <span class="type">T2</span>, v3: <span class="type">T3</span>): <span class="type">R</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a curried version of this function.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f(x1)(x2)(x3) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">T3</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; (x3: <span class="type">T3</span>) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a tupled version of this function: instead of 3 arguments,</span></span><br><span class="line"><span class="comment">   *  it accepts a single [[scala.Tuple3]] argument.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f((x1, x2, x3)) == f(Tuple3(x1, x2, x3)) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">tupled</span></span>: <span class="type">Tuple3</span>[<span class="type">T1</span>, <span class="type">T2</span>, <span class="type">T3</span>] =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Tuple3</span>(x1, x2, x3) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>() = <span class="string">"&lt;function3&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到其中有一个apply方法(先忽略其他方法)，接受三个泛型参数，所以当我们调用<code>f(1)</code>时，其实是调用了Function1实例的apply方法。</p>
-<h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>在学习过程中，还有一点很困扰，就是我们在类中用def定义的是不是函数，如果不是函数，它又是什么，跟函数又有什么区别呢？<br>首先呢使用def 关键字定义的是方法，不是函数，虽然在实际应用中几乎没有差别，但还是需要了解两者的不同的    </p>
-<p>** 方法 **<br>定义在类中，作为某个对象的成员方法，使用def关键字定义</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def a(x: Int):Int = x + 1</span></span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
-
-<p>** 两者的区别 **</p>
-<ul>
-<li>方法使用def关键字定义，而函数不用(函数使用val/var或干脆匿名)</li>
-<li>方法是类的一部分，函数是对象可以赋值给一个val/var</li>
-<li>函数作为对象可以像任何其他数据类型一样被传递和操作，而方法不行，如果想要传递方法，则需要把方法转换为函数</li>
-<li>定义方法时，如果没有参数，则参数表可以省略不写(即方法名后不写())，而函数不行</li>
-<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(x: Int):Int =&gt; x + 1</span></span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>** 两者的转换 **</p>
-<ul>
-<li><p>第一种情况，方法直接转为函数<br>不能将方法直接声明为一个val/var，如下面的写法会编译错误</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m</span></span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
-
-<p>正确写法</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m _</span></span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
-
-<p>这个转换的其实是使用了部分应用(Partial Applied Function)，下面将会讲到</p>
-</li>
-<li><p>第二种情况，需要函数的地方使用方法<br>这种情况下不需要使用下划线，方法会被自动转换为函数，称之为eta转换。关于eta-expansion与eta-conversion的解释可以参考<a href="http://hongjiang.info/scala-eta-conversion/" target="_blank" rel="noopener">王宏江-scala中的eta-conversion</a>与<a href="https://hongjiang.info/eta-conversion-and-eta-expansion/" target="_blank" rel="noopener">王宏江-再谈eta-conversion与eta-expansion</a></p>
-</li>
-</ul>
-<h2 id="scala函数进阶"><a href="#scala函数进阶" class="headerlink" title="scala函数进阶"></a>scala函数进阶</h2><h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><p>引用<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>中高阶函数的定义</p>
-<blockquote>
-<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：    </p>
-</blockquote>
-<ul>
-<li>接受一个或多个函数作为输入    </li>
-<li>输出一个函数    </li>
-</ul>
-<p>定义应该很容易理解，也就是函数可以接受另一个函数作为参数，或者函数的结果类型为函数类型。    </p>
-<ul>
-<li><p>第一种：如数学中的函数<code>f(x) = x + 1</code>， <code>g(x) = x * 2</code>，则<code>f(g(x)) = (x * 2) + 1</code>, 即为高阶函数。用代码实现即为</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>) = x * <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, g: <span class="type">Int</span> =&gt; <span class="type">Int</span>) = g(x) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>第二种：结果类型为函数类型</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>):(<span class="type">Int</span> =&gt; <span class="type">Int</span>) = &#123;</span><br><span class="line">  <span class="keyword">val</span> k = x * <span class="number">2</span></span><br><span class="line">  (y: <span class="type">Int</span>) =&gt; y + k + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h4><p>先看下代码如何实现函数的部分应用吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int, z: Int) = x + y + z</span></span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> a(1,2,3)</span></span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = sum(1, _: Int, _: Int)</span></span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> b(2,3)</span></span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中出现了两种写法</p>
-<ul>
-<li>写法一<br><code>val a = sum _</code><br>这行代码表示sum方法的三个参数都为给出，整个参数表都用占位符<code>_</code>代替，所以这行代码的效果其实就是讲方法sum转换为了函数a。与之相同的写法还有<br><code>val a = sum(_)</code></li>
-<li>写法二<br><code>val b = sum(1, _: Int, _: Int)</code><br>这行代码表示，已知三个参数中的x，y和z未给出，用占位符<code>_</code>代替，最后返回一个包含了两个参数的函数b    </li>
-</ul>
-<p>部分应用从数学角度理解比较容易，如上面例子中的sum，其实对应于数学中的<code>sum(x,y,z) = x + y + z</code>，这是一个三元函数(既有三个未知数)，而写法二对sum的部分应用，相当于我们现在得知<code>x = 1</code>，则带入函数得<code>sum(y,z) = 1 + y + z</code>，也就是函数f消去了未知元x。** 整体来看函数的部分应用其实就是数学中的消元。 ** 而写法是对未消去任何参数的一种简写</p>
-<h4 id="函数的柯里化"><a href="#函数的柯里化" class="headerlink" title="函数的柯里化"></a>函数的柯里化</h4><p>在scala中函数函数可以有多个参数列表，而函数柯里化就是将函数的多参数列表转换为多个多参数列表。写法如下</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int) = x + y</span></span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = a.curried</span></span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
-
-<p>柯里化是通过调用函数对象的curried方法实现的。也就是说调用的是Function*中的curried方法(Function2-Function22拥有curried方法，Function0及Function1没有，因为无参函数和但参函数不需要也不能柯里化)，以Function2为例，我们看下源码的实现</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function2</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; apply(x1, x2)</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>curried的实现是将一个多参函数转换为一个单参函数的函数链，对于上面的例子来说就是把<code>sum(x,y)</code>转换成了<code>sum(x)(y)</code>，<code>sum(1)(2)</code>也就是对两个单参函数的依次调用，而<code>sum(1)</code>或者<code>sum(2)</code>其实相当于对sum函数的部分应用，返回值是一个单参函数</p>
-<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>引用别人blog中对闭包的定义</p>
-<blockquote>
-<p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。</p>
-</blockquote>
-<p>示例</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> var more = 1</span></span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val add = (i: Int) =&gt; i + more</span></span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
-
-<p>上面例子中add函数的计算依赖于自由变量more，也就是闭包了。闭包很像函数字面量，不同的是，闭包运算的过程不只依赖于输入参数，还需要依赖函数之外的一个或多个自由变量。</p>
-<p>关于闭包的详细解释可以参考<a href="https://zhuanlan.zhihu.com/p/21346046" target="_blank" rel="noopener">知乎-什么是闭包</a>，引用博文中的总结</p>
-<blockquote>
-<p>最简洁、直击要害的回答，我能想到的分别有这么三句（版权属于 ：</p>
-</blockquote>
-<ul>
-<li>闭包是一个有状态（不消失的私有数据）的函数。</li>
-<li>闭包是一个有记忆的函数。</li>
-<li>闭包相当于一个只有一个方法的紧凑对象（a compact object）。</li>
-</ul>
-<p>上面这三句话是等价的</p>
-<h4 id="嵌套函数"><a href="#嵌套函数" class="headerlink" title="嵌套函数"></a>嵌套函数</h4><p>scala允许在函数内部定义函数，称之为局部函数。它的作用域仅限于外部函数，其他位置无法访问到内部函数，可以达到控制访问的效果<br>示例</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> f = (x:<span class="type">Int</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">val</span> innerAdd = (i: <span class="type">Int</span>) =&gt; i + <span class="number">1</span></span><br><span class="line">  innerAdd(x) + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>关于scala中的函数，就先写这么多吧，等到后面开发应用到其他的知识，在作补充。关于函数的部分应用和柯里化的实际意义，在<a href="../../21/scala函数式编程/">scala函数式编程</a>那篇里写出来<br>，这里就不写了</p>
-]]></content>
-      <categories>
-        <category>Scala</category>
-      </categories>
-      <tags>
-        <tag>scala</tag>
       </tags>
   </entry>
 </search>
