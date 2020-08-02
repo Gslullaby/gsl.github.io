@@ -61,6 +61,22 @@
       </tags>
   </entry>
   <entry>
+    <title>scala学习资料整理</title>
+    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
+<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br>**<a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></p>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
+</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
+<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
+<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>scala函数式编程</title>
     <url>/2018/07/21/scala%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<p>从java转向scala已经有一段时间了，虽然平时写代码问题不大，但是因为面向对象编程已经根深蒂固了，一直对函数式编程理解不是很到位，scala虽然是多范式编程语言，但是官方还是鼓励开发者使用函数式编程的，所以很有必要仔细学习并记录一下</p>
@@ -98,19 +114,113 @@
       </tags>
   </entry>
   <entry>
-    <title>scala学习资料整理</title>
-    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
-    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
-<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br>**<a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></p>
-<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
-</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
-<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
-<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
+    <title>BIP 32</title>
+    <url>/2018/09/27/bip32/</url>
+    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
+<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
+<p>本文分为两部分</p>
+<ul>
+<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
+<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
+</ul>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
+<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
+<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
+<ul>
+<li>整数模数曲线顺序（用n表示）</li>
+<li>曲线上点的坐标</li>
+<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
+</ul>
+<p>作为标准的转换函数，我们假设</p>
+<ul>
+<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
+<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
+<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
+<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
+<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
+</ul>
+<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
+<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
+<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
+</ol>
+<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
+<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
+</ol>
+<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
+<ol>
+<li>返回值K = point(k)</li>
+<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
+</ol>
+<p>两种通过父私钥计算子公钥的方法</p>
+<ol>
+<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
+<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
+</ol>
+<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
+<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
+<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
+<ul>
+<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
+<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
+</ul>
+<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
+<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
+<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
+<p>密钥id的钱32位称为指纹</p>
+<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
+<ol>
+<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
+<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
+<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
+<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
+<li>32byte：链码</li>
+<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
+</ol>
+<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
+<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
+<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
+<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
+<ol>
+<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
+<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
+<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
+<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
+</ol>
+<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
+<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
+
+<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
+<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
+<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
+<ul>
+<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
+<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
+</ul>
+<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
+<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
+<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
+<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
+<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
+]]></content>
       <categories>
-        <category>Scala</category>
+        <category>区块链</category>
       </categories>
       <tags>
-        <tag>scala</tag>
+        <tag>区块链</tag>
+        <tag>BIP</tag>
       </tags>
   </entry>
   <entry>
@@ -339,113 +449,69 @@
       </tags>
   </entry>
   <entry>
-    <title>BIP 32</title>
-    <url>/2018/09/27/bip32/</url>
-    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
-<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
-<p>本文分为两部分</p>
+    <title>什么是协程？</title>
+    <url>/2020/05/05/coroutine/</url>
+    <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
+<h2 id="协程的定义"><a href="#协程的定义" class="headerlink" title="协程的定义"></a>协程的定义</h2><p>协程: Coroutine<br>协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。</p>
+<p>定义<a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">Wiki</a>:  :</p>
+<blockquote>
+<p><strong>Coroutines</strong> are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. Coroutines are well-suited for implementing familiar program components such as cooperative tasks, exceptions, event loops, iterators, infinite lists and pipes    </p>
+</blockquote>
+<blockquote>
+<p>译: 协程时计算机程序的一类组件，通过允许挂起和恢复执行概括了非抢占式（即协作式）多任务的子程序。协程非常适合用于实现一些常见的程序组件，如协作式多任务，异常，事件循环，迭代器，无限列表以及管道</p>
+</blockquote>
+<p>Wiki中对于协程的定义还是挺难理解的，其中的关键词</p>
 <ul>
-<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
-<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
+<li>子程序（subroutine）  </li>
+<li>挂起（suspend）和恢复（resume）</li>
+<li>抢占式（preemptive）和协作式（cooperative or non-preemptive）  </li>
 </ul>
-<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
-<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
-<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
+<p>如果不先理解这几个关键词的话，是很难搞清楚协程的</p>
+<h4 id="首先是子程序"><a href="#首先是子程序" class="headerlink" title="首先是子程序"></a>首先是子程序</h4><p>《The Art of Computer Programming》(计算机程序设计艺术)一书中对subroutine有详细的解释，以下是原文</p>
+<blockquote>
+<p>When a certain task is to be performed at severial different places in a program, it is usually undesirable to repeat the coding in each place. To avoid this situation, the coding (called a subroutine) can be put into one place only, and a few extra instructions can be added and to restart the outer program properly after the subroutine is finished    </p>
+</blockquote>
+<blockquote>
+<p>译: 当一项确定的任务再程序的不同位置多次执行时，通常重复的代码不是我们想看到的。为了避免这种情况，这段代码（叫做一个子程序）可以被单独放在一个位置，通过少量额外的指令在每个需要执行该此程序的位置添加并执行子程序，并在子程序执行完成后，自动的重启外部程序</p>
+</blockquote>
+<p>这段对于子程序的描述还是很容易理解的，从高级语言的角度来看，子程序就相当于一个函数或方法，对子程序的引用即为对函数或方法的调用。</p>
+<p>子程序的用途书中也有描述，这里简单提一下：子程序的主要优势是避免重复代码，节省程序空间。也间接的节省了时间，如：加载程序需要的时间减少等。子程序也会让构思大型程序变得更容易，debug也会更容易。封装出来的子程序也可以作为开放库对外暴露给其他开发者使用。</p>
+<p>理解了子程序，那么子程序跟协程又有什么关系呢？或者说两者有什么区别呢？同样引用原文给出答案</p>
+<blockquote>
+<p>Subroutines are special case of more general program components, called coroutines. In contrast to the unsymmetric relationship between a main routine and a subroutine, there is complete symmetry between coroutines, which on call each other.    </p>
+<p>We may consider the main program and subroutines as a team of programs, each member of the team having a certain job to do. The main program, in the course of doing its job, will activate the subprogram; the subprogram will perform its own function and then activate the main program. We may stretch our imagination to believe that, from the subroutine’s point of view, when it exits it is calling the main routine; the main routine continues to performs its duty, then ‘exits’ to the subroutine. the subroutine acts, then call the main routine again.</p>
+</blockquote>
+<p>译:     </p>
+<blockquote>
+<p>子程序是通用程序组件（即协程）的一种特例。与主程序与子程序间非对等关系（调用者与被调用者）对比，协程间是完全对等的，他们可以互相调用 </p>
+</blockquote>
+<blockquote>
+<p>我们可以将主程序和子程序看作是程序组，程序组中的每个成员都要完成特定的任务。主程序在完成其任务的过程中，会激活子程序，然后子程序会执行完成它自己的任务，随后再激活主程序让主程序继续执行。拓展下我们的想象力，从子程序的视角出发，在子程序出口位置调用主程序，主程序继续执行其任务，接着主程序’退出’并在出口位置调用子程序，子程序执行，而后再调用主程序</p>
+</blockquote>
+<p>上面第二段的意思是，子程序只有一个入口和出口，而协程可以有多个入口和出口。即子程序被主程序调用后只能从头开始执行（入口）直到执行完成然后退出（出口），而后主程序继续执行。而协程在被调用后，在中途可能会有一个或多个出口（出口点之后仍然有代码待执行），当执行中途遇到出口时，当前协程交出执行权让其他协程执行，当下次再调用该协程时，会从上次的出口点位置继续开始执行后续的代码（上次的出口点即为下次执行的入口点）。这也就解释了第一段中子程序和主程序关系与协程间关系的差别了</p>
+<blockquote>
+<p>Wiki中子程序与协程的比较</p>
 <ul>
-<li>整数模数曲线顺序（用n表示）</li>
-<li>曲线上点的坐标</li>
-<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
+<li>子例程可以调用其他子例程，调用者等待被调用者结束后继续执行，故而子例程的生命期遵循后进先出，即最后一个被调用的子例程最先结束返回。协程的生命期完全由对它们的使用需要来决定</li>
+<li>子例程的起始处是惟一的入口点，每当子例程被调用时，执行都从被调用子例程的起始处开始。协程可以有多个入口点，协程的起始处是第一个入口点，每个yield返回出口点都是再次被调用执行时的入口点。</li>
+<li>子例程只在结束时一次性的返回全部结果值。协程可以在yield时不调用其他协程，而是每次返回一部分的结果值，这种协程常称为生成器或迭代器。</li>
+<li>现代的指令集架构通常提供对调用栈的指令支持，便于实现可递归调用的子例程。在以Scheme为代表的提供续体的语言环境下，恰好可用此控制状态抽象表示来实现协程。</li>
 </ul>
-<p>作为标准的转换函数，我们假设</p>
-<ul>
-<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
-<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
-<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
-<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
-<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
-</ul>
-<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
-<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
-<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
-</ol>
-<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
-<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
-</ol>
-<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
-<ol>
-<li>返回值K = point(k)</li>
-<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
-</ol>
-<p>两种通过父私钥计算子公钥的方法</p>
-<ol>
-<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
-<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
-</ol>
-<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
-<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
-<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
-<ul>
-<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
-<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
-</ul>
-<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
-<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
-<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
-<p>密钥id的钱32位称为指纹</p>
-<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
-<ol>
-<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
-<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
-<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
-<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
-<li>32byte：链码</li>
-<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
-</ol>
-<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
-<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
-<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
-<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
-<ol>
-<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
-<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
-<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
-<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
-</ol>
-<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
-<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
-
-<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
-<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
-<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
-<ul>
-<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
-<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
-</ul>
-<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
-<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
-<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
-<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
-<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
+</blockquote>
+<h4 id="挂起和恢复"><a href="#挂起和恢复" class="headerlink" title="挂起和恢复"></a>挂起和恢复</h4><p>其实在子程序那一部分中已经对挂起和恢复做出了解释。协程拥有多个出口和入口，所谓挂起就是在执行途中遇到出口，当前协程让出执行权，跳转到其他协程继续执行，而恢复就是当再次调用该协程时从上次出口点继续执行后续任务。出口对应挂起，入口对应恢复</p>
+<h4 id="抢占式和协作式"><a href="#抢占式和协作式" class="headerlink" title="抢占式和协作式"></a>抢占式和协作式</h4><p>首先，无论是抢占式还是协作式，都意味着当前Task都不再继续拥有执行权，而两者区别是，抢占式多任务中，当前任务被动的系统剥夺执行权，协作式多任务中，当前任务在不需要系统资源时主动让出执行权    </p>
+<p>抢占式多任务涉及到了中断机制的使用，中断机制可以挂起当前进程并唤起调度器以决定接下来应该调度执行哪个进程。因此，所有进程在一段时间内都会获得一定数量的CPU时间</p>
+<p>抢占式多任务依赖于 CPU 的硬件支持。 因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有 CPU 支持了执行权限后，抢占式调度才成为可能</p>
+<p>不同于抢占式由系统调度进程切换，协作式进程在空闲（idel）或阻塞（block）时会主动的让出执行权（yield）</p>
+<h2 id="协程能解决什么问题呢"><a href="#协程能解决什么问题呢" class="headerlink" title="协程能解决什么问题呢"></a>协程能解决什么问题呢</h2><p>如果从早先协程的设计理念来看，协程是设计用来处理单内核下多任务并发的。协程最本质的特性是可挂起和恢复的特性，拥有多入口多出口。<br>相较于子程序的从头运行至尾，协程有更丰富的过程（有一个或多个运行阶段）,多个任务可以交替执行，使得多任务协作提供成为可能，即协程拥有并发的能力。</p>
+<p>而对于现代的高级语言来说，协程更像是任务，运行在线程之上，在语言级别进行调度。许多语言的也都是多线程 + 协程的的实现，以达到像写同步代码那样处理异步问题。通常异步需要多线程来实现，但是弊端就是多线程调度时，切换上下文较为耗时，而如果通过多线程 + 协程方式来处理异步的话，相当于将系统级的线程调度替换为语言级别的协程调度，一定程度上减少了多线程调度切换上下文的开销。另一方面，多线程方式实现异步最可能面临异步回调，而最熟悉的应该是JS中的回调地狱问题了，而有了协程之后，就可以完美的消除该问题。</p>
+<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>协程从本质上讲依然是一种程序，运行与线程之上。名称以及它表现出来的特征与线程有相似之处，但与线程不同的是，他的调度并不需要系统参与，而是直接在语言级别完成。这也是许多人称协程为用户级线程的原因</p>
 ]]></content>
       <categories>
-        <category>区块链</category>
+        <category>Coroutine</category>
       </categories>
       <tags>
-        <tag>区块链</tag>
-        <tag>BIP</tag>
+        <tag>coroutine</tag>
       </tags>
   </entry>
   <entry>
@@ -559,67 +625,30 @@
       </tags>
   </entry>
   <entry>
-    <title>什么是协程？</title>
-    <url>/2020/05/05/coroutine/</url>
-    <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
-<h2 id="协程的定义"><a href="#协程的定义" class="headerlink" title="协程的定义"></a>协程的定义</h2><p>协程: Coroutine<br>协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。</p>
-<p>定义<a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">Wiki</a>:  :</p>
-<blockquote>
-<p><strong>Coroutines</strong> are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. Coroutines are well-suited for implementing familiar program components such as cooperative tasks, exceptions, event loops, iterators, infinite lists and pipes    </p>
-</blockquote>
-<blockquote>
-<p>译: 协程时计算机程序的一类组件，通过允许挂起和恢复执行概括了非抢占式（即协作式）多任务的子程序。协程非常适合用于实现一些常见的程序组件，如协作式多任务，异常，事件循环，迭代器，无限列表以及管道</p>
-</blockquote>
-<p>Wiki中对于协程的定义还是挺难理解的，其中的关键词</p>
-<ul>
-<li>子程序（subroutine）  </li>
-<li>挂起（suspend）和恢复（resume）</li>
-<li>抢占式（preemptive）和协作式（cooperative or non-preemptive）  </li>
-</ul>
-<p>如果不先理解这几个关键词的话，是很难搞清楚协程的</p>
-<h4 id="首先是子程序"><a href="#首先是子程序" class="headerlink" title="首先是子程序"></a>首先是子程序</h4><p>《The Art of Computer Programming》(计算机程序设计艺术)一书中对subroutine有详细的解释，以下是原文</p>
-<blockquote>
-<p>When a certain task is to be performed at severial different places in a program, it is usually undesirable to repeat the coding in each place. To avoid this situation, the coding (called a subroutine) can be put into one place only, and a few extra instructions can be added and to restart the outer program properly after the subroutine is finished    </p>
-</blockquote>
-<blockquote>
-<p>译: 当一项确定的任务再程序的不同位置多次执行时，通常重复的代码不是我们想看到的。为了避免这种情况，这段代码（叫做一个子程序）可以被单独放在一个位置，通过少量额外的指令在每个需要执行该此程序的位置添加并执行子程序，并在子程序执行完成后，自动的重启外部程序</p>
-</blockquote>
-<p>这段对于子程序的描述还是很容易理解的，从高级语言的角度来看，子程序就相当于一个函数或方法，对子程序的引用即为对函数或方法的调用。</p>
-<p>子程序的用途书中也有描述，这里简单提一下：子程序的主要优势是避免重复代码，节省程序空间。也间接的节省了时间，如：加载程序需要的时间减少等。子程序也会让构思大型程序变得更容易，debug也会更容易。封装出来的子程序也可以作为开放库对外暴露给其他开发者使用。</p>
-<p>理解了子程序，那么子程序跟协程又有什么关系呢？或者说两者有什么区别呢？同样引用原文给出答案</p>
-<blockquote>
-<p>Subroutines are special case of more general program components, called coroutines. In contrast to the unsymmetric relationship between a main routine and a subroutine, there is complete symmetry between coroutines, which on call each other.    </p>
-<p>We may consider the main program and subroutines as a team of programs, each member of the team having a certain job to do. The main program, in the course of doing its job, will activate the subprogram; the subprogram will perform its own function and then activate the main program. We may stretch our imagination to believe that, from the subroutine’s point of view, when it exits it is calling the main routine; the main routine continues to performs its duty, then ‘exits’ to the subroutine. the subroutine acts, then call the main routine again.</p>
-</blockquote>
-<p>译:     </p>
-<blockquote>
-<p>子程序是通用程序组件（即协程）的一种特例。与主程序与子程序间非对等关系（调用者与被调用者）对比，协程间是完全对等的，他们可以互相调用 </p>
-</blockquote>
-<blockquote>
-<p>我们可以将主程序和子程序看作是程序组，程序组中的每个成员都要完成特定的任务。主程序在完成其任务的过程中，会激活子程序，然后子程序会执行完成它自己的任务，随后再激活主程序让主程序继续执行。拓展下我们的想象力，从子程序的视角出发，在子程序出口位置调用主程序，主程序继续执行其任务，接着主程序’退出’并在出口位置调用子程序，子程序执行，而后再调用主程序</p>
-</blockquote>
-<p>上面第二段的意思是，子程序只有一个入口和出口，而协程可以有多个入口和出口。即子程序被主程序调用后只能从头开始执行（入口）直到执行完成然后退出（出口），而后主程序继续执行。而协程在被调用后，在中途可能会有一个或多个出口（出口点之后仍然有代码待执行），当执行中途遇到出口时，当前协程交出执行权让其他协程执行，当下次再调用该协程时，会从上次的出口点位置继续开始执行后续的代码（上次的出口点即为下次执行的入口点）。这也就解释了第一段中子程序和主程序关系与协程间关系的差别了</p>
-<blockquote>
-<p>Wiki中子程序与协程的比较</p>
-<ul>
-<li>子例程可以调用其他子例程，调用者等待被调用者结束后继续执行，故而子例程的生命期遵循后进先出，即最后一个被调用的子例程最先结束返回。协程的生命期完全由对它们的使用需要来决定</li>
-<li>子例程的起始处是惟一的入口点，每当子例程被调用时，执行都从被调用子例程的起始处开始。协程可以有多个入口点，协程的起始处是第一个入口点，每个yield返回出口点都是再次被调用执行时的入口点。</li>
-<li>子例程只在结束时一次性的返回全部结果值。协程可以在yield时不调用其他协程，而是每次返回一部分的结果值，这种协程常称为生成器或迭代器。</li>
-<li>现代的指令集架构通常提供对调用栈的指令支持，便于实现可递归调用的子例程。在以Scheme为代表的提供续体的语言环境下，恰好可用此控制状态抽象表示来实现协程。</li>
-</ul>
-</blockquote>
-<h4 id="挂起和恢复"><a href="#挂起和恢复" class="headerlink" title="挂起和恢复"></a>挂起和恢复</h4><p>其实在子程序那一部分中已经对挂起和恢复做出了解释。协程拥有多个出口和入口，所谓挂起就是在执行途中遇到出口，当前协程让出执行权，跳转到其他协程继续执行，而恢复就是当再次调用该协程时从上次出口点继续执行后续任务。出口对应挂起，入口对应恢复</p>
-<h4 id="抢占式和协作式"><a href="#抢占式和协作式" class="headerlink" title="抢占式和协作式"></a>抢占式和协作式</h4><p>首先，无论是抢占式还是协作式，都意味着当前Task都不再继续拥有执行权，而两者区别是，抢占式多任务中，当前任务被动的系统剥夺执行权，协作式多任务中，当前任务在不需要系统资源时主动让出执行权    </p>
-<p>抢占式多任务涉及到了中断机制的使用，中断机制可以挂起当前进程并唤起调度器以决定接下来应该调度执行哪个进程。因此，所有进程在一段时间内都会获得一定数量的CPU时间</p>
-<p>抢占式多任务依赖于 CPU 的硬件支持。 因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有 CPU 支持了执行权限后，抢占式调度才成为可能</p>
-<p>不同于抢占式由系统调度进程切换，协作式进程在空闲（idel）或阻塞（block）时会主动的让出执行权（yield）</p>
-<h2 id="协程能解决什么问题呢"><a href="#协程能解决什么问题呢" class="headerlink" title="协程能解决什么问题呢"></a>协程能解决什么问题呢</h2><p>如果从早先协程的设计理念来看，协程是设计用来处理单内核下多任务并发的。协程最本质的特性是可挂起和恢复的特性，拥有多入口多出口。<br>相较于子程序的从头运行至尾，协程有更丰富的过程（有一个或多个运行阶段）,多个任务可以交替执行，使得多任务协作提供成为可能，即协程拥有并发的能力。</p>
-<p>而对于现代的高级语言来说，协程更像是任务，运行在线程之上，在语言级别进行调度。许多语言的也都是多线程 + 协程的的实现，以达到像写同步代码那样处理异步问题。通常异步需要多线程来实现，但是弊端就是多线程调度时，切换上下文较为耗时，而如果通过多线程 + 协程方式来处理异步的话，相当于将系统级的线程调度替换为语言级别的协程调度，一定程度上减少了多线程调度切换上下文的开销。另一方面，多线程方式实现异步最可能面临异步回调，而最熟悉的应该是JS中的回调地狱问题了，而有了协程之后，就可以完美的消除该问题。</p>
-<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>协程从本质上讲依然是一种程序，运行与线程之上。名称以及它表现出来的特征与线程有相似之处，但与线程不同的是，他的调度并不需要系统参与，而是直接在语言级别完成。这也是许多人称协程为用户级线程的原因</p>
+    <title>转载--计算机语言协程的历史、现在和未来</title>
+    <url>/2020/05/05/history-of-coroutine/</url>
+    <content><![CDATA[<p>本文原发于《程序员》2014年11月刊。好文章备份一份</p>
+<p>计算机科学是一门应用科学，几乎所有概念都是为了理解或解决实际问题而生的。协程 (Coroutine) 的出现也不例外。协程的概念，最早可以追溯到写作 COBOL 语言编译器中的技术难题。</p>
+<h2 id="从磁带到协程"><a href="#从磁带到协程" class="headerlink" title="从磁带到协程"></a>从磁带到协程</h2><p>COBOL是最早的高级语言之一，编译器则是高级语言必不可少的一部分。现如今，我们对编译器的了解，已经到了可以把核心内容浓缩成一本教科书的程度。然而在二十世纪六十年代，如何写作高效的语言编译器还是绕不过的现实问题。例如，1960年夏天，D. E. Knuth就是利用开车横穿美国去加州理工读研究生的时间，对着<a href="https://www.cs.virginia.edu/brochure/images/manuals/b205/central/central.html" target="_blank" rel="noopener">Burroughs 205</a>机器指令集手写COBOL编译器。最早提出“协程”概念的Melvin Conway，也是从如何写一个只扫描一遍程序（one-pass）的COBOL编译器出发。众多的“高手”纷纷投入编译器开发，可见一门新科学发展之初也是筚路蓝缕。</p>
+<p>以现代眼光来看，高级语言编译实际由多个步骤组合而成：词法解析、语法解析、语法树构建，以及优化和目标代码生成等。编译实质上就是从源程序出发，依次将这些步骤的输出作为下一步的输入，最终输出目标代码。在现代计算机上实现这种管道式的架构毫无困难：只需要依次运行，中间结果存为中间文件或放入内存即可。GCC和Clang编译器，以及<a href="http://www.antlr.org/" target="_blank" rel="noopener">ANTLR</a>构建的编译器，都遵循这种设计。</p>
+<p>在Conway的设计里，词法和语法解析不再是独立运行的步骤，而是交织在一起。编译器的控制流在词法和语法解析之间来回切换：当词法模块读入足够多的token时，控制流交给语法分析；当语法分析消化完所有token后，控制流交给词法分析。词法和语法分别独立维护自身的运行状态。Conway构建的这种协同工作机制，需要参与者“让出（yield）”控制流时，记住自身状态，以便在控制流返回时能从上次让出的位置恢复（resume）执行。简言之，协程的全部精神就在于控制流的主动让出和恢复。我们熟悉的子过程调用可以看作在返回时让出控制流的一种特殊协程，其内部状态在返回时被丢弃了，因此不存在“恢复”这个操作。</p>
+<p>以现在眼光来看，编译器的实现并非必需协程。然而，Conway用协程实现COBOL编译器在当时绝不是舍近求远。首先，从原理上，因为COBOL并不是<a href="https://en.wikipedia.org/wiki/LL_parser" target="_blank" rel="noopener">LL(1)</a>型语法，无法简单构建一个以词法分析为子过程的自动机。其次，当年计算机依赖于磁带存储设备，只支持顺序存储。也就是说，依次执行编译步骤并依靠中间文件通信的设计是不现实的，各步骤必须同步前进。正是这样的现实局限和设计需要，催生了协程的概念。</p>
+<h2 id="自顶向下，无需协同"><a href="#自顶向下，无需协同" class="headerlink" title="自顶向下，无需协同"></a>自顶向下，无需协同</h2><p>虽然协程伴随着高级语言诞生，却没有能像子过程那样成为通用编程语言的基本元素。</p>
+<p>从1963年首次提出到上世纪九十年代，我们在ALOGL、Pascal、C、FORTRAN等主流的命令式编程语言中都没有看到原生的协程支持。协程只稀疏地出现在Simula、Modular-2（Pascal升级版）和Smalltalk等相对小众的语言中。作为一个比子进程更加通用的概念，在实际编程中却没有取代子进程，不得不说出乎意外。但如果结合当时的程序设计思想看，又在意料之中：协程不符合那个时代所崇尚的“自顶向下”的程序设计思想，自然也就不会成为当时主流的命令式编程语言的一部分。</p>
+<p>正如面向对象的语言是围绕面向对象的开发理念设计一样，命令式编程语言是围绕自顶向下的开发理念设计的。在这种理念的指导下，程序被切分为一个主程序和大大小小的子模块，每个子模块又可能调用更多子模块。C家族语言的main()函数就是这种自顶向下思想的体现。在这种理念指导下，各模块形成层次调用关系，而程序设计就是制作这些子过程。</p>
+<p>在“自顶向下”这种层次化的理念下，具有鲜明层次的子过程调用成为软件系统最自然的组织方式，也是理所当然。相较之下，具有执行中让出和恢复功能的协程在这种架构下无用武之地。可以说，自顶向下的设计思想从一开始就排除了对协程的需求。其后的结构化编程思想，更进一步强化了“子过程调用作为唯一控制结构”的基本假设。在这样的指导思想下，协程没有成为当时编程语言的一等公民。</p>
+<p>但作为一种易于理解的控制结构，协程的概念渗入到了软件设计的许多方面。在结构化编程思想一统天下之时，Knuth曾专门写过一篇<a href="http://c2.com/cgi/wiki?StructuredProgrammingWithGoToStatements" target="_blank" rel="noopener">《Structured Programming with GOTO》</a>来为GOTO语句辩护。在他列出的几条GOTO可以方便编程且不破坏程序结构的例子中，有一个（例子7b）就是用GOTO实现协程控制结构。相较之下，不用GOTO的“结构化”代码反而失去了良好的结构。当然，追求实际结果的工业界对于学界这场要不要剔除GOTO的争论并不感冒。当时许多语言都附带了不建议使用的GOTO语句，显得左右逢源。这方面一个最明显的例子就是Java——语言本身预留了goto关键字，而编译器却没提供任何支持，在这场争论中做足了中间派。</p>
+<p>实践中，协程的思想频繁应用于任务调度和流处理。例如，Unix管道就可以看成是众多命令间的协同操作。当然，管道的现代实现都以pipe()系统调用和进程间的通信为基础，而非简单遵循协程的yield/resume语法。</p>
+<p>许多协同式多任务操作系统，也可以看成协程运行系统。说到协同式多任务系统，一个常见的误区是认为协同式调度比抢占式调度“低级”，因为我们所熟悉的桌面操作系统，都是从协同式调度（如Windows 3.2、Mac OS 9等）过渡到抢占式多任务系统的。实际上，调度方式并无高下，完全取决于应用场景。抢占式系统允许操作系统剥夺进程执行权限，抢占控制流，因而天然适合服务器和图形操作系统，因为调度器可以优先保证对用户交互和网络事件的快速响应。当年Windows 95刚推出时，抢占式多任务就被作为一大卖点大加宣传。协同式调度则等到进程时间片用完或系统调用时转移执行权限，因此适合实时或分时等对运行时间有保障的系统。</p>
+<p>另外，抢占式系统依赖于CPU的硬件支持。因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有CPU支持了执行权限后，抢占式调度才成为可能。x86系统从80386处理器开始引入Ring机制支持执行权限，这也是为何Windows 95和Linux其实只能运行在80386之后的x86处理器上的原因。而协同式多任务适用于那些没有处理器权限支持的场景，这些场景包括资源受限的嵌入式系统和实时系统。在这些系统中，程序均以协程的方式运行。调度器负责控制流的让出和恢复。通过协程的模型，无需硬件支持，我们就可以在一个“简陋”的处理器上实现多任务系统。许多常见的智能设备，如运动手环，受硬件所限，都采用协同调度架构。</p>
+<h2 id="协程的复兴和现代形式"><a href="#协程的复兴和现代形式" class="headerlink" title="协程的复兴和现代形式"></a>协程的复兴和现代形式</h2><p>编程思想能否普及开来，很大程度上在于应用场景。协程没有能在自顶向下的世界里立足，却在动态语言世界中大放光彩，这里最显著的例子莫过于Python的迭代器和生成器。<br>回想一下在C的世界里，循环的标准写法是<br><code>for (i = 0; i &lt; n; ++i) { ... }</code><br>这行代码包含两个独立的逻辑：for循环控制了i的边界条件，++i控制了i的自增逻辑。这行代码适用于C世界里的数组即内存位移的范式，因此适合大多数访问场景。对于STL和复杂数据结构，因为往往只支持顺序访问，循环大多写成：<code>for (i = A.first(); i.hasNext(); i = i.next()) { ... }</code></p>
+<p>这种设计抽象出了一个独立于数据结构的迭代器，专门负责数据结构上元素的访问顺序。迭代器把访问逻辑从数据结构中分离出来，是一个常用的设计模式（GoF 23个设计模式之一），我们在STL和Java Collection中也常常看到迭代器的身影。在适当的时候，我们可以更进一步引入一个语法糖，将循环写成：<code>for i in A.Iterator() {func(i)}</code></p>
+<p>事实上，许多现代语言都支持类似的语法。这种语法抛弃了以i变量作为迭代指针的功能，要求迭代器自身能记住当前迭代位置，调用时返回下一个元素。读者不难看到，这就是我们在文章开始提到的语法分析器的架构。正因为如此，我们可以从协程的角度来理解迭代器：当控制流转换到迭代器时，迭代器负责生成和返回下一个元素。一旦准备就绪，迭代器就让出控制流。在Python中，这种特殊的迭代器实现又被成为生成器。以协程角度切入的好处在于设计大大精简。实际上，在Python中，生成器本身就是一个普通函数，和其他普通函数的唯一不同，在于它的返回语句是协程风格的yield。这里，yield一语双关，既是让出控制流，也是生成迭代器的返回值。</p>
+<p>前文我们仅讨论了生成器最基本的特性。实际上，生成器的强大之处在于我们可以像Unix管道一样串联起来，组成所谓的生成器表达式。如果我们有一个可以生成1，2，3 …的生成器N，则square = (i *<em>2 for i in N)就是一个生成平方数的生成器表达式。注意这里圆括号语法和<a href="http://en.wikipedia.org/wiki/List_comprehension" target="_blank" rel="noopener">list comprehansion</a>方括号语法的区别，square = [i *</em>2 for i in N]是生成一个具体的列表。我们可以串联这些生成器表达式，最终的控制流会在这些串联的部分间转换，无需编写复杂的嵌套调用。当然，yield只是冰山的一角，现代的Python语言还充分利用了yield关键字构建<a href="https://www.python.org/dev/peps/pep-0380/" target="_blank" rel="noopener">yield from</a>语句、(yield)语法等，让我们毫无困难地将协程的思想融入到Python编程中，限于篇幅这里不再展开。</p>
+<p>我们前面说过，协程的思想本质上就是控制流的主动让出和恢复机制。在现代语言中，可以实现协程思想的方法很多，这些实现间并无高下之分，所区别的就是是否适合应用场景。理解这一点，我们对于各种协程的分类，如半对称/对称协程、有栈与无栈协程等具体实现就能提纲挈领，无需在实现细节上纠结。</p>
+<p>协程在实践中的实现方式千差万别，一个简单的原因是，协程本身可以通过许多基本元素构建。基本元素的选取方式不一样，构建出来的协程抽象也就有差别。例如，Lua语言选取了create、resume和yield作为基本构建元素，从调度器层面构建出所谓的“非对程”协程系统；而Julia语言绕过调度器，通过在协程内调用yieldto函数完成了同样的功能，构建出了一个所谓的对称协程系统。尽管这两种语言使用了同样的setjmp库，构造出来的原语却不一样。又如，许多C语言的协程库都使用了ucontext库实现，这是因为POSIX本身提供了ucontext库，不少协程实现是以ucontext为蓝本实现的。这些实现，都不可避免地带上了ucontext系统的一些基本假设，如协程间是平等的，一般带有调度器来协调协程等（如<a href="http://swtch.com/libtask/" target="_blank" rel="noopener">libtask</a>实现，以及云风的<a href="http://blog.codingnow.com/2012/07/c_coroutine.html" target="_blank" rel="noopener">coroutine</a>库）。Go语言的一个鲜明特色就是通道（channel）作为一级对象。因此，resume和yield等在其他语言里的原语在Go中都以通道方式构建。我们还可以举出诸多近似的例子。其风格差异往往和语言的历史、演化路径、要解决的问题相关，我们不必苛求其协程模型一定要如此这般。</p>
+<p>总的来说，协程为协同任务提供了一种运行时抽象。这种抽象非常适合于协同多任务调度和数据流处理。在现代操作系统和编程语言中，因为用户态线程切换代价比内核态线程小，协程成为了一种轻量级的多任务模型。我们无法预测未来，但可以看到，协程已成为许多擅长数据处理语言的一级对象。随着计算机并行性能的提升，用户态任务调度已成为一种标准的多任务模型。在这样的大趋势下，协程这个简单且有效的模型就显得更加引人注目。</p>
 ]]></content>
-      <categories>
-        <category>Coroutine</category>
-      </categories>
       <tags>
         <tag>coroutine</tag>
       </tags>
@@ -739,35 +768,6 @@
       </categories>
       <tags>
         <tag>scala</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>转载--计算机语言协程的历史、现在和未来</title>
-    <url>/2020/05/05/history-of-coroutine/</url>
-    <content><![CDATA[<p>本文原发于《程序员》2014年11月刊。好文章备份一份</p>
-<p>计算机科学是一门应用科学，几乎所有概念都是为了理解或解决实际问题而生的。协程 (Coroutine) 的出现也不例外。协程的概念，最早可以追溯到写作 COBOL 语言编译器中的技术难题。</p>
-<h2 id="从磁带到协程"><a href="#从磁带到协程" class="headerlink" title="从磁带到协程"></a>从磁带到协程</h2><p>COBOL是最早的高级语言之一，编译器则是高级语言必不可少的一部分。现如今，我们对编译器的了解，已经到了可以把核心内容浓缩成一本教科书的程度。然而在二十世纪六十年代，如何写作高效的语言编译器还是绕不过的现实问题。例如，1960年夏天，D. E. Knuth就是利用开车横穿美国去加州理工读研究生的时间，对着<a href="https://www.cs.virginia.edu/brochure/images/manuals/b205/central/central.html" target="_blank" rel="noopener">Burroughs 205</a>机器指令集手写COBOL编译器。最早提出“协程”概念的Melvin Conway，也是从如何写一个只扫描一遍程序（one-pass）的COBOL编译器出发。众多的“高手”纷纷投入编译器开发，可见一门新科学发展之初也是筚路蓝缕。</p>
-<p>以现代眼光来看，高级语言编译实际由多个步骤组合而成：词法解析、语法解析、语法树构建，以及优化和目标代码生成等。编译实质上就是从源程序出发，依次将这些步骤的输出作为下一步的输入，最终输出目标代码。在现代计算机上实现这种管道式的架构毫无困难：只需要依次运行，中间结果存为中间文件或放入内存即可。GCC和Clang编译器，以及<a href="http://www.antlr.org/" target="_blank" rel="noopener">ANTLR</a>构建的编译器，都遵循这种设计。</p>
-<p>在Conway的设计里，词法和语法解析不再是独立运行的步骤，而是交织在一起。编译器的控制流在词法和语法解析之间来回切换：当词法模块读入足够多的token时，控制流交给语法分析；当语法分析消化完所有token后，控制流交给词法分析。词法和语法分别独立维护自身的运行状态。Conway构建的这种协同工作机制，需要参与者“让出（yield）”控制流时，记住自身状态，以便在控制流返回时能从上次让出的位置恢复（resume）执行。简言之，协程的全部精神就在于控制流的主动让出和恢复。我们熟悉的子过程调用可以看作在返回时让出控制流的一种特殊协程，其内部状态在返回时被丢弃了，因此不存在“恢复”这个操作。</p>
-<p>以现在眼光来看，编译器的实现并非必需协程。然而，Conway用协程实现COBOL编译器在当时绝不是舍近求远。首先，从原理上，因为COBOL并不是<a href="https://en.wikipedia.org/wiki/LL_parser" target="_blank" rel="noopener">LL(1)</a>型语法，无法简单构建一个以词法分析为子过程的自动机。其次，当年计算机依赖于磁带存储设备，只支持顺序存储。也就是说，依次执行编译步骤并依靠中间文件通信的设计是不现实的，各步骤必须同步前进。正是这样的现实局限和设计需要，催生了协程的概念。</p>
-<h2 id="自顶向下，无需协同"><a href="#自顶向下，无需协同" class="headerlink" title="自顶向下，无需协同"></a>自顶向下，无需协同</h2><p>虽然协程伴随着高级语言诞生，却没有能像子过程那样成为通用编程语言的基本元素。</p>
-<p>从1963年首次提出到上世纪九十年代，我们在ALOGL、Pascal、C、FORTRAN等主流的命令式编程语言中都没有看到原生的协程支持。协程只稀疏地出现在Simula、Modular-2（Pascal升级版）和Smalltalk等相对小众的语言中。作为一个比子进程更加通用的概念，在实际编程中却没有取代子进程，不得不说出乎意外。但如果结合当时的程序设计思想看，又在意料之中：协程不符合那个时代所崇尚的“自顶向下”的程序设计思想，自然也就不会成为当时主流的命令式编程语言的一部分。</p>
-<p>正如面向对象的语言是围绕面向对象的开发理念设计一样，命令式编程语言是围绕自顶向下的开发理念设计的。在这种理念的指导下，程序被切分为一个主程序和大大小小的子模块，每个子模块又可能调用更多子模块。C家族语言的main()函数就是这种自顶向下思想的体现。在这种理念指导下，各模块形成层次调用关系，而程序设计就是制作这些子过程。</p>
-<p>在“自顶向下”这种层次化的理念下，具有鲜明层次的子过程调用成为软件系统最自然的组织方式，也是理所当然。相较之下，具有执行中让出和恢复功能的协程在这种架构下无用武之地。可以说，自顶向下的设计思想从一开始就排除了对协程的需求。其后的结构化编程思想，更进一步强化了“子过程调用作为唯一控制结构”的基本假设。在这样的指导思想下，协程没有成为当时编程语言的一等公民。</p>
-<p>但作为一种易于理解的控制结构，协程的概念渗入到了软件设计的许多方面。在结构化编程思想一统天下之时，Knuth曾专门写过一篇<a href="http://c2.com/cgi/wiki?StructuredProgrammingWithGoToStatements" target="_blank" rel="noopener">《Structured Programming with GOTO》</a>来为GOTO语句辩护。在他列出的几条GOTO可以方便编程且不破坏程序结构的例子中，有一个（例子7b）就是用GOTO实现协程控制结构。相较之下，不用GOTO的“结构化”代码反而失去了良好的结构。当然，追求实际结果的工业界对于学界这场要不要剔除GOTO的争论并不感冒。当时许多语言都附带了不建议使用的GOTO语句，显得左右逢源。这方面一个最明显的例子就是Java——语言本身预留了goto关键字，而编译器却没提供任何支持，在这场争论中做足了中间派。</p>
-<p>实践中，协程的思想频繁应用于任务调度和流处理。例如，Unix管道就可以看成是众多命令间的协同操作。当然，管道的现代实现都以pipe()系统调用和进程间的通信为基础，而非简单遵循协程的yield/resume语法。</p>
-<p>许多协同式多任务操作系统，也可以看成协程运行系统。说到协同式多任务系统，一个常见的误区是认为协同式调度比抢占式调度“低级”，因为我们所熟悉的桌面操作系统，都是从协同式调度（如Windows 3.2、Mac OS 9等）过渡到抢占式多任务系统的。实际上，调度方式并无高下，完全取决于应用场景。抢占式系统允许操作系统剥夺进程执行权限，抢占控制流，因而天然适合服务器和图形操作系统，因为调度器可以优先保证对用户交互和网络事件的快速响应。当年Windows 95刚推出时，抢占式多任务就被作为一大卖点大加宣传。协同式调度则等到进程时间片用完或系统调用时转移执行权限，因此适合实时或分时等对运行时间有保障的系统。</p>
-<p>另外，抢占式系统依赖于CPU的硬件支持。因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有CPU支持了执行权限后，抢占式调度才成为可能。x86系统从80386处理器开始引入Ring机制支持执行权限，这也是为何Windows 95和Linux其实只能运行在80386之后的x86处理器上的原因。而协同式多任务适用于那些没有处理器权限支持的场景，这些场景包括资源受限的嵌入式系统和实时系统。在这些系统中，程序均以协程的方式运行。调度器负责控制流的让出和恢复。通过协程的模型，无需硬件支持，我们就可以在一个“简陋”的处理器上实现多任务系统。许多常见的智能设备，如运动手环，受硬件所限，都采用协同调度架构。</p>
-<h2 id="协程的复兴和现代形式"><a href="#协程的复兴和现代形式" class="headerlink" title="协程的复兴和现代形式"></a>协程的复兴和现代形式</h2><p>编程思想能否普及开来，很大程度上在于应用场景。协程没有能在自顶向下的世界里立足，却在动态语言世界中大放光彩，这里最显著的例子莫过于Python的迭代器和生成器。<br>回想一下在C的世界里，循环的标准写法是<br><code>for (i = 0; i &lt; n; ++i) { ... }</code><br>这行代码包含两个独立的逻辑：for循环控制了i的边界条件，++i控制了i的自增逻辑。这行代码适用于C世界里的数组即内存位移的范式，因此适合大多数访问场景。对于STL和复杂数据结构，因为往往只支持顺序访问，循环大多写成：<code>for (i = A.first(); i.hasNext(); i = i.next()) { ... }</code></p>
-<p>这种设计抽象出了一个独立于数据结构的迭代器，专门负责数据结构上元素的访问顺序。迭代器把访问逻辑从数据结构中分离出来，是一个常用的设计模式（GoF 23个设计模式之一），我们在STL和Java Collection中也常常看到迭代器的身影。在适当的时候，我们可以更进一步引入一个语法糖，将循环写成：<code>for i in A.Iterator() {func(i)}</code></p>
-<p>事实上，许多现代语言都支持类似的语法。这种语法抛弃了以i变量作为迭代指针的功能，要求迭代器自身能记住当前迭代位置，调用时返回下一个元素。读者不难看到，这就是我们在文章开始提到的语法分析器的架构。正因为如此，我们可以从协程的角度来理解迭代器：当控制流转换到迭代器时，迭代器负责生成和返回下一个元素。一旦准备就绪，迭代器就让出控制流。在Python中，这种特殊的迭代器实现又被成为生成器。以协程角度切入的好处在于设计大大精简。实际上，在Python中，生成器本身就是一个普通函数，和其他普通函数的唯一不同，在于它的返回语句是协程风格的yield。这里，yield一语双关，既是让出控制流，也是生成迭代器的返回值。</p>
-<p>前文我们仅讨论了生成器最基本的特性。实际上，生成器的强大之处在于我们可以像Unix管道一样串联起来，组成所谓的生成器表达式。如果我们有一个可以生成1，2，3 …的生成器N，则square = (i *<em>2 for i in N)就是一个生成平方数的生成器表达式。注意这里圆括号语法和<a href="http://en.wikipedia.org/wiki/List_comprehension" target="_blank" rel="noopener">list comprehansion</a>方括号语法的区别，square = [i *</em>2 for i in N]是生成一个具体的列表。我们可以串联这些生成器表达式，最终的控制流会在这些串联的部分间转换，无需编写复杂的嵌套调用。当然，yield只是冰山的一角，现代的Python语言还充分利用了yield关键字构建<a href="https://www.python.org/dev/peps/pep-0380/" target="_blank" rel="noopener">yield from</a>语句、(yield)语法等，让我们毫无困难地将协程的思想融入到Python编程中，限于篇幅这里不再展开。</p>
-<p>我们前面说过，协程的思想本质上就是控制流的主动让出和恢复机制。在现代语言中，可以实现协程思想的方法很多，这些实现间并无高下之分，所区别的就是是否适合应用场景。理解这一点，我们对于各种协程的分类，如半对称/对称协程、有栈与无栈协程等具体实现就能提纲挈领，无需在实现细节上纠结。</p>
-<p>协程在实践中的实现方式千差万别，一个简单的原因是，协程本身可以通过许多基本元素构建。基本元素的选取方式不一样，构建出来的协程抽象也就有差别。例如，Lua语言选取了create、resume和yield作为基本构建元素，从调度器层面构建出所谓的“非对程”协程系统；而Julia语言绕过调度器，通过在协程内调用yieldto函数完成了同样的功能，构建出了一个所谓的对称协程系统。尽管这两种语言使用了同样的setjmp库，构造出来的原语却不一样。又如，许多C语言的协程库都使用了ucontext库实现，这是因为POSIX本身提供了ucontext库，不少协程实现是以ucontext为蓝本实现的。这些实现，都不可避免地带上了ucontext系统的一些基本假设，如协程间是平等的，一般带有调度器来协调协程等（如<a href="http://swtch.com/libtask/" target="_blank" rel="noopener">libtask</a>实现，以及云风的<a href="http://blog.codingnow.com/2012/07/c_coroutine.html" target="_blank" rel="noopener">coroutine</a>库）。Go语言的一个鲜明特色就是通道（channel）作为一级对象。因此，resume和yield等在其他语言里的原语在Go中都以通道方式构建。我们还可以举出诸多近似的例子。其风格差异往往和语言的历史、演化路径、要解决的问题相关，我们不必苛求其协程模型一定要如此这般。</p>
-<p>总的来说，协程为协同任务提供了一种运行时抽象。这种抽象非常适合于协同多任务调度和数据流处理。在现代操作系统和编程语言中，因为用户态线程切换代价比内核态线程小，协程成为了一种轻量级的多任务模型。我们无法预测未来，但可以看到，协程已成为许多擅长数据处理语言的一级对象。随着计算机并行性能的提升，用户态任务调度已成为一种标准的多任务模型。在这样的大趋势下，协程这个简单且有效的模型就显得更加引人注目。</p>
-]]></content>
-      <tags>
-        <tag>coroutine</tag>
       </tags>
   </entry>
 </search>

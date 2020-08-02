@@ -1162,7 +1162,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ffdaff;
+  background: #b80b05;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2119,6 +2119,12 @@ ul.breadcrumb li + li:last-child {
 .tag-cloud a:hover {
   color: #222 !important;
 }
+body {
+  background: url("/images/ywy_bg.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+}
 .header {
   margin: 0 auto;
   position: relative;
@@ -2414,24 +2420,4 @@ ul.breadcrumb li + li:last-child {
 }
 .links-of-blogroll-item {
   padding: 0;
-}
-body {
-  background: url("/images/bg.jpg");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: 50% 50%;
-  background-size: cover;
-}
-.sidebar {
-  transition-duration: 0.4s;
-  opacity: 0.8;
-}
-.posts-expand .post-title-link {
-  color: #222;
-}
-.post-block {
-  background: #fff;
-  border-radius: initial;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
-  padding: 40px;
 }
