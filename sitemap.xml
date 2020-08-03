@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hcendless.ink/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</loc>
+    
+    <lastmod>2020-08-03T07:09:52.561Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hcendless.ink/2020/07/20/Gradle-build-lifecycle/</loc>
+    
+    <lastmod>2020-08-03T07:09:40.574Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hcendless.ink/2018/09/27/bip32/</loc>
     
     <lastmod>2020-08-03T06:13:27.598Z</lastmod>
@@ -44,23 +58,9 @@
   </url>
   
   <url>
-    <loc>https://hcendless.ink/2020/07/20/Gradle-build-lifecycle/</loc>
-    
-    <lastmod>2020-08-03T06:10:27.755Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://hcendless.ink/2020/07/17/What-is-Gradle/</loc>
     
     <lastmod>2020-08-03T06:10:07.025Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hcendless.ink/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</loc>
-    
-    <lastmod>2020-08-02T06:48:59.897Z</lastmod>
     
   </url>
   

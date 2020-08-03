@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://hcendless.ink/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</loc>
+    <lastmod>2020-08-03</lastmod>
+  </url>
+  <url>
+    <loc>https://hcendless.ink/2020/07/20/Gradle-build-lifecycle/</loc>
+    <lastmod>2020-08-03</lastmod>
+  </url>
+  <url>
     <loc>https://hcendless.ink/2018/09/27/bip32/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
@@ -25,16 +33,8 @@
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>https://hcendless.ink/2020/07/20/Gradle-build-lifecycle/</loc>
-    <lastmod>2020-08-03</lastmod>
-  </url>
-  <url>
     <loc>https://hcendless.ink/2020/07/17/What-is-Gradle/</loc>
     <lastmod>2020-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://hcendless.ink/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</loc>
-    <lastmod>2020-08-02</lastmod>
   </url>
   <url>
     <loc>https://hcendless.ink/2019/08/18/hexo_github_pages/</loc>
