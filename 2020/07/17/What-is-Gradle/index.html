@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"hcendless.ink","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="概述Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性      高效率   Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的">
+  <meta name="description" content="本文对做Gradle简单介绍，包括其基本概念，以及几个重要特性。">
 <meta name="keywords" content="gradle">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gradle是什么">
 <meta property="og:url" content="https://hcendless.ink/2020/07/17/What-is-Gradle/index.html">
 <meta property="og:site_name" content="Gsl&#39;s Blog">
-<meta property="og:description" content="概述Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性      高效率   Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的">
+<meta property="og:description" content="本文对做Gradle简单介绍，包括其基本概念，以及几个重要特性。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://hcendless.ink/2020/07/17/What-is-Gradle/task-dag-examples.png">
-<meta property="og:updated_time" content="2020-08-02T06:49:18.392Z">
+<meta property="og:updated_time" content="2020-08-03T06:10:07.025Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle是什么">
-<meta name="twitter:description" content="概述Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性      高效率   Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的">
+<meta name="twitter:description" content="本文对做Gradle简单介绍，包括其基本概念，以及几个重要特性。">
 <meta name="twitter:image" content="https://hcendless.ink/2020/07/17/What-is-Gradle/task-dag-examples.png">
 
 <link rel="canonical" href="https://hcendless.ink/2020/07/17/What-is-Gradle/">
@@ -192,7 +192,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-02 14:49:18" itemprop="dateModified" datetime="2020-08-02T14:49:18+08:00">2020-08-02</time>
+                <time title="Modified: 2020-08-03 14:10:07" itemprop="dateModified" datetime="2020-08-03T14:10:07+08:00">2020-08-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -205,6 +205,7 @@
             </span>
 
           
+            <div class="post-description">本文对做Gradle简单介绍，包括其基本概念，以及几个重要特性。</div>
 
         </div>
       </header>

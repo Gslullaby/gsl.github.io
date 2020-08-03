@@ -61,22 +61,6 @@
       </tags>
   </entry>
   <entry>
-    <title>scala学习资料整理</title>
-    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
-    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
-<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br>**<a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></p>
-<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
-</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
-<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
-<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
-      <categories>
-        <category>Scala</category>
-      </categories>
-      <tags>
-        <tag>scala</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>scala函数式编程</title>
     <url>/2018/07/21/scala%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<p>从java转向scala已经有一段时间了，虽然平时写代码问题不大，但是因为面向对象编程已经根深蒂固了，一直对函数式编程理解不是很到位，scala虽然是多范式编程语言，但是官方还是鼓励开发者使用函数式编程的，所以很有必要仔细学习并记录一下</p>
@@ -111,6 +95,22 @@
       <tags>
         <tag>scala</tag>
         <tag>函数式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala学习资料整理</title>
+    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
+<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br>**<a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></p>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
+</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
+<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
+<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
       </tags>
   </entry>
   <entry>
@@ -339,72 +339,6 @@
       </tags>
   </entry>
   <entry>
-    <title>什么是协程？</title>
-    <url>/2020/05/05/coroutine/</url>
-    <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
-<h2 id="协程的定义"><a href="#协程的定义" class="headerlink" title="协程的定义"></a>协程的定义</h2><p>协程: Coroutine<br>协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。</p>
-<p>定义<a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">Wiki</a>:  :</p>
-<blockquote>
-<p><strong>Coroutines</strong> are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. Coroutines are well-suited for implementing familiar program components such as cooperative tasks, exceptions, event loops, iterators, infinite lists and pipes    </p>
-</blockquote>
-<blockquote>
-<p>译: 协程时计算机程序的一类组件，通过允许挂起和恢复执行概括了非抢占式（即协作式）多任务的子程序。协程非常适合用于实现一些常见的程序组件，如协作式多任务，异常，事件循环，迭代器，无限列表以及管道</p>
-</blockquote>
-<p>Wiki中对于协程的定义还是挺难理解的，其中的关键词</p>
-<ul>
-<li>子程序（subroutine）  </li>
-<li>挂起（suspend）和恢复（resume）</li>
-<li>抢占式（preemptive）和协作式（cooperative or non-preemptive）  </li>
-</ul>
-<p>如果不先理解这几个关键词的话，是很难搞清楚协程的</p>
-<h4 id="首先是子程序"><a href="#首先是子程序" class="headerlink" title="首先是子程序"></a>首先是子程序</h4><p>《The Art of Computer Programming》(计算机程序设计艺术)一书中对subroutine有详细的解释，以下是原文</p>
-<blockquote>
-<p>When a certain task is to be performed at severial different places in a program, it is usually undesirable to repeat the coding in each place. To avoid this situation, the coding (called a subroutine) can be put into one place only, and a few extra instructions can be added and to restart the outer program properly after the subroutine is finished    </p>
-</blockquote>
-<blockquote>
-<p>译: 当一项确定的任务再程序的不同位置多次执行时，通常重复的代码不是我们想看到的。为了避免这种情况，这段代码（叫做一个子程序）可以被单独放在一个位置，通过少量额外的指令在每个需要执行该此程序的位置添加并执行子程序，并在子程序执行完成后，自动的重启外部程序</p>
-</blockquote>
-<p>这段对于子程序的描述还是很容易理解的，从高级语言的角度来看，子程序就相当于一个函数或方法，对子程序的引用即为对函数或方法的调用。</p>
-<p>子程序的用途书中也有描述，这里简单提一下：子程序的主要优势是避免重复代码，节省程序空间。也间接的节省了时间，如：加载程序需要的时间减少等。子程序也会让构思大型程序变得更容易，debug也会更容易。封装出来的子程序也可以作为开放库对外暴露给其他开发者使用。</p>
-<p>理解了子程序，那么子程序跟协程又有什么关系呢？或者说两者有什么区别呢？同样引用原文给出答案</p>
-<blockquote>
-<p>Subroutines are special case of more general program components, called coroutines. In contrast to the unsymmetric relationship between a main routine and a subroutine, there is complete symmetry between coroutines, which on call each other.    </p>
-<p>We may consider the main program and subroutines as a team of programs, each member of the team having a certain job to do. The main program, in the course of doing its job, will activate the subprogram; the subprogram will perform its own function and then activate the main program. We may stretch our imagination to believe that, from the subroutine’s point of view, when it exits it is calling the main routine; the main routine continues to performs its duty, then ‘exits’ to the subroutine. the subroutine acts, then call the main routine again.</p>
-</blockquote>
-<p>译:     </p>
-<blockquote>
-<p>子程序是通用程序组件（即协程）的一种特例。与主程序与子程序间非对等关系（调用者与被调用者）对比，协程间是完全对等的，他们可以互相调用 </p>
-</blockquote>
-<blockquote>
-<p>我们可以将主程序和子程序看作是程序组，程序组中的每个成员都要完成特定的任务。主程序在完成其任务的过程中，会激活子程序，然后子程序会执行完成它自己的任务，随后再激活主程序让主程序继续执行。拓展下我们的想象力，从子程序的视角出发，在子程序出口位置调用主程序，主程序继续执行其任务，接着主程序’退出’并在出口位置调用子程序，子程序执行，而后再调用主程序</p>
-</blockquote>
-<p>上面第二段的意思是，子程序只有一个入口和出口，而协程可以有多个入口和出口。即子程序被主程序调用后只能从头开始执行（入口）直到执行完成然后退出（出口），而后主程序继续执行。而协程在被调用后，在中途可能会有一个或多个出口（出口点之后仍然有代码待执行），当执行中途遇到出口时，当前协程交出执行权让其他协程执行，当下次再调用该协程时，会从上次的出口点位置继续开始执行后续的代码（上次的出口点即为下次执行的入口点）。这也就解释了第一段中子程序和主程序关系与协程间关系的差别了</p>
-<blockquote>
-<p>Wiki中子程序与协程的比较</p>
-<ul>
-<li>子例程可以调用其他子例程，调用者等待被调用者结束后继续执行，故而子例程的生命期遵循后进先出，即最后一个被调用的子例程最先结束返回。协程的生命期完全由对它们的使用需要来决定</li>
-<li>子例程的起始处是惟一的入口点，每当子例程被调用时，执行都从被调用子例程的起始处开始。协程可以有多个入口点，协程的起始处是第一个入口点，每个yield返回出口点都是再次被调用执行时的入口点。</li>
-<li>子例程只在结束时一次性的返回全部结果值。协程可以在yield时不调用其他协程，而是每次返回一部分的结果值，这种协程常称为生成器或迭代器。</li>
-<li>现代的指令集架构通常提供对调用栈的指令支持，便于实现可递归调用的子例程。在以Scheme为代表的提供续体的语言环境下，恰好可用此控制状态抽象表示来实现协程。</li>
-</ul>
-</blockquote>
-<h4 id="挂起和恢复"><a href="#挂起和恢复" class="headerlink" title="挂起和恢复"></a>挂起和恢复</h4><p>其实在子程序那一部分中已经对挂起和恢复做出了解释。协程拥有多个出口和入口，所谓挂起就是在执行途中遇到出口，当前协程让出执行权，跳转到其他协程继续执行，而恢复就是当再次调用该协程时从上次出口点继续执行后续任务。出口对应挂起，入口对应恢复</p>
-<h4 id="抢占式和协作式"><a href="#抢占式和协作式" class="headerlink" title="抢占式和协作式"></a>抢占式和协作式</h4><p>首先，无论是抢占式还是协作式，都意味着当前Task都不再继续拥有执行权，而两者区别是，抢占式多任务中，当前任务被动的系统剥夺执行权，协作式多任务中，当前任务在不需要系统资源时主动让出执行权    </p>
-<p>抢占式多任务涉及到了中断机制的使用，中断机制可以挂起当前进程并唤起调度器以决定接下来应该调度执行哪个进程。因此，所有进程在一段时间内都会获得一定数量的CPU时间</p>
-<p>抢占式多任务依赖于 CPU 的硬件支持。 因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有 CPU 支持了执行权限后，抢占式调度才成为可能</p>
-<p>不同于抢占式由系统调度进程切换，协作式进程在空闲（idel）或阻塞（block）时会主动的让出执行权（yield）</p>
-<h2 id="协程能解决什么问题呢"><a href="#协程能解决什么问题呢" class="headerlink" title="协程能解决什么问题呢"></a>协程能解决什么问题呢</h2><p>如果从早先协程的设计理念来看，协程是设计用来处理单内核下多任务并发的。协程最本质的特性是可挂起和恢复的特性，拥有多入口多出口。<br>相较于子程序的从头运行至尾，协程有更丰富的过程（有一个或多个运行阶段）,多个任务可以交替执行，使得多任务协作提供成为可能，即协程拥有并发的能力。</p>
-<p>而对于现代的高级语言来说，协程更像是任务，运行在线程之上，在语言级别进行调度。许多语言的也都是多线程 + 协程的的实现，以达到像写同步代码那样处理异步问题。通常异步需要多线程来实现，但是弊端就是多线程调度时，切换上下文较为耗时，而如果通过多线程 + 协程方式来处理异步的话，相当于将系统级的线程调度替换为语言级别的协程调度，一定程度上减少了多线程调度切换上下文的开销。另一方面，多线程方式实现异步最可能面临异步回调，而最熟悉的应该是JS中的回调地狱问题了，而有了协程之后，就可以完美的消除该问题。</p>
-<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>协程从本质上讲依然是一种程序，运行与线程之上。名称以及它表现出来的特征与线程有相似之处，但与线程不同的是，他的调度并不需要系统参与，而是直接在语言级别完成。这也是许多人称协程为用户级线程的原因</p>
-]]></content>
-      <categories>
-        <category>Coroutine</category>
-      </categories>
-      <tags>
-        <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>BIP 32</title>
     <url>/2018/09/27/bip32/</url>
     <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
@@ -515,120 +449,69 @@
       </tags>
   </entry>
   <entry>
-    <title>scala中的函数</title>
-    <url>/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>在各类blog及scala书籍中看到的关于函数最多的一句话是</p>
+    <title>什么是协程？</title>
+    <url>/2020/05/05/coroutine/</url>
+    <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
+<h2 id="协程的定义"><a href="#协程的定义" class="headerlink" title="协程的定义"></a>协程的定义</h2><p>协程: Coroutine<br>协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。</p>
+<p>定义<a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">Wiki</a>:  :</p>
 <blockquote>
-<p>函数是一等公民</p>
+<p><strong>Coroutines</strong> are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. Coroutines are well-suited for implementing familiar program components such as cooperative tasks, exceptions, event loops, iterators, infinite lists and pipes    </p>
 </blockquote>
-<p>可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它</p>
-<h2 id="scala函数基础"><a href="#scala函数基础" class="headerlink" title="scala函数基础"></a>scala函数基础</h2><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
-<li><p>匿名函数</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> (x: Int) =&gt; x + 1</span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
-
-<p>固定写法：左边是参数列表，中间符号=&gt;，右边是函数体<br>匿名函数无函数名，也无需给出函数的结果类型</p>
-</li>
-<li><p>函数字面量</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> val f = (x: Int) =&gt; x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> f(10)</span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
-
-<p>其中表达式有半部分为一个匿名函数，函数作为一个变量(或不变量)，用变量名+参数表方式调用，与普通方法的调用几乎相同。<br>** 需要注意的是函数字面量声明函数时不需要写出函数的返回值类型，函数体的最后一条表达式的结果会作为返回值返回 **</p>
-</li>
-<li><p>函数值<br>函数字面量与函数值的关系就像类与对象的关系。函数字面量其实就是一个实现了trait Function*的函数类，在运行时实例化了一个函数类，这个实例就是函数值</p>
-</li>
-</ul>
-<h4 id="函数的本质"><a href="#函数的本质" class="headerlink" title="函数的本质"></a>函数的本质</h4><p>scala不像java有基本类型与引用类型之分，scala中一切皆对象，包括函数也是对象。scala中定义了一系列trait，Function0 - Function22，其中0-22表示参数的个数(至于为什么是到22，理论上讲程序中不会出现多于22个参数的函数)。而函数正是Function<em>的实例。如<code>val f = (x: Int) =&gt; x + 1</code>其实就是Function1的实例。下面看下Function</em>的源码，以Function3为例</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** A function of 3 parameters.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function3</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, -<span class="type">T3</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  <span class="comment">/** Apply the body of this function to the arguments.</span></span><br><span class="line"><span class="comment">   *  @return   the result of function application.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">T1</span>, v2: <span class="type">T2</span>, v3: <span class="type">T3</span>): <span class="type">R</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a curried version of this function.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f(x1)(x2)(x3) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">T3</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; (x3: <span class="type">T3</span>) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a tupled version of this function: instead of 3 arguments,</span></span><br><span class="line"><span class="comment">   *  it accepts a single [[scala.Tuple3]] argument.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f((x1, x2, x3)) == f(Tuple3(x1, x2, x3)) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">tupled</span></span>: <span class="type">Tuple3</span>[<span class="type">T1</span>, <span class="type">T2</span>, <span class="type">T3</span>] =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Tuple3</span>(x1, x2, x3) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>() = <span class="string">"&lt;function3&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到其中有一个apply方法(先忽略其他方法)，接受三个泛型参数，所以当我们调用<code>f(1)</code>时，其实是调用了Function1实例的apply方法。</p>
-<h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>在学习过程中，还有一点很困扰，就是我们在类中用def定义的是不是函数，如果不是函数，它又是什么，跟函数又有什么区别呢？<br>首先呢使用def 关键字定义的是方法，不是函数，虽然在实际应用中几乎没有差别，但还是需要了解两者的不同的    </p>
-<p>** 方法 **<br>定义在类中，作为某个对象的成员方法，使用def关键字定义</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def a(x: Int):Int = x + 1</span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
-
-<p>** 两者的区别 **</p>
-<ul>
-<li>方法使用def关键字定义，而函数不用(函数使用val/var或干脆匿名)</li>
-<li>方法是类的一部分，函数是对象可以赋值给一个val/var</li>
-<li>函数作为对象可以像任何其他数据类型一样被传递和操作，而方法不行，如果想要传递方法，则需要把方法转换为函数</li>
-<li>定义方法时，如果没有参数，则参数表可以省略不写(即方法名后不写())，而函数不行</li>
-<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> f(x: Int):Int =&gt; x + 1</span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>** 两者的转换 **</p>
-<ul>
-<li><p>第一种情况，方法直接转为函数<br>不能将方法直接声明为一个val/var，如下面的写法会编译错误</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def m(x: Int):Int = x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> val f = m</span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
-
-<p>正确写法</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def m(x: Int):Int = x + 1</span><br><span class="line"><span class="meta">scala&gt;</span> val f = m _</span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
-
-<p>这个转换的其实是使用了部分应用(Partial Applied Function)，下面将会讲到</p>
-</li>
-<li><p>第二种情况，需要函数的地方使用方法<br>这种情况下不需要使用下划线，方法会被自动转换为函数，称之为eta转换。关于eta-expansion与eta-conversion的解释可以参考<a href="http://hongjiang.info/scala-eta-conversion/" target="_blank" rel="noopener">王宏江-scala中的eta-conversion</a>与<a href="https://hongjiang.info/eta-conversion-and-eta-expansion/" target="_blank" rel="noopener">王宏江-再谈eta-conversion与eta-expansion</a></p>
-</li>
-</ul>
-<h2 id="scala函数进阶"><a href="#scala函数进阶" class="headerlink" title="scala函数进阶"></a>scala函数进阶</h2><h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><p>引用<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>中高阶函数的定义</p>
 <blockquote>
-<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：    </p>
+<p>译: 协程时计算机程序的一类组件，通过允许挂起和恢复执行概括了非抢占式（即协作式）多任务的子程序。协程非常适合用于实现一些常见的程序组件，如协作式多任务，异常，事件循环，迭代器，无限列表以及管道</p>
 </blockquote>
+<p>Wiki中对于协程的定义还是挺难理解的，其中的关键词</p>
 <ul>
-<li>接受一个或多个函数作为输入    </li>
-<li>输出一个函数    </li>
+<li>子程序（subroutine）  </li>
+<li>挂起（suspend）和恢复（resume）</li>
+<li>抢占式（preemptive）和协作式（cooperative or non-preemptive）  </li>
 </ul>
-<p>定义应该很容易理解，也就是函数可以接受另一个函数作为参数，或者函数的结果类型为函数类型。    </p>
-<ul>
-<li><p>第一种：如数学中的函数<code>f(x) = x + 1</code>， <code>g(x) = x * 2</code>，则<code>f(g(x)) = (x * 2) + 1</code>, 即为高阶函数。用代码实现即为</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>) = x * <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, g: <span class="type">Int</span> =&gt; <span class="type">Int</span>) = g(x) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>第二种：结果类型为函数类型</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>):(<span class="type">Int</span> =&gt; <span class="type">Int</span>) = &#123;</span><br><span class="line">  <span class="keyword">val</span> k = x * <span class="number">2</span></span><br><span class="line">  (y: <span class="type">Int</span>) =&gt; y + k + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h4><p>先看下代码如何实现函数的部分应用吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def sum(x: Int, y: Int, z: Int) = x + y + z</span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = sum _</span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> a(1,2,3)</span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val b = sum(1, _: Int, _: Int)</span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> b(2,3)</span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中出现了两种写法</p>
-<ul>
-<li>写法一<br><code>val a = sum _</code><br>这行代码表示sum方法的三个参数都为给出，整个参数表都用占位符<code>_</code>代替，所以这行代码的效果其实就是讲方法sum转换为了函数a。与之相同的写法还有<br><code>val a = sum(_)</code></li>
-<li>写法二<br><code>val b = sum(1, _: Int, _: Int)</code><br>这行代码表示，已知三个参数中的x，y和z未给出，用占位符<code>_</code>代替，最后返回一个包含了两个参数的函数b    </li>
-</ul>
-<p>部分应用从数学角度理解比较容易，如上面例子中的sum，其实对应于数学中的<code>sum(x,y,z) = x + y + z</code>，这是一个三元函数(既有三个未知数)，而写法二对sum的部分应用，相当于我们现在得知<code>x = 1</code>，则带入函数得<code>sum(y,z) = 1 + y + z</code>，也就是函数f消去了未知元x。** 整体来看函数的部分应用其实就是数学中的消元。 ** 而写法是对未消去任何参数的一种简写</p>
-<h4 id="函数的柯里化"><a href="#函数的柯里化" class="headerlink" title="函数的柯里化"></a>函数的柯里化</h4><p>在scala中函数函数可以有多个参数列表，而函数柯里化就是将函数的多参数列表转换为多个多参数列表。写法如下</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> def sum(x: Int, y: Int) = x + y</span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = sum _</span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val b = a.curried</span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
-
-<p>柯里化是通过调用函数对象的curried方法实现的。也就是说调用的是Function*中的curried方法(Function2-Function22拥有curried方法，Function0及Function1没有，因为无参函数和但参函数不需要也不能柯里化)，以Function2为例，我们看下源码的实现</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function2</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; apply(x1, x2)</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>curried的实现是将一个多参函数转换为一个单参函数的函数链，对于上面的例子来说就是把<code>sum(x,y)</code>转换成了<code>sum(x)(y)</code>，<code>sum(1)(2)</code>也就是对两个单参函数的依次调用，而<code>sum(1)</code>或者<code>sum(2)</code>其实相当于对sum函数的部分应用，返回值是一个单参函数</p>
-<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>引用别人blog中对闭包的定义</p>
+<p>如果不先理解这几个关键词的话，是很难搞清楚协程的</p>
+<h4 id="首先是子程序"><a href="#首先是子程序" class="headerlink" title="首先是子程序"></a>首先是子程序</h4><p>《The Art of Computer Programming》(计算机程序设计艺术)一书中对subroutine有详细的解释，以下是原文</p>
 <blockquote>
-<p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。</p>
+<p>When a certain task is to be performed at severial different places in a program, it is usually undesirable to repeat the coding in each place. To avoid this situation, the coding (called a subroutine) can be put into one place only, and a few extra instructions can be added and to restart the outer program properly after the subroutine is finished    </p>
 </blockquote>
-<p>示例</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> var more = 1</span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val add = (i: Int) =&gt; i + more</span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
-
-<p>上面例子中add函数的计算依赖于自由变量more，也就是闭包了。闭包很像函数字面量，不同的是，闭包运算的过程不只依赖于输入参数，还需要依赖函数之外的一个或多个自由变量。</p>
-<p>关于闭包的详细解释可以参考<a href="https://zhuanlan.zhihu.com/p/21346046" target="_blank" rel="noopener">知乎-什么是闭包</a>，引用博文中的总结</p>
 <blockquote>
-<p>最简洁、直击要害的回答，我能想到的分别有这么三句（版权属于 ：</p>
+<p>译: 当一项确定的任务再程序的不同位置多次执行时，通常重复的代码不是我们想看到的。为了避免这种情况，这段代码（叫做一个子程序）可以被单独放在一个位置，通过少量额外的指令在每个需要执行该此程序的位置添加并执行子程序，并在子程序执行完成后，自动的重启外部程序</p>
 </blockquote>
+<p>这段对于子程序的描述还是很容易理解的，从高级语言的角度来看，子程序就相当于一个函数或方法，对子程序的引用即为对函数或方法的调用。</p>
+<p>子程序的用途书中也有描述，这里简单提一下：子程序的主要优势是避免重复代码，节省程序空间。也间接的节省了时间，如：加载程序需要的时间减少等。子程序也会让构思大型程序变得更容易，debug也会更容易。封装出来的子程序也可以作为开放库对外暴露给其他开发者使用。</p>
+<p>理解了子程序，那么子程序跟协程又有什么关系呢？或者说两者有什么区别呢？同样引用原文给出答案</p>
+<blockquote>
+<p>Subroutines are special case of more general program components, called coroutines. In contrast to the unsymmetric relationship between a main routine and a subroutine, there is complete symmetry between coroutines, which on call each other.    </p>
+<p>We may consider the main program and subroutines as a team of programs, each member of the team having a certain job to do. The main program, in the course of doing its job, will activate the subprogram; the subprogram will perform its own function and then activate the main program. We may stretch our imagination to believe that, from the subroutine’s point of view, when it exits it is calling the main routine; the main routine continues to performs its duty, then ‘exits’ to the subroutine. the subroutine acts, then call the main routine again.</p>
+</blockquote>
+<p>译:     </p>
+<blockquote>
+<p>子程序是通用程序组件（即协程）的一种特例。与主程序与子程序间非对等关系（调用者与被调用者）对比，协程间是完全对等的，他们可以互相调用 </p>
+</blockquote>
+<blockquote>
+<p>我们可以将主程序和子程序看作是程序组，程序组中的每个成员都要完成特定的任务。主程序在完成其任务的过程中，会激活子程序，然后子程序会执行完成它自己的任务，随后再激活主程序让主程序继续执行。拓展下我们的想象力，从子程序的视角出发，在子程序出口位置调用主程序，主程序继续执行其任务，接着主程序’退出’并在出口位置调用子程序，子程序执行，而后再调用主程序</p>
+</blockquote>
+<p>上面第二段的意思是，子程序只有一个入口和出口，而协程可以有多个入口和出口。即子程序被主程序调用后只能从头开始执行（入口）直到执行完成然后退出（出口），而后主程序继续执行。而协程在被调用后，在中途可能会有一个或多个出口（出口点之后仍然有代码待执行），当执行中途遇到出口时，当前协程交出执行权让其他协程执行，当下次再调用该协程时，会从上次的出口点位置继续开始执行后续的代码（上次的出口点即为下次执行的入口点）。这也就解释了第一段中子程序和主程序关系与协程间关系的差别了</p>
+<blockquote>
+<p>Wiki中子程序与协程的比较</p>
 <ul>
-<li>闭包是一个有状态（不消失的私有数据）的函数。</li>
-<li>闭包是一个有记忆的函数。</li>
-<li>闭包相当于一个只有一个方法的紧凑对象（a compact object）。</li>
+<li>子例程可以调用其他子例程，调用者等待被调用者结束后继续执行，故而子例程的生命期遵循后进先出，即最后一个被调用的子例程最先结束返回。协程的生命期完全由对它们的使用需要来决定</li>
+<li>子例程的起始处是惟一的入口点，每当子例程被调用时，执行都从被调用子例程的起始处开始。协程可以有多个入口点，协程的起始处是第一个入口点，每个yield返回出口点都是再次被调用执行时的入口点。</li>
+<li>子例程只在结束时一次性的返回全部结果值。协程可以在yield时不调用其他协程，而是每次返回一部分的结果值，这种协程常称为生成器或迭代器。</li>
+<li>现代的指令集架构通常提供对调用栈的指令支持，便于实现可递归调用的子例程。在以Scheme为代表的提供续体的语言环境下，恰好可用此控制状态抽象表示来实现协程。</li>
 </ul>
-<p>上面这三句话是等价的</p>
-<h4 id="嵌套函数"><a href="#嵌套函数" class="headerlink" title="嵌套函数"></a>嵌套函数</h4><p>scala允许在函数内部定义函数，称之为局部函数。它的作用域仅限于外部函数，其他位置无法访问到内部函数，可以达到控制访问的效果<br>示例</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> f = (x:<span class="type">Int</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">val</span> innerAdd = (i: <span class="type">Int</span>) =&gt; i + <span class="number">1</span></span><br><span class="line">  innerAdd(x) + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>关于scala中的函数，就先写这么多吧，等到后面开发应用到其他的知识，在作补充。关于函数的部分应用和柯里化的实际意义，在<a href="../../21/scala函数式编程/">scala函数式编程</a>那篇里写出来<br>，这里就不写了</p>
+</blockquote>
+<h4 id="挂起和恢复"><a href="#挂起和恢复" class="headerlink" title="挂起和恢复"></a>挂起和恢复</h4><p>其实在子程序那一部分中已经对挂起和恢复做出了解释。协程拥有多个出口和入口，所谓挂起就是在执行途中遇到出口，当前协程让出执行权，跳转到其他协程继续执行，而恢复就是当再次调用该协程时从上次出口点继续执行后续任务。出口对应挂起，入口对应恢复</p>
+<h4 id="抢占式和协作式"><a href="#抢占式和协作式" class="headerlink" title="抢占式和协作式"></a>抢占式和协作式</h4><p>首先，无论是抢占式还是协作式，都意味着当前Task都不再继续拥有执行权，而两者区别是，抢占式多任务中，当前任务被动的系统剥夺执行权，协作式多任务中，当前任务在不需要系统资源时主动让出执行权    </p>
+<p>抢占式多任务涉及到了中断机制的使用，中断机制可以挂起当前进程并唤起调度器以决定接下来应该调度执行哪个进程。因此，所有进程在一段时间内都会获得一定数量的CPU时间</p>
+<p>抢占式多任务依赖于 CPU 的硬件支持。 因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有 CPU 支持了执行权限后，抢占式调度才成为可能</p>
+<p>不同于抢占式由系统调度进程切换，协作式进程在空闲（idel）或阻塞（block）时会主动的让出执行权（yield）</p>
+<h2 id="协程能解决什么问题呢"><a href="#协程能解决什么问题呢" class="headerlink" title="协程能解决什么问题呢"></a>协程能解决什么问题呢</h2><p>如果从早先协程的设计理念来看，协程是设计用来处理单内核下多任务并发的。协程最本质的特性是可挂起和恢复的特性，拥有多入口多出口。<br>相较于子程序的从头运行至尾，协程有更丰富的过程（有一个或多个运行阶段）,多个任务可以交替执行，使得多任务协作提供成为可能，即协程拥有并发的能力。</p>
+<p>而对于现代的高级语言来说，协程更像是任务，运行在线程之上，在语言级别进行调度。许多语言的也都是多线程 + 协程的的实现，以达到像写同步代码那样处理异步问题。通常异步需要多线程来实现，但是弊端就是多线程调度时，切换上下文较为耗时，而如果通过多线程 + 协程方式来处理异步的话，相当于将系统级的线程调度替换为语言级别的协程调度，一定程度上减少了多线程调度切换上下文的开销。另一方面，多线程方式实现异步最可能面临异步回调，而最熟悉的应该是JS中的回调地狱问题了，而有了协程之后，就可以完美的消除该问题。</p>
+<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>协程从本质上讲依然是一种程序，运行与线程之上。名称以及它表现出来的特征与线程有相似之处，但与线程不同的是，他的调度并不需要系统参与，而是直接在语言级别完成。这也是许多人称协程为用户级线程的原因</p>
 ]]></content>
       <categories>
-        <category>Scala</category>
+        <category>Coroutine</category>
       </categories>
       <tags>
-        <tag>scala</tag>
+        <tag>coroutine</tag>
       </tags>
   </entry>
   <entry>
@@ -739,6 +622,123 @@
       <tags>
         <tag>Hexo</tag>
         <tag>GitHub Pages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala中的函数</title>
+    <url>/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>在各类blog及scala书籍中看到的关于函数最多的一句话是</p>
+<blockquote>
+<p>函数是一等公民</p>
+</blockquote>
+<p>可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它</p>
+<h2 id="scala函数基础"><a href="#scala函数基础" class="headerlink" title="scala函数基础"></a>scala函数基础</h2><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
+<li><p>匿名函数</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> (x: Int) =&gt; x + 1</span></span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
+
+<p>固定写法：左边是参数列表，中间符号=&gt;，右边是函数体<br>匿名函数无函数名，也无需给出函数的结果类型</p>
+</li>
+<li><p>函数字面量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = (x: Int) =&gt; x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(10)</span></span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
+
+<p>其中表达式有半部分为一个匿名函数，函数作为一个变量(或不变量)，用变量名+参数表方式调用，与普通方法的调用几乎相同。<br>** 需要注意的是函数字面量声明函数时不需要写出函数的返回值类型，函数体的最后一条表达式的结果会作为返回值返回 **</p>
+</li>
+<li><p>函数值<br>函数字面量与函数值的关系就像类与对象的关系。函数字面量其实就是一个实现了trait Function*的函数类，在运行时实例化了一个函数类，这个实例就是函数值</p>
+</li>
+</ul>
+<h4 id="函数的本质"><a href="#函数的本质" class="headerlink" title="函数的本质"></a>函数的本质</h4><p>scala不像java有基本类型与引用类型之分，scala中一切皆对象，包括函数也是对象。scala中定义了一系列trait，Function0 - Function22，其中0-22表示参数的个数(至于为什么是到22，理论上讲程序中不会出现多于22个参数的函数)。而函数正是Function<em>的实例。如<code>val f = (x: Int) =&gt; x + 1</code>其实就是Function1的实例。下面看下Function</em>的源码，以Function3为例</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** A function of 3 parameters.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function3</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, -<span class="type">T3</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  <span class="comment">/** Apply the body of this function to the arguments.</span></span><br><span class="line"><span class="comment">   *  @return   the result of function application.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">T1</span>, v2: <span class="type">T2</span>, v3: <span class="type">T3</span>): <span class="type">R</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a curried version of this function.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f(x1)(x2)(x3) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">T3</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; (x3: <span class="type">T3</span>) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a tupled version of this function: instead of 3 arguments,</span></span><br><span class="line"><span class="comment">   *  it accepts a single [[scala.Tuple3]] argument.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f((x1, x2, x3)) == f(Tuple3(x1, x2, x3)) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">tupled</span></span>: <span class="type">Tuple3</span>[<span class="type">T1</span>, <span class="type">T2</span>, <span class="type">T3</span>] =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Tuple3</span>(x1, x2, x3) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>() = <span class="string">"&lt;function3&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到其中有一个apply方法(先忽略其他方法)，接受三个泛型参数，所以当我们调用<code>f(1)</code>时，其实是调用了Function1实例的apply方法。</p>
+<h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>在学习过程中，还有一点很困扰，就是我们在类中用def定义的是不是函数，如果不是函数，它又是什么，跟函数又有什么区别呢？<br>首先呢使用def 关键字定义的是方法，不是函数，虽然在实际应用中几乎没有差别，但还是需要了解两者的不同的    </p>
+<p>** 方法 **<br>定义在类中，作为某个对象的成员方法，使用def关键字定义</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def a(x: Int):Int = x + 1</span></span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
+
+<p>** 两者的区别 **</p>
+<ul>
+<li>方法使用def关键字定义，而函数不用(函数使用val/var或干脆匿名)</li>
+<li>方法是类的一部分，函数是对象可以赋值给一个val/var</li>
+<li>函数作为对象可以像任何其他数据类型一样被传递和操作，而方法不行，如果想要传递方法，则需要把方法转换为函数</li>
+<li>定义方法时，如果没有参数，则参数表可以省略不写(即方法名后不写())，而函数不行</li>
+<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(x: Int):Int =&gt; x + 1</span></span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>** 两者的转换 **</p>
+<ul>
+<li><p>第一种情况，方法直接转为函数<br>不能将方法直接声明为一个val/var，如下面的写法会编译错误</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m</span></span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
+
+<p>正确写法</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m _</span></span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
+
+<p>这个转换的其实是使用了部分应用(Partial Applied Function)，下面将会讲到</p>
+</li>
+<li><p>第二种情况，需要函数的地方使用方法<br>这种情况下不需要使用下划线，方法会被自动转换为函数，称之为eta转换。关于eta-expansion与eta-conversion的解释可以参考<a href="http://hongjiang.info/scala-eta-conversion/" target="_blank" rel="noopener">王宏江-scala中的eta-conversion</a>与<a href="https://hongjiang.info/eta-conversion-and-eta-expansion/" target="_blank" rel="noopener">王宏江-再谈eta-conversion与eta-expansion</a></p>
+</li>
+</ul>
+<h2 id="scala函数进阶"><a href="#scala函数进阶" class="headerlink" title="scala函数进阶"></a>scala函数进阶</h2><h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><p>引用<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>中高阶函数的定义</p>
+<blockquote>
+<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：    </p>
+</blockquote>
+<ul>
+<li>接受一个或多个函数作为输入    </li>
+<li>输出一个函数    </li>
+</ul>
+<p>定义应该很容易理解，也就是函数可以接受另一个函数作为参数，或者函数的结果类型为函数类型。    </p>
+<ul>
+<li><p>第一种：如数学中的函数<code>f(x) = x + 1</code>， <code>g(x) = x * 2</code>，则<code>f(g(x)) = (x * 2) + 1</code>, 即为高阶函数。用代码实现即为</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>) = x * <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, g: <span class="type">Int</span> =&gt; <span class="type">Int</span>) = g(x) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二种：结果类型为函数类型</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>):(<span class="type">Int</span> =&gt; <span class="type">Int</span>) = &#123;</span><br><span class="line">  <span class="keyword">val</span> k = x * <span class="number">2</span></span><br><span class="line">  (y: <span class="type">Int</span>) =&gt; y + k + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h4><p>先看下代码如何实现函数的部分应用吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int, z: Int) = x + y + z</span></span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> a(1,2,3)</span></span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = sum(1, _: Int, _: Int)</span></span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> b(2,3)</span></span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中出现了两种写法</p>
+<ul>
+<li>写法一<br><code>val a = sum _</code><br>这行代码表示sum方法的三个参数都为给出，整个参数表都用占位符<code>_</code>代替，所以这行代码的效果其实就是讲方法sum转换为了函数a。与之相同的写法还有<br><code>val a = sum(_)</code></li>
+<li>写法二<br><code>val b = sum(1, _: Int, _: Int)</code><br>这行代码表示，已知三个参数中的x，y和z未给出，用占位符<code>_</code>代替，最后返回一个包含了两个参数的函数b    </li>
+</ul>
+<p>部分应用从数学角度理解比较容易，如上面例子中的sum，其实对应于数学中的<code>sum(x,y,z) = x + y + z</code>，这是一个三元函数(既有三个未知数)，而写法二对sum的部分应用，相当于我们现在得知<code>x = 1</code>，则带入函数得<code>sum(y,z) = 1 + y + z</code>，也就是函数f消去了未知元x。** 整体来看函数的部分应用其实就是数学中的消元。 ** 而写法是对未消去任何参数的一种简写</p>
+<h4 id="函数的柯里化"><a href="#函数的柯里化" class="headerlink" title="函数的柯里化"></a>函数的柯里化</h4><p>在scala中函数函数可以有多个参数列表，而函数柯里化就是将函数的多参数列表转换为多个多参数列表。写法如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int) = x + y</span></span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = a.curried</span></span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
+
+<p>柯里化是通过调用函数对象的curried方法实现的。也就是说调用的是Function*中的curried方法(Function2-Function22拥有curried方法，Function0及Function1没有，因为无参函数和但参函数不需要也不能柯里化)，以Function2为例，我们看下源码的实现</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function2</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; apply(x1, x2)</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>curried的实现是将一个多参函数转换为一个单参函数的函数链，对于上面的例子来说就是把<code>sum(x,y)</code>转换成了<code>sum(x)(y)</code>，<code>sum(1)(2)</code>也就是对两个单参函数的依次调用，而<code>sum(1)</code>或者<code>sum(2)</code>其实相当于对sum函数的部分应用，返回值是一个单参函数</p>
+<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>引用别人blog中对闭包的定义</p>
+<blockquote>
+<p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。</p>
+</blockquote>
+<p>示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> var more = 1</span></span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val add = (i: Int) =&gt; i + more</span></span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
+
+<p>上面例子中add函数的计算依赖于自由变量more，也就是闭包了。闭包很像函数字面量，不同的是，闭包运算的过程不只依赖于输入参数，还需要依赖函数之外的一个或多个自由变量。</p>
+<p>关于闭包的详细解释可以参考<a href="https://zhuanlan.zhihu.com/p/21346046" target="_blank" rel="noopener">知乎-什么是闭包</a>，引用博文中的总结</p>
+<blockquote>
+<p>最简洁、直击要害的回答，我能想到的分别有这么三句（版权属于 ：</p>
+</blockquote>
+<ul>
+<li>闭包是一个有状态（不消失的私有数据）的函数。</li>
+<li>闭包是一个有记忆的函数。</li>
+<li>闭包相当于一个只有一个方法的紧凑对象（a compact object）。</li>
+</ul>
+<p>上面这三句话是等价的</p>
+<h4 id="嵌套函数"><a href="#嵌套函数" class="headerlink" title="嵌套函数"></a>嵌套函数</h4><p>scala允许在函数内部定义函数，称之为局部函数。它的作用域仅限于外部函数，其他位置无法访问到内部函数，可以达到控制访问的效果<br>示例</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> f = (x:<span class="type">Int</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">val</span> innerAdd = (i: <span class="type">Int</span>) =&gt; i + <span class="number">1</span></span><br><span class="line">  innerAdd(x) + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>关于scala中的函数，就先写这么多吧，等到后面开发应用到其他的知识，在作补充。关于函数的部分应用和柯里化的实际意义，在<a href="../../21/scala函数式编程/">scala函数式编程</a>那篇里写出来<br>，这里就不写了</p>
+]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
       </tags>
   </entry>
   <entry>

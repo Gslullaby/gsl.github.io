@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"hcendless.ink","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识 原文链接 概要此篇BIP介绍如何为确定性钱包生成助记词或者助记句（一组容易记忆的单词）本文包括两部分：  生成助记词 将助记词转化为二进制种子。种子可以用于生成BIP 32">
+  <meta name="description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识">
 <meta name="keywords" content="BIP,区块链">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BIP 39">
 <meta property="og:url" content="https://hcendless.ink/2018/09/13/bip39/index.html">
 <meta property="og:site_name" content="Gsl&#39;s Blog">
-<meta property="og:description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识 原文链接 概要此篇BIP介绍如何为确定性钱包生成助记词或者助记句（一组容易记忆的单词）本文包括两部分：  生成助记词 将助记词转化为二进制种子。种子可以用于生成BIP 32">
+<meta property="og:description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://hcendless.ink/2018/09/13/bip39/ENT-CS-MS.png">
-<meta property="og:updated_time" content="2020-08-02T06:02:48.130Z">
+<meta property="og:updated_time" content="2020-08-03T06:13:20.619Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BIP 39">
-<meta name="twitter:description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识 原文链接 概要此篇BIP介绍如何为确定性钱包生成助记词或者助记句（一组容易记忆的单词）本文包括两部分：  生成助记词 将助记词转化为二进制种子。种子可以用于生成BIP 32">
+<meta name="twitter:description" content="进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识">
 <meta name="twitter:image" content="https://hcendless.ink/2018/09/13/bip39/ENT-CS-MS.png">
 
 <link rel="canonical" href="https://hcendless.ink/2018/09/13/bip39/">
@@ -192,7 +192,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-02 14:02:48" itemprop="dateModified" datetime="2020-08-02T14:02:48+08:00">2020-08-02</time>
+                <time title="Modified: 2020-08-03 14:13:20" itemprop="dateModified" datetime="2020-08-03T14:13:20+08:00">2020-08-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -205,6 +205,7 @@
             </span>
 
           
+            <div class="post-description">进入区块链行业已经一年有余，开发之余也一直在补充区块链知识，读过《区块链-技术驱动金融》，以及BTC白皮书BIP等，记录的比较零散，很有必要整理一下。首先先把比较重要的BIP翻译整理一遍。此篇BIP39的译文，是助记词相关知识</div>
 
         </div>
       </header>
