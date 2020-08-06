@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Gsl&#39;s Blog">
 <meta property="og:description" content="本文介绍了Gradle构建环境的配置。包括对Gradle properties，System properties，Environment variables，Project properties等的配置">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-08-05T10:34:57.689Z">
+<meta property="og:updated_time" content="2020-08-06T16:12:05.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle构建环境">
 <meta name="twitter:description" content="本文介绍了Gradle构建环境的配置。包括对Gradle properties，System properties，Environment variables，Project properties等的配置">
@@ -190,7 +190,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-05 18:34:57" itemprop="dateModified" datetime="2020-08-05T18:34:57+08:00">2020-08-05</time>
+                <time title="Modified: 2020-08-07 00:12:05" itemprop="dateModified" datetime="2020-08-07T00:12:05+08:00">2020-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -214,15 +214,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Gradle提供多种机制，用以配置Gradle本身以及Project的行为。下面展示了如何使用这些机制，下列方法按优先级从高到低排列（第一个方法优先级最高）：</p>
+        <p>Gradle提供多种方式对Gradle本身以及Project的行为进行配置。下面列出了四种配置方式，按优先级从高到低排列（第一个方法优先级最高）：</p>
 <ul>
 <li><code>Common-line flags</code> 如:<code>--build-cache</code>。优先级高于各种属性和环境变量</li>
 <li><code>System properties</code> 如: 存储在<code>gradle.properties</code>中的<code>systemProp.http.proxyHost=somehost.org</code></li>
-<li><code>Gradel properties</code> 如: 存储在项目根目录或<code>GRADLE_USER_HOME</code>目录下<code>gradle.properties</code>中的<code>org.gradle.caching=true</code></li>
+<li><code>Gradle properties</code> 如: 存储在项目根目录或<code>GRADLE_USER_HOME</code>目录下<code>gradle.properties</code>中的<code>org.gradle.caching=true</code></li>
 <li><code>Environment variables</code> 如: Gradle运行环境中的<code>GRADLE_OPTS</code>变量</li>
 </ul>
 <p>除了配置构建环境外，还可以通过<code>Project properties</code>来配置特定项目构建，如<code>-PreleaseType=final</code></p>
-<h2 id="Gradle-properties"><a href="#Gradle-properties" class="headerlink" title="Gradle properties"></a>Gradle properties</h2><p>Gradle提供了一些选项，通过这些选项可以很方便的对用于执行构建的Java进程进行配置。虽然可以在本地环境中通过<code>Gradle_OPTS</code>或<code>JAVA_OPTS</code>对该进程进行配置，但是把诸如JVM内存大小、Java Home位置等配置信息加入版本控制（如git/svn等），可以保证项目组构建环境的一致性。</p>
+<h2 id="Gradle-properties"><a href="#Gradle-properties" class="headerlink" title="Gradle properties"></a>Gradle properties</h2><p>Gradle提供了一些选项，通过这些选项可以很方便的对用于执行构建的Java进程进行配置。虽然可以在本地环境中通过<code>GRADLE_OPTS</code>或<code>JAVA_OPTS</code>对该进程进行配置，但是把诸如JVM内存大小、Java Home位置等配置信息加入版本控制（如git/svn等），可以保证项目组构建环境的一致性。</p>
 <p>配置一致的构建环境非常简单，只需在<code>gradle.properties</code>文件中添加配置即可。所有的<code>gradle.properties</code>合并在一起构成了构建环境的配置。如果多个<code>gradle.properties</code>出现了同一个配置项，则会第一个会生效。</p>
 <p>四种设置方式：</p>
 <ul>
@@ -271,7 +271,7 @@
 <p>在多项目构建中，在除根项目以外的项目中设置的”<code>systemProp.</code>“属性都将被忽略，也就是说，只有根项目的<code>gradle.properties</code>文件中以”<code>systemProp.</code>“为前缀的属性会被检测</p>
 <h2 id="Environment-variables"><a href="#Environment-variables" class="headerlink" title="Environment variables"></a>Environment variables</h2><p><code>gradle</code>命令有以下几个可用的环境变量。命令行选项以及系统变量具有比环境变量更高的优先级</p>
 <p><code>GRADLE_OPTS</code><br>设置Gradle client VM启动时使用的JVM参数。由于Client VM仅处理命令行input/output，因此很少需要更改其VM选项。实际的构建任务是由Gradle daemon进程执行的，因此该环境变量并不会影响构建</p>
-<p><code>GRADLE_USER_HOME</code><br>指定Gradle用户主目录（如果未这只，则默认值为<code>$USER_HOME/.gradle</code>）</p>
+<p><code>GRADLE_USER_HOME</code><br>指定Gradle用户主目录（如果未设置，则默认值为<code>$USER_HOME/.gradle</code>）</p>
 <p><code>JAVA_HOME</code><br>为client VM指定JDK的安装路径。此VM也用于daemon进程，除非在带有<code>org.gradle.java.home</code>的Gradle属性文件中指定了不同的VM</p>
 <h2 id="Project-properties"><a href="#Project-properties" class="headerlink" title="Project properties"></a>Project properties</h2><p>可以直接使用<code>-P</code>命令行选项为<code>Project</code>对象添加一些属性</p>
 <p>当Gradle遇到一些特定名称的系统属性或环境变量时也会为Project设置属性。如：如果环境变量的名称为<code>ORG_GRADLE_PROJECT_prop=somevalue</code>，则Gradle会为Project对象设置一个名为<code>prop</code>值为<code>somevalue</code>的属性。对于系统属性来说，则使用了不同的命名模式，即为<code>org.gradle.project.prop</code>。</p>
@@ -313,7 +313,7 @@
 <blockquote>
 <p>$ gradle performRelease -PisCI=true –quiet<br>Performing release actions</p>
 </blockquote>
-<h2 id="通过HTTP代理访问Web"><a href="#通过HTTP代理访问Web" class="headerlink" title="通过HTTP代理访问Web"></a>通过HTTP代理访问Web</h2><p>通过配置标准的JVM系统属性可以配置HTTP/HTTPS代理（用于下载依赖等）。可以直接在构建脚本中设置这些属性，如使用<code>System.setProperty(&#39;http.proxyHost&#39;, &#39;www.somehost.org&#39;)</code>来设置HTTP代理。也可以在<code>gradle.properties</code>中进行设置</p>
+<h2 id="通过HTTP代理访问Web"><a href="#通过HTTP代理访问Web" class="headerlink" title="通过HTTP代理访问Web"></a>通过HTTP代理访问Web</h2><p>通过标准的JVM系统属性可以配置HTTP/HTTPS代理（用于下载依赖等）。可以直接在构建脚本中设置这些属性，如使用<code>System.setProperty(&#39;http.proxyHost&#39;, &#39;www.somehost.org&#39;)</code>来设置HTTP代理。也可以在<code>gradle.properties</code>中进行设置</p>
 <p><strong><code>在gradle.properties</code>中配置HTTP代理</strong></p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemProp.http.proxyHost=www.somehost.org</span><br><span class="line">systemProp.http.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.http.proxyUser=userid</span><br><span class="line">systemProp.http.proxyPassword=password</span><br><span class="line">systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
 

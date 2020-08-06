@@ -114,6 +114,238 @@
       </tags>
   </entry>
   <entry>
+    <title>Gradle构建环境</title>
+    <url>/2020/08/04/Gradle-build-environment/</url>
+    <content><![CDATA[<p>Gradle提供多种方式对Gradle本身以及Project的行为进行配置。下面列出了四种配置方式，按优先级从高到低排列（第一个方法优先级最高）：</p>
+<ul>
+<li><code>Common-line flags</code> 如:<code>--build-cache</code>。优先级高于各种属性和环境变量</li>
+<li><code>System properties</code> 如: 存储在<code>gradle.properties</code>中的<code>systemProp.http.proxyHost=somehost.org</code></li>
+<li><code>Gradle properties</code> 如: 存储在项目根目录或<code>GRADLE_USER_HOME</code>目录下<code>gradle.properties</code>中的<code>org.gradle.caching=true</code></li>
+<li><code>Environment variables</code> 如: Gradle运行环境中的<code>GRADLE_OPTS</code>变量</li>
+</ul>
+<p>除了配置构建环境外，还可以通过<code>Project properties</code>来配置特定项目构建，如<code>-PreleaseType=final</code></p>
+<h2 id="Gradle-properties"><a href="#Gradle-properties" class="headerlink" title="Gradle properties"></a>Gradle properties</h2><p>Gradle提供了一些选项，通过这些选项可以很方便的对用于执行构建的Java进程进行配置。虽然可以在本地环境中通过<code>GRADLE_OPTS</code>或<code>JAVA_OPTS</code>对该进程进行配置，但是把诸如JVM内存大小、Java Home位置等配置信息加入版本控制（如git/svn等），可以保证项目组构建环境的一致性。</p>
+<p>配置一致的构建环境非常简单，只需在<code>gradle.properties</code>文件中添加配置即可。所有的<code>gradle.properties</code>合并在一起构成了构建环境的配置。如果多个<code>gradle.properties</code>出现了同一个配置项，则会第一个会生效。</p>
+<p>四种设置方式：</p>
+<ul>
+<li>system properties，例如，当在命令行中设置<code>-Dgradle.user.home</code></li>
+<li><code>GRADLE_USER_HOME</code>目录中的 <code>gradle.properties</code>文件</li>
+<li>项目根目录中的<code>gradle.properties</code>文件</li>
+<li>Gradle安装目录下的<code>gradle.properties</code>文件</li>
+</ul>
+<p>下面列出了一些Gradle构建环境的配置项</p>
+<p><code>org.gradle.caching=(true,false)</code><br>当设置为true时，在可能的情况下，Gradle会复用之前构建的输出以加快构建。</p>
+<p><code>org.gradle.caching.debug=(true,false)</code><br>当设置为true时，所有任务的输入属性的hash以及构建缓存的key都会输出到console中</p>
+<p><code>org.gradle.configureondemand=(true,false)</code><br>启用按需配置，Gradle将尝试仅配置必要的项目</p>
+<p><code>org.gradle.console=(auto,plain,rich,verbose)</code><br>自定义console中log的颜色或log的级别。 默认值取决于调用Gradle的方式</p>
+<p><code>org.gradle.daemon=(true,false)</code><br>当设置为true时，将使用Gradle Daemon进程执行构建。默认值为true</p>
+<p><code>org.gradle.daemon.idletimeout=(# of idle millis)</code><br>设置Gradle Daemon进程自动关闭的时间，单位为毫秒。默认值为<code>10800000</code>(3小时)</p>
+<p><code>org.gradle.debug=(true,false)</code><br>当设置为true时，Gradle将在启用远程调试的情况下运行构建，并监听5005端口。该设置项等同于在JVM 命令行中添加<code>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005</code>。该设置会挂起JVM直至有可绑定的debugger。默认为false</p>
+<p><code>org.gradle.java.home=(path to JDK home)</code><br>为Gradle构建进程指定Java home。可设置为<code>jdk</code>或<code>jre</code>路径，但是最好使用<code>jdk</code>。该设置项最合理默认值应该是从PC环境变量（JAVA_HOME或path中的java路径）中获取。该设置不会影响到运行Gradle客户端的JVM所使用的Java版本</p>
+<p><code>org.gradle.jvmargs=(JVM arguments)</code><br>为Gradle Daemon进程指定JVM参数。可以使用该配置修改JVM内存，以提升构建的执行效率。该设置不会影响Gradle客户端VM的JVM设置</p>
+<p><code>org.gradle.logging.level=(quiet,warn,lifecycle,info,debug)</code><br>用于设置Gradle的日志级别，可设置为quiet、warn，lifecycle，info，debug。不区分大小写。默认为<code>lifecycle</code></p>
+<p><code>org.gradle.parallel=(true,false)</code><br>配置后，Gradle将派生到org.gradle.workers.max JVM以并行执行项目</p>
+<p><code>org.gradle.priority=(low,normal)</code><br>为Gradle daemon以及所有由它启动的进程指定调度优先级。默认为<code>normal</code></p>
+<p><code>org.gradle.unsafe.watch-fs=(true,false)</code><br>观察文件系统的开关。允许Gradle下次构建时重用fs信息。默认为false</p>
+<p><code>org.gradle.warning.mode=(all,fail,summary,none)</code><br>当设置为<code>all</code>/<code>summary</code>/<code>none</code>，Gradle会使用不同的警告类型显示</p>
+<p><code>org.gradle.workers.max=(max # of worker processes)</code><br>用于设置worker进程的最大数量。默认为CPU的核心数</p>
+<p>下面例子演示如何使用以上属性</p>
+<p><em>Example 1.在gradle.properties文件中设置属性</em></p>
+<blockquote>
+<p>gradle.properties</p>
+</blockquote>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="attribute">gradlePropertiesProp</span>=gradlePropertiesValue</span><br><span class="line"><span class="attribute">sysProp</span>=shouldBeOverWrittenBySysProp</span><br><span class="line">systemProp.<span class="attribute">system</span>=systemValue</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task printProps &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println commandLineProjectProp</span><br><span class="line">        println gradlePropertiesProp</span><br><span class="line">        println systemProjectProp</span><br><span class="line">        println System.properties[<span class="string">'system'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">$ gradle -q -PcommandLineProjectProp=commandLineProjectPropValue -Dorg.gradle.project.systemProjectProp=systemPropertyValue printProps</span><br><span class="line"></span><br><span class="line">commandLineProjectPropValue</span><br><span class="line">gradlePropertiesValue</span><br><span class="line">systemPropertyValue</span><br><span class="line">systemValue</span><br></pre></td></tr></table></figure>
+
+<h2 id="System-properties"><a href="#System-properties" class="headerlink" title="System properties"></a>System properties</h2><p>使用<code>-D</code>命令行选项，可以传入一些系统属性给运行Gradle的JVM。Gradle命令的-D选项与java命令的-D选项具有相同的效果。<br>也可以在<code>gradle.properties</code>中使用<code>systemProp</code>前缀来设置system properties<br>如：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperUser</span>=myuser</span><br><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperPassword</span>=mypassword</span><br></pre></td></tr></table></figure>
+
+<p>下面列出了可用的系统属性。注意命令行选项方式具有更高的优先级</p>
+<p><code>gradle.wrapperUser=(myuser)</code><br>指定用于从服务器（使用Http基本身份验证）下载Gradle的用户名。</p>
+<p><code>gradle.wrapperPassword=(mypassword)</code><br>指定上一条属性中设置的用户名所对应的密码</p>
+<p><code>gradle.user.home=(path to directory)</code><br>指定Gradle的用户主目录</p>
+<p>在多项目构建中，在除根项目以外的项目中设置的”<code>systemProp.</code>“属性都将被忽略，也就是说，只有根项目的<code>gradle.properties</code>文件中以”<code>systemProp.</code>“为前缀的属性会被检测</p>
+<h2 id="Environment-variables"><a href="#Environment-variables" class="headerlink" title="Environment variables"></a>Environment variables</h2><p><code>gradle</code>命令有以下几个可用的环境变量。命令行选项以及系统变量具有比环境变量更高的优先级</p>
+<p><code>GRADLE_OPTS</code><br>设置Gradle client VM启动时使用的JVM参数。由于Client VM仅处理命令行input/output，因此很少需要更改其VM选项。实际的构建任务是由Gradle daemon进程执行的，因此该环境变量并不会影响构建</p>
+<p><code>GRADLE_USER_HOME</code><br>指定Gradle用户主目录（如果未设置，则默认值为<code>$USER_HOME/.gradle</code>）</p>
+<p><code>JAVA_HOME</code><br>为client VM指定JDK的安装路径。此VM也用于daemon进程，除非在带有<code>org.gradle.java.home</code>的Gradle属性文件中指定了不同的VM</p>
+<h2 id="Project-properties"><a href="#Project-properties" class="headerlink" title="Project properties"></a>Project properties</h2><p>可以直接使用<code>-P</code>命令行选项为<code>Project</code>对象添加一些属性</p>
+<p>当Gradle遇到一些特定名称的系统属性或环境变量时也会为Project设置属性。如：如果环境变量的名称为<code>ORG_GRADLE_PROJECT_prop=somevalue</code>，则Gradle会为Project对象设置一个名为<code>prop</code>值为<code>somevalue</code>的属性。对于系统属性来说，则使用了不同的命名模式，即为<code>org.gradle.project.prop</code>。</p>
+<p>下面两个例子都会子啊Project对象中设置一个名为<code>foo</code>值为<code>bar</code>的属性</p>
+<p><strong>通过系统属性设置Project属性</strong><br><code>org.gradle.project.foo=bar</code></p>
+<p><strong>通过环境变量设置Project属性</strong><br><code>ORG_GRADLE_PROJECT_foo=bar</code></p>
+<blockquote>
+<p>用户主目录中的属性文件优先级要高于项目目录中属性文件</p>
+</blockquote>
+<p>当对一个持续集成服务没有管理员权限并且需要设置一些不容易被看到的属性值时，该特性非常有用。在此场景下，因为你无法使用<code>-P</code>选项，也无法更改系统层级的配置文件，所以正确的策略是修改持续集成构建任务的配置，添加一个与于其模式匹配的环境变量。这对系统上的普通用户是不可见的。</p>
+<p>在构建脚本中可以像使用普通变量那样，通过属性名称即可访问Project的属性</p>
+<blockquote>
+<p>如果应用了一个不存在的Project属性，则会抛出异常，进而构建失败</p>
+<p>在使用<code>Project.hasProperty(java.lang.String)</code>方法访问某个属性之前，应该先检查该Project属性是否存在</p>
+</blockquote>
+<h2 id="配置JVM内存"><a href="#配置JVM内存" class="headerlink" title="配置JVM内存"></a>配置JVM内存</h2><p>可以使用以下方式调整JVM</p>
+<p>Gradle属性<code>org.gradle.jvmargs</code>用以控制运行构建的VM。默认值为<code>-Xmx512m &quot;-XX:MaxMetaspaceSize=256m&quot;</code></p>
+<p><strong>修改构建VM的JVM参数</strong><br><code>org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</code></p>
+<p>环境变量<code>JAVA_OPTS</code>用以控制命令行终端，该终端仅用于显示控制台输出。默认值为<code>-Xmx64m</code></p>
+<p><strong>修改命令行终端VM的JVM参数</strong><br><code>JAVA_OPTS=&quot;-Xmx64m -XX:MaxPermSize=64m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8&quot;</code></p>
+<blockquote>
+<p>有一种情况终端VM也会作为构建VM使用，即：Gradle Daemon进程处于禁用状态，并且终端VM与构建VM的参数设置相同，则终端VM会直接执行构建。其他情况下终端VM会fork出一个新的VM用与执行构建</p>
+</blockquote>
+<p>某些task，如<code>test</code> task，也会fork出额外的JVM进程。可以通过task本身对其进行配置。默认值为<code>-Xmx512m</code></p>
+<p><em>Example 2. 为<code>JavaCompile</code>任务设置Java编译选项</em></p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tasks.withType(JavaCompile) &#123;</span><br><span class="line">    options.compilerArgs += [<span class="string">'-Xdoclint:none'</span>, <span class="string">'-Xlint:none'</span>, <span class="string">'-nowarn'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Project属性配置任务"><a href="#使用Project属性配置任务" class="headerlink" title="使用Project属性配置任务"></a>使用Project属性配置任务</h2><p>可以根据调用时指定的项目属性更改任务的行为</p>
+<p>假设像确保只有CI才能触发发布版本操作，则简单是实现方式是通过使用Project的<code>isCI</code>属性</p>
+<p><em>Example 3. 禁止CI之外发布版本</em></p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task performRelease &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        <span class="keyword">if</span> (project.hasProperty(<span class="string">"isCI"</span>)) &#123;</span><br><span class="line">            println(<span class="string">"Performing release actions"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidUserDataException(<span class="string">"Cannot perform release outside of CI"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>$ gradle performRelease -PisCI=true –quiet<br>Performing release actions</p>
+</blockquote>
+<h2 id="通过HTTP代理访问Web"><a href="#通过HTTP代理访问Web" class="headerlink" title="通过HTTP代理访问Web"></a>通过HTTP代理访问Web</h2><p>通过标准的JVM系统属性可以配置HTTP/HTTPS代理（用于下载依赖等）。可以直接在构建脚本中设置这些属性，如使用<code>System.setProperty(&#39;http.proxyHost&#39;, &#39;www.somehost.org&#39;)</code>来设置HTTP代理。也可以在<code>gradle.properties</code>中进行设置</p>
+<p><strong><code>在gradle.properties</code>中配置HTTP代理</strong></p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.http.proxyHost=www.somehost.org</span><br><span class="line">systemProp.http.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.http.proxyUser=userid</span><br><span class="line">systemProp.http.proxyPassword=password</span><br><span class="line">systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>在gradle.properties</code>中配置HTTPS代理</strong></p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.https.proxyHost=www.somehost.org</span><br><span class="line">systemProp.https.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.https.proxyUser=userid</span><br><span class="line">systemProp.https.proxyPassword=password</span><br><span class="line">systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
+
+<p>为了访问一些特殊网络可能还需要设置一些其他属性。下面是两个参考链接</p>
+<ul>
+<li><a href="https://git-wip-us.apache.org/repos/asf?p=ant.git;a=blob;f=src/main/org/apache/tools/ant/util/ProxySetup.java;hb=HEAD" target="_blank" rel="noopener">ProxySetup.java in the Ant codebase</a></li>
+<li><a href="http://download.oracle.com/javase/7/docs/technotes/guides/net/properties.html" target="_blank" rel="noopener">JDK 7 Networking Properties</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BIP 32</title>
+    <url>/2018/09/27/bip32/</url>
+    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
+<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
+<p>本文分为两部分</p>
+<ul>
+<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
+<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
+</ul>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
+<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
+<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
+<ul>
+<li>整数模数曲线顺序（用n表示）</li>
+<li>曲线上点的坐标</li>
+<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
+</ul>
+<p>作为标准的转换函数，我们假设</p>
+<ul>
+<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
+<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
+<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
+<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
+<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
+</ul>
+<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
+<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
+<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
+</ol>
+<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
+<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
+</ol>
+<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
+<ol>
+<li>返回值K = point(k)</li>
+<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
+</ol>
+<p>两种通过父私钥计算子公钥的方法</p>
+<ol>
+<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
+<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
+</ol>
+<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
+<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
+<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
+<ul>
+<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
+<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
+</ul>
+<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
+<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
+<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
+<p>密钥id的钱32位称为指纹</p>
+<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
+<ol>
+<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
+<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
+<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
+<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
+<li>32byte：链码</li>
+<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
+</ol>
+<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
+<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
+<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
+<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
+<ol>
+<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
+<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
+<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
+<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
+</ol>
+<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
+<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
+
+<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
+<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
+<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
+<ul>
+<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
+<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
+</ul>
+<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
+<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
+<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
+<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
+<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
+]]></content>
+      <categories>
+        <category>区块链</category>
+      </categories>
+      <tags>
+        <tag>区块链</tag>
+        <tag>BIP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Gradle构建的生命周期</title>
     <url>/2020/07/20/Gradle-build-lifecycle/</url>
     <content><![CDATA[<p>我们之前说过，Gradle的核心是一种基于依赖的编程语言。按照Gradle的术语来说，这意味着你可以定义一系列任务以及它们之间的依赖关系。Gradle会保证这些任务按照他们的依赖关系顺序执行，并且每个任务只会执行一次。这些任务一起构成了一个有向无环图（DAG）。某些构建工具会在构建任务执行阶段，组建依赖图。但是Gradle是在任务执行之前组建出完整的依赖图的。这正是Gradle的核心所在，使得许多不可能的事情成为了可能。    </p>
@@ -260,235 +492,113 @@
       </tags>
   </entry>
   <entry>
-    <title>Gradle构建环境</title>
-    <url>/2020/08/04/Gradle-build-environment/</url>
-    <content><![CDATA[<p>Gradle提供多种机制，用以配置Gradle本身以及Project的行为。下面展示了如何使用这些机制，下列方法按优先级从高到低排列（第一个方法优先级最高）：</p>
-<ul>
-<li><code>Common-line flags</code> 如:<code>--build-cache</code>。优先级高于各种属性和环境变量</li>
-<li><code>System properties</code> 如: 存储在<code>gradle.properties</code>中的<code>systemProp.http.proxyHost=somehost.org</code></li>
-<li><code>Gradel properties</code> 如: 存储在项目根目录或<code>GRADLE_USER_HOME</code>目录下<code>gradle.properties</code>中的<code>org.gradle.caching=true</code></li>
-<li><code>Environment variables</code> 如: Gradle运行环境中的<code>GRADLE_OPTS</code>变量</li>
+    <title>GitHub Pages + Hexo搭建博客汇总</title>
+    <url>/2019/08/18/hexo_github_pages/</url>
+    <content><![CDATA[<p>网上关于GitHub Pages + Hexo搭建博客的教程较多，因此此文旨在查缺补漏，记录整个流程，汇总一些参考的优质blog，以及梳理我在搭建过程中遇到的问题。</p>
+<h2 id="如何搭建个人blog"><a href="#如何搭建个人blog" class="headerlink" title="如何搭建个人blog"></a>如何搭建个人blog</h2><p>在开始之前，我先想了下如何搭建个人blog。既然blog是个网站，那么首先能想到的是，需要自己开发一个网站出来啊，有了网站，还需要服务器来部署我们的网站，然后还需要一个域名，方便访问我们的网站。    </p>
+<h4 id="因此我们要做的工作有"><a href="#因此我们要做的工作有" class="headerlink" title="因此我们要做的工作有"></a>因此我们要做的工作有</h4><ul>
+<li>开发自己的网站（网站设计，UI开发，评论统计系统集成维护等）</li>
+<li>搭建服务器（部署网站，维护等）</li>
+<li>购买域名（绑定域名）</li>
 </ul>
-<p>除了配置构建环境外，还可以通过<code>Project properties</code>来配置特定项目构建，如<code>-PreleaseType=final</code></p>
-<h2 id="Gradle-properties"><a href="#Gradle-properties" class="headerlink" title="Gradle properties"></a>Gradle properties</h2><p>Gradle提供了一些选项，通过这些选项可以很方便的对用于执行构建的Java进程进行配置。虽然可以在本地环境中通过<code>Gradle_OPTS</code>或<code>JAVA_OPTS</code>对该进程进行配置，但是把诸如JVM内存大小、Java Home位置等配置信息加入版本控制（如git/svn等），可以保证项目组构建环境的一致性。</p>
-<p>配置一致的构建环境非常简单，只需在<code>gradle.properties</code>文件中添加配置即可。所有的<code>gradle.properties</code>合并在一起构成了构建环境的配置。如果多个<code>gradle.properties</code>出现了同一个配置项，则会第一个会生效。</p>
-<p>四种设置方式：</p>
+<p>首先开发网赚需要耗费巨大精力，其次购买服务器和域名都需要花钱，而我的初衷只是写blog啊，然而却需要做这么多，那岂不是舍本逐末了。好在已经有现成且免费的框架和工具，GitHub Pages<br>和Hexo帮我们做了上面几乎所有的事儿</p>
+<h4 id="GitHub-Pages介绍"><a href="#GitHub-Pages介绍" class="headerlink" title="GitHub Pages介绍"></a>GitHub Pages介绍</h4><p>GitHub Pages是Github提供的一个免费静态网站的托管服务，旨在直接从GitHub仓库托管个人/组织/项目的页面，并且为站点提供了默认域名github.io<br>。也就是说GitHub Pages帮我们解决了 <strong>服务器和域名</strong> 这两大难题</p>
+<p>详细介绍：<a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages官网</a></p>
+<h4 id="Hexo介绍"><a href="#Hexo介绍" class="headerlink" title="Hexo介绍"></a>Hexo介绍</h4><p>Hexo是一款基于Node.js的静态博客框架。通过Hexo，用户可以定制自己喜欢的网站主题，专注与使用Markdown编写blog，它会帮用户生成静态网站并托管在GitHub，相当的简便。因此Hexo帮我们解决了** 开发网站 ** 的难题</p>
+<p>详细介绍：<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>  </p>
+<h2 id="搭建个人blog的流程"><a href="#搭建个人blog的流程" class="headerlink" title="搭建个人blog的流程"></a>搭建个人blog的流程</h2><p>在使用Hexo极力推荐阅读** <a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a> ** ,文档里的说明要比许多blog里清晰的多</p>
+<h4 id="搭建前的准备工作"><a href="#搭建前的准备工作" class="headerlink" title="搭建前的准备工作"></a>搭建前的准备工作</h4><p>安装流程在上文中的<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>里有详细说明</p>
 <ul>
-<li>system properties，例如，当在命令行中设置<code>-Dgradle.user.home</code></li>
-<li><code>GRADLE_USER_HOME</code>目录中的 <code>gradle.properties</code>文件</li>
-<li>项目根目录中的<code>gradle.properties</code>文件</li>
-<li>Gradle安装目录下的<code>gradle.properties</code>文件</li>
+<li>安装Git</li>
+<li>安装Node.js</li>
+<li>安装Hexo  </li>
 </ul>
-<p>下面列出了一些Gradle构建环境的配置项</p>
-<p><code>org.gradle.caching=(true,false)</code><br>当设置为true时，在可能的情况下，Gradle会复用之前构建的输出以加快构建。</p>
-<p><code>org.gradle.caching.debug=(true,false)</code><br>当设置为true时，所有任务的输入属性的hash以及构建缓存的key都会输出到console中</p>
-<p><code>org.gradle.configureondemand=(true,false)</code><br>启用按需配置，Gradle将尝试仅配置必要的项目</p>
-<p><code>org.gradle.console=(auto,plain,rich,verbose)</code><br>自定义console中log的颜色或log的级别。 默认值取决于调用Gradle的方式</p>
-<p><code>org.gradle.daemon=(true,false)</code><br>当设置为true时，将使用Gradle Daemon进程执行构建。默认值为true</p>
-<p><code>org.gradle.daemon.idletimeout=(# of idle millis)</code><br>设置Gradle Daemon进程自动关闭的时间，单位为毫秒。默认值为<code>10800000</code>(3小时)</p>
-<p><code>org.gradle.debug=(true,false)</code><br>当设置为true时，Gradle将在启用远程调试的情况下运行构建，并监听5005端口。该设置项等同于在JVM 命令行中添加<code>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005</code>。该设置会挂起JVM直至有可绑定的debugger。默认为false</p>
-<p><code>org.gradle.java.home=(path to JDK home)</code><br>为Gradle构建进程指定Java home。可设置为<code>jdk</code>或<code>jre</code>路径，但是最好使用<code>jdk</code>。该设置项最合理默认值应该是从PC环境变量（JAVA_HOME或path中的java路径）中获取。该设置不会影响到运行Gradle客户端的JVM所使用的Java版本</p>
-<p><code>org.gradle.jvmargs=(JVM arguments)</code><br>为Gradle Daemon进程指定JVM参数。可以使用该配置修改JVM内存，以提升构建的执行效率。该设置不会影响Gradle客户端VM的JVM设置</p>
-<p><code>org.gradle.logging.level=(quiet,warn,lifecycle,info,debug)</code><br>用于设置Gradle的日志级别，可设置为quiet、warn，lifecycle，info，debug。不区分大小写。默认为<code>lifecycle</code></p>
-<p><code>org.gradle.parallel=(true,false)</code><br>配置后，Gradle将派生到org.gradle.workers.max JVM以并行执行项目</p>
-<p><code>org.gradle.priority=(low,normal)</code><br>为Gradle daemon以及所有由它启动的进程指定调度优先级。默认为<code>normal</code></p>
-<p><code>org.gradle.unsafe.watch-fs=(true,false)</code><br>观察文件系统的开关。允许Gradle下次构建时重用fs信息。默认为false</p>
-<p><code>org.gradle.warning.mode=(all,fail,summary,none)</code><br>当设置为<code>all</code>/<code>summary</code>/<code>none</code>，Gradle会使用不同的警告类型显示</p>
-<p><code>org.gradle.workers.max=(max # of worker processes)</code><br>用于设置worker进程的最大数量。默认为CPU的核心数</p>
-<p>下面例子演示如何使用以上属性</p>
-<p><em>Example 1.在gradle.properties文件中设置属性</em></p>
+<h4 id="搭建流程"><a href="#搭建流程" class="headerlink" title="搭建流程"></a>搭建流程</h4><p>这里只列出简单流程，定制主题，及git分支设置在后面介绍</p>
+<ol>
+<li><p>GitHub上创建新仓库，仓库名为 ** GitHub用户名.github.io **</p>
 <blockquote>
-<p>gradle.properties</p>
+<p>这里需要注意，仓库的名字必须为上面的格式，否则部署后将无法访问blog</p>
 </blockquote>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="attribute">gradlePropertiesProp</span>=gradlePropertiesValue</span><br><span class="line"><span class="attribute">sysProp</span>=shouldBeOverWrittenBySysProp</span><br><span class="line">systemProp.<span class="attribute">system</span>=systemValue</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GitHub新建分支hexo，并设置为默认分支</p>
+</li>
+<li><p>使用Git克隆新建仓库到本地（此时为hexo分支）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/github_user_name/github_user_name.github.io.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在仓库根目录使用hexo init命令初始化（此时为hexo分支）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上一步完成后依次使用hexo g 与 hexo s（此时为hexo分支），其中g为generator，s为server</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开浏览器输入localhost:4000查看本地blog效果，如下图</p>
+<img src="/2019/08/18/hexo_github_pages/hexo_landscape.jpeg" title="Hexo默认主题"></li>
+<li><p>修改仓库根目录下的_config.yml文件，修改deploy中的以下字段并保存，注意branch要设置为master</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span>    </span><br><span class="line"><span class="attr">    type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">    repo:</span> <span class="attr">https://github.com/github_user_name/github_user_name.github.io.git</span></span><br><span class="line"><span class="attr">    branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>提交本地变更至hexo分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">'commit msg'</span></span><br><span class="line">$ git push origin hexo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用hexo d命令完成blog部署</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
 
+</li>
+</ol>
+<h4 id="blog目录结构"><a href="#blog目录结构" class="headerlink" title="blog目录结构"></a>blog目录结构</h4><p>在上面流程的第4步中，执行完hexo init命令后，会在文件夹下生成hexo工程，以下简要展示生成的目录结构及各个目录的作用，更为详细的解释见<a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">Hexo目录结构</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|-- _config.yml      // 网站全局配置文件，详细说明见</span><br><span class="line">|-- package.json     //</span><br><span class="line">|-- scaffolds        //</span><br><span class="line">|-- source           // 网站资源文件夹，存放网站图片，文章等</span><br><span class="line">   |-- _drafts</span><br><span class="line">   |-- _posts        // 我们的Markdown和HTML文件存放在次文件夹</span><br><span class="line">|-- themes</span><br><span class="line">   |-- landscape     // 官方默认的主题</span><br><span class="line">   |-- next          // next主题</span><br></pre></td></tr></table></figure>
+
+<p>经过第4步之后，通过修改_config.yml文件进行网站的配置,如网站title，author等，详情见<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="noopener">Hexo网站配置</a>。其中最应该注意的是deploy字段，该字段用于配置网站的部署，如网站部署到git的xxx仓库的xxx分支，或是地址为xxx.xxx.xxx.xxx的服务器，详情见<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">Hexo deploy</a>    </p>
+<h4 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h4><p>Hexo允许用户自定义主题，下面展示主题的设置方式</p>
+<ol>
+<li><p>挑选自己喜欢的主题，找到其仓库地址</p>
+</li>
+<li><p>命令行cd 定位到themes文件夹，将主题clone至该文件夹</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes</span><br><span class="line">$ git <span class="built_in">clone</span> &lt;theme repo&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在clone完成后，新添加的文件夹名称即为主题名称xxx，打开_config.yml将theme字段的landscape修改为xxx</p>
+</li>
+</ol>
+<p>关于主题的挑选，如果没有web前段经验，最好挑选那些star数计较高，社区比较活跃，经常迭代维护的主题，如我自己使用的next主题，下面是我在挑选主题时参考的资料   </p>
+<p><a href="https://www.zhihu.com/question/24422335/answer/46357100" target="_blank" rel="noopener">知乎-有哪些好看的Hexo主题</a></p>
 <blockquote>
-<p>build.gradle</p>
+<p>高赞回答用python爬虫爬出来的主题star排行榜 ,推荐参考这个挑选主题     </p>
 </blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task printProps &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println commandLineProjectProp</span><br><span class="line">        println gradlePropertiesProp</span><br><span class="line">        println systemProjectProp</span><br><span class="line">        println System.properties[<span class="string">'system'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">$ gradle -q -PcommandLineProjectProp=commandLineProjectPropValue -Dorg.gradle.project.systemProjectProp=systemPropertyValue printProps</span><br><span class="line"></span><br><span class="line">commandLineProjectPropValue</span><br><span class="line">gradlePropertiesValue</span><br><span class="line">systemPropertyValue</span><br><span class="line">systemValue</span><br></pre></td></tr></table></figure>
-
-<h2 id="System-properties"><a href="#System-properties" class="headerlink" title="System properties"></a>System properties</h2><p>使用<code>-D</code>命令行选项，可以传入一些系统属性给运行Gradle的JVM。Gradle命令的-D选项与java命令的-D选项具有相同的效果。<br>也可以在<code>gradle.properties</code>中使用<code>systemProp</code>前缀来设置system properties<br>如：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperUser</span>=myuser</span><br><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperPassword</span>=mypassword</span><br></pre></td></tr></table></figure>
-
-<p>下面列出了可用的系统属性。注意命令行选项方式具有更高的优先级</p>
-<p><code>gradle.wrapperUser=(myuser)</code><br>指定用于从服务器（使用Http基本身份验证）下载Gradle的用户名。</p>
-<p><code>gradle.wrapperPassword=(mypassword)</code><br>指定上一条属性中设置的用户名所对应的密码</p>
-<p><code>gradle.user.home=(path to directory)</code><br>指定Gradle的用户主目录</p>
-<p>在多项目构建中，在除根项目以外的项目中设置的”<code>systemProp.</code>“属性都将被忽略，也就是说，只有根项目的<code>gradle.properties</code>文件中以”<code>systemProp.</code>“为前缀的属性会被检测</p>
-<h2 id="Environment-variables"><a href="#Environment-variables" class="headerlink" title="Environment variables"></a>Environment variables</h2><p><code>gradle</code>命令有以下几个可用的环境变量。命令行选项以及系统变量具有比环境变量更高的优先级</p>
-<p><code>GRADLE_OPTS</code><br>设置Gradle client VM启动时使用的JVM参数。由于Client VM仅处理命令行input/output，因此很少需要更改其VM选项。实际的构建任务是由Gradle daemon进程执行的，因此该环境变量并不会影响构建</p>
-<p><code>GRADLE_USER_HOME</code><br>指定Gradle用户主目录（如果未这只，则默认值为<code>$USER_HOME/.gradle</code>）</p>
-<p><code>JAVA_HOME</code><br>为client VM指定JDK的安装路径。此VM也用于daemon进程，除非在带有<code>org.gradle.java.home</code>的Gradle属性文件中指定了不同的VM</p>
-<h2 id="Project-properties"><a href="#Project-properties" class="headerlink" title="Project properties"></a>Project properties</h2><p>可以直接使用<code>-P</code>命令行选项为<code>Project</code>对象添加一些属性</p>
-<p>当Gradle遇到一些特定名称的系统属性或环境变量时也会为Project设置属性。如：如果环境变量的名称为<code>ORG_GRADLE_PROJECT_prop=somevalue</code>，则Gradle会为Project对象设置一个名为<code>prop</code>值为<code>somevalue</code>的属性。对于系统属性来说，则使用了不同的命名模式，即为<code>org.gradle.project.prop</code>。</p>
-<p>下面两个例子都会子啊Project对象中设置一个名为<code>foo</code>值为<code>bar</code>的属性</p>
-<p><strong>通过系统属性设置Project属性</strong><br><code>org.gradle.project.foo=bar</code></p>
-<p><strong>通过环境变量设置Project属性</strong><br><code>ORG_GRADLE_PROJECT_foo=bar</code></p>
+<p><a href="https://hexo.io/themes/index.html" target="_blank" rel="noopener">官方主题列表</a></p>
 <blockquote>
-<p>用户主目录中的属性文件优先级要高于项目目录中属性文件</p>
+<p>官方没有对主题进行排名，挑选时稍微麻烦些</p>
 </blockquote>
-<p>当对一个持续集成服务没有管理员权限并且需要设置一些不容易被看到的属性值时，该特性非常有用。在此场景下，因为你无法使用<code>-P</code>选项，也无法更改系统层级的配置文件，所以正确的策略是修改持续集成构建任务的配置，添加一个与于其模式匹配的环境变量。这对系统上的普通用户是不可见的。</p>
-<p>在构建脚本中可以像使用普通变量那样，通过属性名称即可访问Project的属性</p>
+<p><a href="https://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">推荐NexT主题</a></p>
 <blockquote>
-<p>如果应用了一个不存在的Project属性，则会抛出异常，进而构建失败</p>
-<p>在使用<code>Project.hasProperty(java.lang.String)</code>方法访问某个属性之前，应该先检查该Project属性是否存在</p>
+<p>NexT主题外观比较简洁利落，并且社区活跃，有详尽的中文文档，主题的外观也可进行各种灵活的配置，是前段盲的必备良药。对于该主题的详细用法，其官方文档中有详细的说明，也就不再赘述了</p>
 </blockquote>
-<h2 id="配置JVM内存"><a href="#配置JVM内存" class="headerlink" title="配置JVM内存"></a>配置JVM内存</h2><p>可以使用以下方式调整JVM</p>
-<p>Gradle属性<code>org.gradle.jvmargs</code>用以控制运行构建的VM。默认值为<code>-Xmx512m &quot;-XX:MaxMetaspaceSize=256m&quot;</code></p>
-<p><strong>修改构建VM的JVM参数</strong><br><code>org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</code></p>
-<p>环境变量<code>JAVA_OPTS</code>用以控制命令行终端，该终端仅用于显示控制台输出。默认值为<code>-Xmx64m</code></p>
-<p><strong>修改命令行终端VM的JVM参数</strong><br><code>JAVA_OPTS=&quot;-Xmx64m -XX:MaxPermSize=64m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8&quot;</code></p>
-<blockquote>
-<p>有一种情况终端VM也会作为构建VM使用，即：Gradle Daemon进程处于禁用状态，并且终端VM与构建VM的参数设置相同，则终端VM会直接执行构建。其他情况下终端VM会fork出一个新的VM用与执行构建</p>
-</blockquote>
-<p>某些task，如<code>test</code> task，也会fork出额外的JVM进程。可以通过task本身对其进行配置。默认值为<code>-Xmx512m</code></p>
-<p><em>Example 2. 为<code>JavaCompile</code>任务设置Java编译选项</em></p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tasks.withType(JavaCompile) &#123;</span><br><span class="line">    options.compilerArgs += [<span class="string">'-Xdoclint:none'</span>, <span class="string">'-Xlint:none'</span>, <span class="string">'-nowarn'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用Project属性配置任务"><a href="#使用Project属性配置任务" class="headerlink" title="使用Project属性配置任务"></a>使用Project属性配置任务</h2><p>可以根据调用时指定的项目属性更改任务的行为</p>
-<p>假设像确保只有CI才能触发发布版本操作，则简单是实现方式是通过使用Project的<code>isCI</code>属性</p>
-<p><em>Example 3. 禁止CI之外发布版本</em></p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task performRelease &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        <span class="keyword">if</span> (project.hasProperty(<span class="string">"isCI"</span>)) &#123;</span><br><span class="line">            println(<span class="string">"Performing release actions"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidUserDataException(<span class="string">"Cannot perform release outside of CI"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>$ gradle performRelease -PisCI=true –quiet<br>Performing release actions</p>
-</blockquote>
-<h2 id="通过HTTP代理访问Web"><a href="#通过HTTP代理访问Web" class="headerlink" title="通过HTTP代理访问Web"></a>通过HTTP代理访问Web</h2><p>通过配置标准的JVM系统属性可以配置HTTP/HTTPS代理（用于下载依赖等）。可以直接在构建脚本中设置这些属性，如使用<code>System.setProperty(&#39;http.proxyHost&#39;, &#39;www.somehost.org&#39;)</code>来设置HTTP代理。也可以在<code>gradle.properties</code>中进行设置</p>
-<p><strong><code>在gradle.properties</code>中配置HTTP代理</strong></p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.http.proxyHost=www.somehost.org</span><br><span class="line">systemProp.http.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.http.proxyUser=userid</span><br><span class="line">systemProp.http.proxyPassword=password</span><br><span class="line">systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
-
-<p><strong><code>在gradle.properties</code>中配置HTTPS代理</strong></p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.https.proxyHost=www.somehost.org</span><br><span class="line">systemProp.https.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.https.proxyUser=userid</span><br><span class="line">systemProp.https.proxyPassword=password</span><br><span class="line">systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
-
-<p>为了访问一些特殊网络可能还需要设置一些其他属性。下面是两个参考链接</p>
+<h4 id="关于git仓库的说明"><a href="#关于git仓库的说明" class="headerlink" title="关于git仓库的说明"></a>关于git仓库的说明</h4><p>在搭建流程中的前两步，建立完仓库后，又新建了一个hexo分支，并且设置为默认分支。这是因为我们在维护我们的网站时，要维护以下两部分内容</p>
 <ul>
-<li><a href="https://git-wip-us.apache.org/repos/asf?p=ant.git;a=blob;f=src/main/org/apache/tools/ant/util/ProxySetup.java;hb=HEAD" target="_blank" rel="noopener">ProxySetup.java in the Ant codebase</a></li>
-<li><a href="http://download.oracle.com/javase/7/docs/technotes/guides/net/properties.html" target="_blank" rel="noopener">JDK 7 Networking Properties</a></li>
+<li><p>Hexo工程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo init之后生成的部分</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成的静态网站</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">之前在_config.yml中配置了deploy的git仓库及分支，这里我配置的是master分支，在执行了hexo deploy命令之后，Hexo就会生成静态静态网站提交至master分支并自动部署</span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
+<p>这两部分都需要提交至git仓库的，第一部分提交至git，我们就可以随时随地只要有电脑网络就可以clone工程，写blog并更新网站。第二部分是GitHub Pages部署网站必须的部分。这两部分的内容互不相干，因此建议新建hexo分支，用于存储我们的Hexo工程，master分支用于部署网站</p>
+<p>参考的文档：<a href="https://www.zhihu.com/question/21193762" target="_blank" rel="noopener">知乎-使用Hexo，如果换了电脑怎么更新博客</a></p>
+<h4 id="关于NexT主题个人签名不显示的问题"><a href="#关于NexT主题个人签名不显示的问题" class="headerlink" title="关于NexT主题个人签名不显示的问题"></a>关于NexT主题个人签名不显示的问题</h4><p>在NexT主题配置文件_config.yml中，如果设置seo字段为true，则网站配置文件_config.yml中的description字段会被用于seo，而不会显示为签名，这时如果想要显示个人签名，需要额外添加signature字段</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="string">随行、随记</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo-SEO优化"><a href="#Hexo-SEO优化" class="headerlink" title="Hexo SEO优化"></a>Hexo SEO优化</h2><p>辛辛苦苦搭好了blog，写了文章，最后发现浏览器里搜不到啊，根本没人看啊，怎么办啊，好没有成就感。这时候就需要SEO出马了，那么什么是SEO呢？</p>
+<blockquote>
+<p>SEO 英文全称Search Engine Optimization 即搜索引擎优化。是一种利用搜索引擎规则提高网站在有关引擎内的自然排名</p>
+</blockquote>
+<p>既然是针对搜索引擎的优化，那么也就是针对Baidu和Google的优化了。相关blog有很多，并且都是死套路，所以这里就挑选几篇比较新比较好的blog列出来</p>
+<p><a href="https://hoxis.github.io/Hexo+Next%20SEO%E4%BC%98%E5%8C%96.html" target="_blank" rel="noopener">Hexo博客Next主题SEO优化方法</a><br><a href="https://juejin.im/post/5ae7f8a2f265da0ba266c5c6" target="_blank" rel="noopener">Hexo个人博客SEO优化系列</a></p>
 ]]></content>
       <categories>
-        <category>Gradle</category>
+        <category>Web前端</category>
       </categories>
       <tags>
-        <tag>gradle</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BIP 32</title>
-    <url>/2018/09/27/bip32/</url>
-    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
-<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
-<p>本文分为两部分</p>
-<ul>
-<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
-<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
-</ul>
-<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
-<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
-<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
-<ul>
-<li>整数模数曲线顺序（用n表示）</li>
-<li>曲线上点的坐标</li>
-<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
-</ul>
-<p>作为标准的转换函数，我们假设</p>
-<ul>
-<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
-<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
-<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
-<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
-<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
-</ul>
-<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
-<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
-<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
-</ol>
-<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
-<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
-</ol>
-<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
-<ol>
-<li>返回值K = point(k)</li>
-<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
-</ol>
-<p>两种通过父私钥计算子公钥的方法</p>
-<ol>
-<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
-<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
-</ol>
-<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
-<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
-<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
-<ul>
-<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
-<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
-</ul>
-<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
-<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
-<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
-<p>密钥id的钱32位称为指纹</p>
-<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
-<ol>
-<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
-<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
-<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
-<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
-<li>32byte：链码</li>
-<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
-</ol>
-<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
-<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
-<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
-<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
-<ol>
-<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
-<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
-<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
-<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
-</ol>
-<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
-<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
-
-<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
-<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
-<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
-<ul>
-<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
-<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
-</ul>
-<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
-<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
-<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
-<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
-<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
-]]></content>
-      <categories>
-        <category>区块链</category>
-      </categories>
-      <tags>
-        <tag>区块链</tag>
-        <tag>BIP</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub Pages</tag>
       </tags>
   </entry>
   <entry>
@@ -634,116 +744,6 @@
       </categories>
       <tags>
         <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GitHub Pages + Hexo搭建博客汇总</title>
-    <url>/2019/08/18/hexo_github_pages/</url>
-    <content><![CDATA[<p>网上关于GitHub Pages + Hexo搭建博客的教程较多，因此此文旨在查缺补漏，记录整个流程，汇总一些参考的优质blog，以及梳理我在搭建过程中遇到的问题。</p>
-<h2 id="如何搭建个人blog"><a href="#如何搭建个人blog" class="headerlink" title="如何搭建个人blog"></a>如何搭建个人blog</h2><p>在开始之前，我先想了下如何搭建个人blog。既然blog是个网站，那么首先能想到的是，需要自己开发一个网站出来啊，有了网站，还需要服务器来部署我们的网站，然后还需要一个域名，方便访问我们的网站。    </p>
-<h4 id="因此我们要做的工作有"><a href="#因此我们要做的工作有" class="headerlink" title="因此我们要做的工作有"></a>因此我们要做的工作有</h4><ul>
-<li>开发自己的网站（网站设计，UI开发，评论统计系统集成维护等）</li>
-<li>搭建服务器（部署网站，维护等）</li>
-<li>购买域名（绑定域名）</li>
-</ul>
-<p>首先开发网赚需要耗费巨大精力，其次购买服务器和域名都需要花钱，而我的初衷只是写blog啊，然而却需要做这么多，那岂不是舍本逐末了。好在已经有现成且免费的框架和工具，GitHub Pages<br>和Hexo帮我们做了上面几乎所有的事儿</p>
-<h4 id="GitHub-Pages介绍"><a href="#GitHub-Pages介绍" class="headerlink" title="GitHub Pages介绍"></a>GitHub Pages介绍</h4><p>GitHub Pages是Github提供的一个免费静态网站的托管服务，旨在直接从GitHub仓库托管个人/组织/项目的页面，并且为站点提供了默认域名github.io<br>。也就是说GitHub Pages帮我们解决了 <strong>服务器和域名</strong> 这两大难题</p>
-<p>详细介绍：<a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages官网</a></p>
-<h4 id="Hexo介绍"><a href="#Hexo介绍" class="headerlink" title="Hexo介绍"></a>Hexo介绍</h4><p>Hexo是一款基于Node.js的静态博客框架。通过Hexo，用户可以定制自己喜欢的网站主题，专注与使用Markdown编写blog，它会帮用户生成静态网站并托管在GitHub，相当的简便。因此Hexo帮我们解决了** 开发网站 ** 的难题</p>
-<p>详细介绍：<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>  </p>
-<h2 id="搭建个人blog的流程"><a href="#搭建个人blog的流程" class="headerlink" title="搭建个人blog的流程"></a>搭建个人blog的流程</h2><p>在使用Hexo极力推荐阅读** <a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a> ** ,文档里的说明要比许多blog里清晰的多</p>
-<h4 id="搭建前的准备工作"><a href="#搭建前的准备工作" class="headerlink" title="搭建前的准备工作"></a>搭建前的准备工作</h4><p>安装流程在上文中的<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>里有详细说明</p>
-<ul>
-<li>安装Git</li>
-<li>安装Node.js</li>
-<li>安装Hexo  </li>
-</ul>
-<h4 id="搭建流程"><a href="#搭建流程" class="headerlink" title="搭建流程"></a>搭建流程</h4><p>这里只列出简单流程，定制主题，及git分支设置在后面介绍</p>
-<ol>
-<li><p>GitHub上创建新仓库，仓库名为 ** GitHub用户名.github.io **</p>
-<blockquote>
-<p>这里需要注意，仓库的名字必须为上面的格式，否则部署后将无法访问blog</p>
-</blockquote>
-</li>
-<li><p>GitHub新建分支hexo，并设置为默认分支</p>
-</li>
-<li><p>使用Git克隆新建仓库到本地（此时为hexo分支）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/github_user_name/github_user_name.github.io.git</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在仓库根目录使用hexo init命令初始化（此时为hexo分支）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>上一步完成后依次使用hexo g 与 hexo s（此时为hexo分支），其中g为generator，s为server</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>打开浏览器输入localhost:4000查看本地blog效果，如下图</p>
-<img src="/2019/08/18/hexo_github_pages/hexo_landscape.jpeg" title="Hexo默认主题"></li>
-<li><p>修改仓库根目录下的_config.yml文件，修改deploy中的以下字段并保存，注意branch要设置为master</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span>    </span><br><span class="line"><span class="attr">    type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">    repo:</span> <span class="attr">https://github.com/github_user_name/github_user_name.github.io.git</span></span><br><span class="line"><span class="attr">    branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>提交本地变更至hexo分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">'commit msg'</span></span><br><span class="line">$ git push origin hexo</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用hexo d命令完成blog部署</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h4 id="blog目录结构"><a href="#blog目录结构" class="headerlink" title="blog目录结构"></a>blog目录结构</h4><p>在上面流程的第4步中，执行完hexo init命令后，会在文件夹下生成hexo工程，以下简要展示生成的目录结构及各个目录的作用，更为详细的解释见<a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">Hexo目录结构</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|-- _config.yml      // 网站全局配置文件，详细说明见</span><br><span class="line">|-- package.json     //</span><br><span class="line">|-- scaffolds        //</span><br><span class="line">|-- source           // 网站资源文件夹，存放网站图片，文章等</span><br><span class="line">   |-- _drafts</span><br><span class="line">   |-- _posts        // 我们的Markdown和HTML文件存放在次文件夹</span><br><span class="line">|-- themes</span><br><span class="line">   |-- landscape     // 官方默认的主题</span><br><span class="line">   |-- next          // next主题</span><br></pre></td></tr></table></figure>
-
-<p>经过第4步之后，通过修改_config.yml文件进行网站的配置,如网站title，author等，详情见<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="noopener">Hexo网站配置</a>。其中最应该注意的是deploy字段，该字段用于配置网站的部署，如网站部署到git的xxx仓库的xxx分支，或是地址为xxx.xxx.xxx.xxx的服务器，详情见<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">Hexo deploy</a>    </p>
-<h4 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h4><p>Hexo允许用户自定义主题，下面展示主题的设置方式</p>
-<ol>
-<li><p>挑选自己喜欢的主题，找到其仓库地址</p>
-</li>
-<li><p>命令行cd 定位到themes文件夹，将主题clone至该文件夹</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes</span><br><span class="line">$ git <span class="built_in">clone</span> &lt;theme repo&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在clone完成后，新添加的文件夹名称即为主题名称xxx，打开_config.yml将theme字段的landscape修改为xxx</p>
-</li>
-</ol>
-<p>关于主题的挑选，如果没有web前段经验，最好挑选那些star数计较高，社区比较活跃，经常迭代维护的主题，如我自己使用的next主题，下面是我在挑选主题时参考的资料   </p>
-<p><a href="https://www.zhihu.com/question/24422335/answer/46357100" target="_blank" rel="noopener">知乎-有哪些好看的Hexo主题</a></p>
-<blockquote>
-<p>高赞回答用python爬虫爬出来的主题star排行榜 ,推荐参考这个挑选主题     </p>
-</blockquote>
-<p><a href="https://hexo.io/themes/index.html" target="_blank" rel="noopener">官方主题列表</a></p>
-<blockquote>
-<p>官方没有对主题进行排名，挑选时稍微麻烦些</p>
-</blockquote>
-<p><a href="https://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">推荐NexT主题</a></p>
-<blockquote>
-<p>NexT主题外观比较简洁利落，并且社区活跃，有详尽的中文文档，主题的外观也可进行各种灵活的配置，是前段盲的必备良药。对于该主题的详细用法，其官方文档中有详细的说明，也就不再赘述了</p>
-</blockquote>
-<h4 id="关于git仓库的说明"><a href="#关于git仓库的说明" class="headerlink" title="关于git仓库的说明"></a>关于git仓库的说明</h4><p>在搭建流程中的前两步，建立完仓库后，又新建了一个hexo分支，并且设置为默认分支。这是因为我们在维护我们的网站时，要维护以下两部分内容</p>
-<ul>
-<li><p>Hexo工程</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo init之后生成的部分</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>生成的静态网站</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">之前在_config.yml中配置了deploy的git仓库及分支，这里我配置的是master分支，在执行了hexo deploy命令之后，Hexo就会生成静态静态网站提交至master分支并自动部署</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>这两部分都需要提交至git仓库的，第一部分提交至git，我们就可以随时随地只要有电脑网络就可以clone工程，写blog并更新网站。第二部分是GitHub Pages部署网站必须的部分。这两部分的内容互不相干，因此建议新建hexo分支，用于存储我们的Hexo工程，master分支用于部署网站</p>
-<p>参考的文档：<a href="https://www.zhihu.com/question/21193762" target="_blank" rel="noopener">知乎-使用Hexo，如果换了电脑怎么更新博客</a></p>
-<h4 id="关于NexT主题个人签名不显示的问题"><a href="#关于NexT主题个人签名不显示的问题" class="headerlink" title="关于NexT主题个人签名不显示的问题"></a>关于NexT主题个人签名不显示的问题</h4><p>在NexT主题配置文件_config.yml中，如果设置seo字段为true，则网站配置文件_config.yml中的description字段会被用于seo，而不会显示为签名，这时如果想要显示个人签名，需要额外添加signature字段</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="string">随行、随记</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo-SEO优化"><a href="#Hexo-SEO优化" class="headerlink" title="Hexo SEO优化"></a>Hexo SEO优化</h2><p>辛辛苦苦搭好了blog，写了文章，最后发现浏览器里搜不到啊，根本没人看啊，怎么办啊，好没有成就感。这时候就需要SEO出马了，那么什么是SEO呢？</p>
-<blockquote>
-<p>SEO 英文全称Search Engine Optimization 即搜索引擎优化。是一种利用搜索引擎规则提高网站在有关引擎内的自然排名</p>
-</blockquote>
-<p>既然是针对搜索引擎的优化，那么也就是针对Baidu和Google的优化了。相关blog有很多，并且都是死套路，所以这里就挑选几篇比较新比较好的blog列出来</p>
-<p><a href="https://hoxis.github.io/Hexo+Next%20SEO%E4%BC%98%E5%8C%96.html" target="_blank" rel="noopener">Hexo博客Next主题SEO优化方法</a><br><a href="https://juejin.im/post/5ae7f8a2f265da0ba266c5c6" target="_blank" rel="noopener">Hexo个人博客SEO优化系列</a></p>
-]]></content>
-      <categories>
-        <category>Web前端</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>GitHub Pages</tag>
       </tags>
   </entry>
   <entry>
