@@ -1,3 +1,3 @@
+https://hcendless.ink/2020/08/08/Gradle-Script-Basics/
 https://hcendless.ink/2020/08/04/Gradle-build-environment/
 https://hcendless.ink/2020/07/20/Gradle-build-lifecycle/
-https://hcendless.ink/2020/07/17/What-is-Gradle/

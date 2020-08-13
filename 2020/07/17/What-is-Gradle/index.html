@@ -29,7 +29,7 @@
 <meta property="og:description" content="本文对做Gradle简单介绍，包括其基本概念，以及几个重要特性。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://hcendless.ink/2020/07/17/What-is-Gradle/task-dag-examples.png">
-<meta property="og:updated_time" content="2020-08-03T06:10:07.025Z">
+<meta property="og:updated_time" content="2020-08-12T11:35:18.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle是什么">
 <meta name="twitter:description" content="本文对做Gradle简单介绍，包括其基本概念，以及几个重要特性。">
@@ -192,7 +192,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-03 14:10:07" itemprop="dateModified" datetime="2020-08-03T14:10:07+08:00">2020-08-03</time>
+                <time title="Modified: 2020-08-12 19:35:18" itemprop="dateModified" datetime="2020-08-12T19:35:18+08:00">2020-08-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -242,7 +242,7 @@
 <p>这并不意味着需要做大量的工作才能创建一个构建。 Gradle通过插件添加了一层约定和预构建的功能，使得构建常见类型的项目(比如Java库)变得很容易。 你甚至可以创建和发布自定义插件来封装你自己的约定和构建功能。</p>
 <h4 id="2-核心的model基于task"><a href="#2-核心的model基于task" class="headerlink" title="2. 核心的model基于task"></a>2. 核心的model基于task</h4><p>Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务</p>
 <p>下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示</p>
-<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="主密钥生成">
+<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="DAG示例图">
 
 <p>几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。</p>
 <p>任务的组成:</p>
@@ -384,7 +384,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

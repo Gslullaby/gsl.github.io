@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hcendless.ink","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文主要介绍有关构建的一些基本概念，如构建脚本的结构，Project、Task，以及它们之间的关系等等。">
+<meta name="keywords" content="gradle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构建的基础知识">
+<meta property="og:url" content="https://hcendless.ink/2020/08/08/Gradle-Script-Basics/index.html">
+<meta property="og:site_name" content="Gsl&#39;s Blog">
+<meta property="og:description" content="本文主要介绍有关构建的一些基本概念，如构建脚本的结构，Project、Task，以及它们之间的关系等等。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://hcendless.ink/2020/08/08/Gradle-Script-Basics/script_delegate.jpg">
+<meta property="og:updated_time" content="2020-08-13T13:26:49.532Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="构建的基础知识">
+<meta name="twitter:description" content="本文主要介绍有关构建的一些基本概念，如构建脚本的结构，Project、Task，以及它们之间的关系等等。">
+<meta name="twitter:image" content="https://hcendless.ink/2020/08/08/Gradle-Script-Basics/script_delegate.jpg">
+
+<link rel="canonical" href="https://hcendless.ink/2020/08/08/Gradle-Script-Basics/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>构建的基础知识 | Gsl's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gsl's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">静待花开</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://hcendless.ink/2020/08/08/Gradle-Script-Basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="何从">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gsl's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          构建的基础知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-08 23:54:39" itemprop="dateCreated datePublished" datetime="2020-08-08T23:54:39+08:00">2020-08-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-13 21:26:49" itemprop="dateModified" datetime="2020-08-13T21:26:49+08:00">2020-08-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Gradle/" itemprop="url" rel="index"><span itemprop="name">Gradle</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文主要介绍有关构建的一些基本概念，如构建脚本的结构，Project、Task，以及它们之间的关系等等。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h2><p>在Gradle生命周期中，我们曾提及构建脚本其实是构建配置脚本。脚本执行，其实就是对一个特定类型对象的配置。例如，build.gradle脚本执行，就是对<code>Project</code>对象的配置。所配置的对象称之为构建脚本的代理对象。下图展示了脚本与代理对象的对应关系</p>
+<img src="/2020/08/08/Gradle-Script-Basics/script_delegate.jpg" title="脚本与代理对象对应关系">
+
+<p>在构建脚本中可以访问到代理对象的属性以及方法</p>
+<p>每个构建脚本的代理对象都实现了<code>Script</code>接口。该接口中定义的属性和方法在构建脚本中均可访问</p>
+<h4 id="构建脚本的结构"><a href="#构建脚本的结构" class="headerlink" title="构建脚本的结构"></a><strong>构建脚本的结构</strong></h4><p>构建脚本由0到多个语句及脚本代码块组成。语句可以包含方法调用，属性赋值，成员变量的定义等。脚本块是对一个接收一个闭包作为参数的方法调用。闭包可以看作是配置闭包，因为闭包的调用即为对相应代理对象的配置。</p>
+<p>下面是一些常用的顶层脚本块</p>
+<ul>
+<li><p><code>allprojects {}</code> </p>
+<blockquote>
+<p>配置当前project及其所有子project</p>
+</blockquote>
+</li>
+<li><p><code>buildscript {}</code></p>
+<blockquote>
+<p>为当前project配置构建脚本的classpath</p>
+</blockquote>
+</li>
+<li><p><code>dependencies {}</code></p>
+<blockquote>
+<p>为当前project配置依赖（第三方lib等）</p>
+</blockquote>
+</li>
+<li><p><code>repositories {}</code></p>
+<blockquote>
+<p>为当前project配置资源库（下载依赖库的仓库，如jcenter等）</p>
+</blockquote>
+</li>
+<li><p><code>sourceSets {}</code></p>
+<blockquote>
+<p>为当前project配置源码及资源等（如Android中的java代码，资源文件等）</p>
+</blockquote>
+</li>
+<li><p><code>subprojects {}</code></p>
+<blockquote>
+<p>配置当前project的所有子project</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="几个核心类型"><a href="#几个核心类型" class="headerlink" title="几个核心类型"></a><strong>几个核心类型</strong></h4><ul>
+<li><p><code>Project</code></p>
+<blockquote>
+<p>该接口是从构建脚本中与Gradle交互的核心API。</p>
+</blockquote>
+</li>
+<li><p><code>Task</code></p>
+<blockquote>
+<p>Task代表一个原子操作，是构建的最小单位</p>
+</blockquote>
+</li>
+<li><p><code>Gradle</code></p>
+<blockquote>
+<p>表示对Gradle的调用</p>
+</blockquote>
+</li>
+<li><p><code>Settings</code></p>
+<blockquote>
+<p>声明了实例化和配置要参与构建的Project实例所需的配置</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Prject与Task的关系"><a href="#Prject与Task的关系" class="headerlink" title="Prject与Task的关系"></a><strong>Prject与Task的关系</strong></h4><p>Gradle中的一切都建立在两个基本概念之上：project和task</p>
+<p>每个Gradle构建都由一个或多个Project组成。Project取决于要构建什么类型的项目。例如，project可能是JAR或web应用。也可能是其他项目输出的JAR打包成的ZIP等。项目也可以不是待构建的事物，也可以是待做任务，如部署应用至测试或生产环境。</p>
+<p>每个Project由一个或多个Task组成。任务即构建执行的原子操作。如编译指定的类，打一个JAR包，生成Javadoc或发布库至仓库等</p>
+<p>下面是一个单项目的示例，该但项目中定义了一些简单的任务</p>
+<h2 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h2><p>该接口中包含了与Gradle交互的主要API。在Project对象中，可以访问Gradle的所有特性</p>
+<h4 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a><strong>Lifecycle</strong></h4><p><code>build.gradle</code>文件与<code>Project</code>对象是一对一的关系。在构建初始化阶段，Gradle会为每个参与构建的项目创建一个Project对象。创建步骤如下：   </p>
+<ul>
+<li>首先为构建创建一个<code>Settings</code>对象</li>
+<li>分析<code>settings.gradle</code>脚本，并根据该脚本配置<code>Settings</code>对象</li>
+<li>使用配置好的<code>Settings</code>对象，创建参与构建的项目对应的<code>Project</code>对象</li>
+<li>最后，通过执行项目的<code>build.gradle</code>脚本来配置与之对应的<code>Project</code>对象。Project按广度优先顺序进行配置，即父Project先于子Project配置。不过可以通过调用<code>Project.evaluationDependsOnChildren()</code>或<code>Project.evaluationDependsOn(java.lang.String)</code>改变初始化顺序</li>
+</ul>
+<h4 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a><strong>Tasks</strong></h4><p><code>Project</code>本质上是<code>Task</code>对象的集合。通过调用<code>TaskContainer</code>的<code>create()</code>方法为<code>Project</code>添加任务，如<code>TaskContainer.create(java.lang.String)</code>。<code>TaskContainer</code>中提供了一些方法，用以查询已定义的<code>Task</code>，如<code>TaskCollection.getByName(java.lang.String)</code></p>
+<h4 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a><strong>Dependencies</strong></h4><p>project为了完成工作，通常需要某些依赖。同样的，project通常也会输出结果供其他project使用。依赖按配置分组，从仓库中上传下载。可以使用<code>Project.getConfigurations()</code>方法返回的<code>ConfigurationContainer</code>对象来管理配置。使用<code>Project.getDependencies()</code>方法返回的<code>DependencyHandler</code>对象管理依赖。使用<code>Project.getRepositories()</code>方法返回的<code>RepositoryHandler</code>对象管理仓库</p>
+<h4 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a><strong>Plugins</strong></h4><p>插件可用于构建的模块化以及重用project配置。使用<code>PluginAware.apply(java.util.Map)</code>方法或使用<code>PluginDependenciesSpec</code>来应用插件</p>
+<h4 id="Dynamic-Project-Properties"><a href="#Dynamic-Project-Properties" class="headerlink" title="Dynamic Project Properties"></a><strong>Dynamic Project Properties</strong></h4><p>Gradle执行<code>build.gradle</code>脚本来配置与之对应的<code>Project</code>对象。脚本中使用的任何属性及方法都是对<code>Project</code>代理对象的访问。也就是说，可以直接在脚本中使用<code>Project</code>接口的任一方法和属性。</p>
+<p>例如：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">defaultTasks(<span class="string">'some-task'</span>)  <span class="comment">// Delegates to Project.defaultTasks()</span></span><br><span class="line">reportsDir = file(<span class="string">'reports'</span>) <span class="comment">// Delegates to Project.file() and the Java Plugin</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以通过<code>project</code>属性访问<code>Project</code>实例。某些情况下，以这种方式访问会使脚本更加清晰。如，可以使用<code>project.name</code>访问project的name，而不是使用直接用<code>name</code>属性</p>
+<p>project有5个属性域，用以搜索属性。在build文件中可以通过属性名或调用<code>Project.property(java.lang.string)</code>方法访问属性。下面是5个属性域：</p>
+<ul>
+<li><code>Project</code>对象本身。该域中包含了<code>Project</code>接口实现类中顶一个任何属性（拥有get&amp;set方法）。例如，<code>Project.getRootProject()</code>方法用以访问<code>rootProject</code>属性。属性的可读可写性取决于get/set方法的声明</li>
+<li>project的<em>额外(extra)</em>属性。每个project都维护了一个额外属性的map，属性名（任意）-&gt;属性值。额外属性均可读可写</li>
+<li>由插件引入的扩展。每个扩展相当于一个只读的属性，扩展名即属性名</li>
+<li>由插件引入的convention属性。插件可以通过Porject中的<code>Convention</code>对象向其中加入方法和属性。该域中属性的可读可写性取决于<code>Convention</code>对象</li>
+<li>project中的task。可以将task的name看作属性名对其进行访问。该域中的属性是只读的。例如，名为<code>compile</code>的task可以作为<code>compile</code>属性进行访问</li>
+<li>extra属性和convention属性是从项目的父级继承的，直到根项目。 该域中的的属性是只读的。</li>
+</ul>
+<p>当访问一个属性时，project按以上顺序从域中进行查找，如果未找到，则抛出异常</p>
+<h4 id="Extra-Properties"><a href="#Extra-Properties" class="headerlink" title="Extra Properties"></a><strong>Extra Properties</strong></h4><p>所有的extra属性都必须通过”ext”命名空间来定义。额外属性定义后，即可在所属对象中直接访问（可以是Project、Task或者sub-project），可以读取也可更改。下面是一个例子</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">project.ext.prop1 = <span class="string">"foo"</span></span><br><span class="line">task doStuff &#123;</span><br><span class="line">    ext.prop2 = <span class="string">"bar"</span></span><br><span class="line">&#125;</span><br><span class="line">subprojects &#123; ext.$&#123;prop3&#125; = <span class="literal">false</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过”ext”读取extra属性</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ext.isSnapshot = version.endsWith(<span class="string">"-SNAPSHOT"</span>)</span><br><span class="line"><span class="keyword">if</span> (isSnapshot) &#123;</span><br><span class="line">    <span class="comment">// do snapshot stuff</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Dynamic-Methods"><a href="#Dynamic-Methods" class="headerlink" title="Dynamic Methods"></a><strong>Dynamic Methods</strong></h4><p>project同样由5个方法域，用以查找方法</p>
+<ul>
+<li><code>Project</code>对象本身</li>
+<li>build文件。build文件中可以定义方法，project从其中查找特定的方法。</li>
+<li>由插件引入的扩展。扩展可以看作一个接受一个闭包或<code>Action</code>作为参数的方法</li>
+<li>由插件引入的convention方法。插件可以通过project的<code>Convention</code>对象向其中添加属性和方法</li>
+<li>project中的task。每个Task都会拥有一个与Task同名的方法，该方法接受一个闭包或<code>Action</code>作为参数,并且使用传入的闭包关联到Task的<code>Task.configure(groovy.lang.Closure)</code>方法。例如，project有一个名为<code>compile</code>的方法，则一个<code>void compile(Closure ConfigureClosure)</code>方法会添加至project中</li>
+<li>继承自父Project的方法</li>
+<li>project中值为闭包的属性。闭包可以看作一个方法，直接传入参数调用</li>
+</ul>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><p>前文中已经给出了Task的定义，以及Task与Project的关系，这里不再赘述。    </p>
+<p>下面介绍下Task的属性、创建、执行。以及Task之间的依赖关系的声明等</p>
+<h4 id="Task的组成"><a href="#Task的组成" class="headerlink" title="Task的组成"></a><strong>Task的组成</strong></h4><p>Task由一系列的<code>Action</code>组成。Task的执行，即为其中<code>Action</code>的执行（调用<code>Action.execute(T)</code>）。可以通过调用<code>Task.doFirst(org.gradle.api.Action)</code>或<code>Task.doLast(org.gradle.api.Action)</code>方法向Task中添加<code>Action</code>，Task中还有两个接受<code>groovy.lang.Closure</code>闭包作为参数的同名方法，同样可以向Task中添加Action。</p>
+<p>Task中的两个特殊异常，<code>StopActionException</code>和<code>StopExecutionException</code>。其中<code>StopActionException</code>会导致当前<code>Action</code>中止执行，转而执行下一个<code>Action</code>。而<code>StopExecutionException</code>会中止当前<code>Task</code>，转而执行下一个<code>Task</code>。可以通过抛出这两个异常来跳过某些执行错误的<code>Action</code>或<code>Task</code></p>
+<h4 id="Task之间的依赖关系"><a href="#Task之间的依赖关系" class="headerlink" title="Task之间的依赖关系"></a><strong>Task之间的依赖关系</strong></h4><p>一个Task的执行可能依赖于其他Task，也可能必须在某个Task执行完成后才能开始执行。Gradle会保证任务按照它们之间的依赖关系执行。</p>
+<p>下面几组方法可以声明Task间的依赖关系，每组中的两个方法是等效的。</p>
+<ul>
+<li><code>Task.dependsOn(java.lang.Object[])</code> 或 <code>Task.setDependsOn(java.lang.Iterable)</code></li>
+<li><code>Task.mustRunAfter(java.lang.Object[])</code> 或 <code>Task.setMustRunAfter(java.lang.Iterable</code></li>
+<li><code>Task.shouldRunAfter(java.lang.Object[])</code> 或 <code>Task.setShouldRunAfter(java.lang.Iterable)</code></li>
+</ul>
+<p>可以使用以下类型作为参数来指定任务间的依赖关系</p>
+<ul>
+<li><code>String</code>、<code>CharSequence</code>或<code>groovy.lang.GString</code>类型的任务路径或任务名。当千project的task的相对路径。这种方式可以引用其他project中的task</li>
+<li><code>Task</code>类型</li>
+<li><code>TaskDependency</code>类型</li>
+<li><code>TaskReference</code>类型</li>
+<li><code>Buildable</code>类型</li>
+<li><code>RegularFileProperty</code>或<code>DirectoryPerty</code>类型</li>
+<li><code>Provider&lt;T&gt;</code>类型。其中泛型为这里列出的任意类型之一</li>
+<li><code>Iterable</code>、<code>Collection</code>、<code>Map</code>或array类型。其中元素类型为这里列出的任意类型之一。其中元素最终可递归的转换为task</li>
+<li><code>Callable</code>类型。<code>call()</code>方法返回类型为这里列出的任意类型之一，并且最终可转换为task，返回值<code>null</code>会被视为空集合</li>
+<li>Groovy闭包<code>Closure</code>或Kotlin函数。闭包或函数返回类型为这里列出的任意类型之一，并且最终可转换为task，返回值<code>null</code>会被视为空集合</li>
+<li>其他类型会导致error</li>
+</ul>
+<h4 id="Task的动态属性"><a href="#Task的动态属性" class="headerlink" title="Task的动态属性"></a><strong>Task的动态属性</strong></h4><p><code>Task</code>有四个属性域。在构建文件中可以通过属性名直接访问属性，或通过调用<code>Task.property(java.lang.String)</code>方法访问属性。可以通过调用<code>Task.setProperty(java.lang.String, java.lang.Object)</code>方法改变属性值</p>
+<ul>
+<li><code>Task</code>对象本身。<code>Task</code>实现类中拥有get和set方法的字段即为属性。属性的读写性取决于get、set方法的声明</li>
+<li>通过插件添加至任务的扩展。每个扩展即为一个同名的属性</li>
+<li>通过插件引入的<em>convention</em>属性。插件可以通过<code>Convention</code>对象向Task中添加属性及方法。属性的读写性取决于<code>Convention</code>对象</li>
+<li>与project一样，task也可以添加额外属性。每个task都维护了一个额外属性的map，属性名（任意）-&gt;属性值。额外属性均可读可写</li>
+</ul>
+<h4 id="Task并行执行"><a href="#Task并行执行" class="headerlink" title="Task并行执行"></a><strong>Task并行执行</strong></h4><p>默认情况下，多个task是不会并行执行，除非一个task正在等待异步操作完成，并且有其他task在等待执行。在构建初始化时，可以通过<code>--parallel</code>标志启用并行执行，不同project的task可以并行执行</p>
+<p>本篇只是简单介绍了包括Project、Task在内的基本概念。关于Project、Task以及实战操作会在后续文章中详细介绍</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/gradle/" rel="tag"># gradle</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/04/Gradle-build-environment/" rel="prev" title="Gradle构建环境">
+      <i class="fa fa-chevron-left"></i> Gradle构建环境
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些基础概念"><span class="nav-number">1.</span> <span class="nav-text">一些基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构建脚本的结构"><span class="nav-number">1.0.1.</span> <span class="nav-text">构建脚本的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#几个核心类型"><span class="nav-number">1.0.2.</span> <span class="nav-text">几个核心类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Prject与Task的关系"><span class="nav-number">1.0.3.</span> <span class="nav-text">Prject与Task的关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Project"><span class="nav-number">2.</span> <span class="nav-text">Project</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lifecycle"><span class="nav-number">2.0.1.</span> <span class="nav-text">Lifecycle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tasks"><span class="nav-number">2.0.2.</span> <span class="nav-text">Tasks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dependencies"><span class="nav-number">2.0.3.</span> <span class="nav-text">Dependencies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Plugins"><span class="nav-number">2.0.4.</span> <span class="nav-text">Plugins</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dynamic-Project-Properties"><span class="nav-number">2.0.5.</span> <span class="nav-text">Dynamic Project Properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Extra-Properties"><span class="nav-number">2.0.6.</span> <span class="nav-text">Extra Properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dynamic-Methods"><span class="nav-number">2.0.7.</span> <span class="nav-text">Dynamic Methods</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task"><span class="nav-number">3.</span> <span class="nav-text">Task</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Task的组成"><span class="nav-number">3.0.1.</span> <span class="nav-text">Task的组成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Task之间的依赖关系"><span class="nav-number">3.0.2.</span> <span class="nav-text">Task之间的依赖关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Task的动态属性"><span class="nav-number">3.0.3.</span> <span class="nav-text">Task的动态属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Task并行执行"><span class="nav-number">3.0.4.</span> <span class="nav-text">Task并行执行</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="何从"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">何从</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gslullaby" title="GitHub → https://github.com/gslullaby" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.douban.com/people/wlp_caidao" title="DouBan → https://www.douban.com/people/wlp_caidao" rel="noopener" target="_blank"><i class="fa fa-fw fa-douban"></i>DouBan</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">何从</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
