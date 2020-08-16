@@ -8,7 +8,7 @@ categories:
 keywords:
 - scala
 - 函数
-description:
+description: 在各类blog及scala书籍中看到的关于函数最多的一句话是“函数是一等公民”，可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它
 ---
 在各类blog及scala书籍中看到的关于函数最多的一句话是
 > 函数是一等公民

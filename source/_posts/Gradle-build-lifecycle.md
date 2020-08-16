@@ -7,7 +7,7 @@ keywords:
 - gradle
 categories:
 - Gradle
-description:
+description: 本文介绍Gradle构建的生命周期，即对三个构建阶段（初始化、配置、执行）进行了详细阐述，并给出相应的示例
 ---
 我们之前说过，Gradle的核心是一种基于依赖的编程语言。按照Gradle的术语来说，这意味着你可以定义一系列任务以及它们之间的依赖关系。Gradle会保证这些任务按照他们的依赖关系顺序执行，并且每个任务只会执行一次。这些任务一起构成了一个有向无环图（DAG）。某些构建工具会在构建任务执行阶段，组建依赖图。但是Gradle是在任务执行之前组建出完整的依赖图的。这正是Gradle的核心所在，使得许多不可能的事情成为了可能。    
 
@@ -16,7 +16,7 @@ description:
 ## 构建阶段
 Gradle构建有三个不同的阶段
 
-* 初始换阶段（Initialization）
+* 初始化阶段（Initialization）
      
     Gradle支持单/多项目构建。在初始化阶段，Gradle会确定哪些项目要参与到构建中，并且为每个参与构建的项目创建一个Project实例
 

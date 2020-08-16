@@ -9,7 +9,7 @@ keywords:
 - 区块链
 categories:
 - 区块链
-description:
+description: 此篇为BIP 32的译文，介绍分层确定性钱包
 ---
 此篇为BIP 32的译文，介绍分层确定性钱包
 [原文链接](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)

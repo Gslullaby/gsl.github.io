@@ -8,7 +8,7 @@ keywords:
 - 协程
 - categories:
 - Coroutine
-description:
+description: 本文原发于《程序员》2014年11月刊。简明介绍了协程的因何诞生，以及其兴衰史。
 ---
 
 本文原发于《程序员》2014年11月刊。好文章备份一份

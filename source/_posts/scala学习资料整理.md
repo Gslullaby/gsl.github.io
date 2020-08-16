@@ -16,7 +16,7 @@ description:
 
 ## 优质blog
 **[王宏江scala系列](https://hongjiang.info/scala/)**
-**[李浩毅blog](http://www.lihaoyi.com/)
+**[李浩毅blog](http://www.lihaoyi.com/)**
 
 #### 集合
 **[Scala中的集合](https://scala.cool/)**

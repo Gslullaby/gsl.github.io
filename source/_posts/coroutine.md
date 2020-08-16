@@ -7,7 +7,7 @@ keywords:
 - coroutine
 - kotlin
 - 协程
-description:
+description: Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱
 categories:
 - Coroutine
 ---

@@ -7,7 +7,7 @@ keywords:
 - gradle
 categories:
 - Gradle
-description:
+description: 本文对做Gradle简单介绍，包括其基本概念，以及几个重要特性。
 ---
 ## 概述
 Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性    
@@ -45,7 +45,7 @@ Gradle可用于构建任何软件，因为它对你尝试构建的内容或应�
 Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务
 
 下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示
-{% asset_img task-dag-examples.png 主密钥生成 %}
+{% asset_img task-dag-examples.png DAG示例图 %}
 
 几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。
 
