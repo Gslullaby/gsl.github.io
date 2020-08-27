@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hcendless.ink/2020/08/22/Gradle-dependency-management/</loc>
+    
+    <lastmod>2020-08-27T16:33:49.946Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hcendless.ink/2020/08/23/hack-in-search/</loc>
+    
+    <lastmod>2020-08-23T15:36:47.386Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hcendless.ink/2020/08/16/Gradle-task-details/</loc>
     
     <lastmod>2020-08-19T16:40:50.776Z</lastmod>
