@@ -112,181 +112,6 @@
       </tags>
   </entry>
   <entry>
-    <title>scala函数式编程</title>
-    <url>/2018/07/21/scala%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p>从java转向scala已经有一段时间了，虽然平时写代码问题不大，但是因为面向对象编程已经根深蒂固了，一直对函数式编程理解不是很到位，scala虽然是多范式编程语言，但是官方还是鼓励开发者使用函数式编程的，所以很有必要仔细学习并记录一下</p>
-<h2 id="什么是函数式"><a href="#什么是函数式" class="headerlink" title="什么是函数式"></a>什么是函数式</h2><p>函数式编程，不是某一种语言的特性，而是诸多编程思想(如命令式，面向对象等)中的一种。对于它的解释，引用<a href="(http://www.10tiao.com/html/557/201609/2652725732/1.html)">王宏江-Scala中的函数式特性</a>中的一段话</p>
-<blockquote>
-<p>图灵机，以及冯诺依曼对它的实现（冯诺依曼体系），从风格上被归为“命令式”，它的运算过程可以看作不断地修改内存来反映运算的结果，即用命令修改状态；而阿隆佐邱奇提出的 Lambda 演算，则是通过连续的运算（基于函数）得到最终结果。<br>基于Lambda演算的被归为函数式，在众多的函数式编程语言里，Scala的血缘继承自ML 和Haskell 最多。关于ML有本非常好的书《ML for the Working Programmer》，这本书里面提到:<strong>“函数式程序是跟值打交道的，而不是跟状态打交道的。它们的工具是表达式，而不是命令。”</strong></p>
-</blockquote>
-<h4 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h4><p>上面引文里，函数式程序的工具是表达式，那么什么是表达式呢？<br>表达式可以简单理解为有返回值的语句。在scala中只有表达式，因为在scala中任何语句都有返回值，而在java中则不是。如赋值语句在scala中是有返回值的，返回类型为Unit，而在java中赋值语句没有返回值<br>示例</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> var b = 1</span><br><span class="line">b: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = b = 3</span><br><span class="line">a: Unit = ()</span><br></pre></td></tr></table></figure>
-
-<p>变量b被重新赋值为3，赋值的结果类型为Unit，并且赋值给了a</p>
-<h4 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h4><p>函数式编程就是把计算机中的运算抽象为数学中的运算，程序中的函数和方法抽象为数学中的函数。如       </p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>):<span class="type">Int</span> = &#123;</span><br><span class="line">  <span class="number">3</span>X + <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">对应于数学中的</span><br><span class="line"></span><br><span class="line">f(<span class="type">X</span>) = <span class="number">3</span>X + <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>函数的参数即为数学函数中的未知数(x或y等等)，整个运算过程封装在函数体中，并且不需要依赖除了参数外的其他数据，运算完成后返回运算的结果。  </p>
-<p>对于复杂的运算，抽象为多个函数的嵌套调用，整个运算的过程都是围绕函数进行的，摒弃了命令式编程中对状态的依赖，这也是为什么scala鼓励我们使用val不变量，而尽量少使用var变量</p>
-<p>最终整个应用程序都是由一个一个的函数组成</p>
-<p>为了支持函数式编程，scala中提供了很多函数特性，这些特性在<a href="../../23/scala中的函数/">scala中的函数那篇blog</a>里，简单罗列下</p>
-<ul>
-<li>引入了与其他类型地位平等的函数类型，函数可传递，可作为返回值</li>
-<li>对高阶函数的支持</li>
-<li>函数的部分应用</li>
-<li>函数柯里化</li>
-<li>函数嵌套</li>
-<li>闭包</li>
-</ul>
-<h2 id="函数式编程的特性"><a href="#函数式编程的特性" class="headerlink" title="函数式编程的特性"></a>函数式编程的特性</h2><p>关于函数式编程的特性可以参考<a href="http://www.ruanyifeng.com/blog/2012/04/functional_programming.html" target="_blank" rel="noopener">阮一峰-函数式编程初探</a></p>
-]]></content>
-      <categories>
-        <category>Scala</category>
-      </categories>
-      <tags>
-        <tag>scala</tag>
-        <tag>函数式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>scala学习资料整理</title>
-    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
-    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
-<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br><strong><a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></strong></p>
-<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
-</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
-<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
-<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
-      <categories>
-        <category>Scala</category>
-      </categories>
-      <tags>
-        <tag>scala</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Gradle构建环境</title>
-    <url>/2020/08/04/Gradle-build-environment/</url>
-    <content><![CDATA[<p>Gradle提供多种方式对Gradle本身以及Project的行为进行配置。下面列出了四种配置方式，按优先级从高到低排列（第一个方法优先级最高）：</p>
-<ul>
-<li><code>Common-line flags</code> 如:<code>--build-cache</code>。优先级高于各种属性和环境变量</li>
-<li><code>System properties</code> 如: 存储在<code>gradle.properties</code>中的<code>systemProp.http.proxyHost=somehost.org</code></li>
-<li><code>Gradle properties</code> 如: 存储在项目根目录或<code>GRADLE_USER_HOME</code>目录下<code>gradle.properties</code>中的<code>org.gradle.caching=true</code></li>
-<li><code>Environment variables</code> 如: Gradle运行环境中的<code>GRADLE_OPTS</code>变量</li>
-</ul>
-<p>除了配置构建环境外，还可以通过<code>Project properties</code>来配置特定项目构建，如<code>-PreleaseType=final</code></p>
-<h2 id="Gradle-properties"><a href="#Gradle-properties" class="headerlink" title="Gradle properties"></a>Gradle properties</h2><p>Gradle提供了一些选项，通过这些选项可以很方便的对用于执行构建的Java进程进行配置。虽然可以在本地环境中通过<code>GRADLE_OPTS</code>或<code>JAVA_OPTS</code>对该进程进行配置，但是把诸如JVM内存大小、Java Home位置等配置信息加入版本控制（如git/svn等），可以保证项目组构建环境的一致性。</p>
-<p>配置一致的构建环境非常简单，只需在<code>gradle.properties</code>文件中添加配置即可。所有的<code>gradle.properties</code>合并在一起构成了构建环境的配置。如果多个<code>gradle.properties</code>出现了同一个配置项，则会第一个会生效。</p>
-<p>四种设置方式：</p>
-<ul>
-<li>system properties，例如，当在命令行中设置<code>-Dgradle.user.home</code></li>
-<li><code>GRADLE_USER_HOME</code>目录中的 <code>gradle.properties</code>文件</li>
-<li>项目根目录中的<code>gradle.properties</code>文件</li>
-<li>Gradle安装目录下的<code>gradle.properties</code>文件</li>
-</ul>
-<p>下面列出了一些Gradle构建环境的配置项</p>
-<p><code>org.gradle.caching=(true,false)</code><br>当设置为true时，在可能的情况下，Gradle会复用之前构建的输出以加快构建。</p>
-<p><code>org.gradle.caching.debug=(true,false)</code><br>当设置为true时，所有任务的输入属性的hash以及构建缓存的key都会输出到console中</p>
-<p><code>org.gradle.configureondemand=(true,false)</code><br>启用按需配置，Gradle将尝试仅配置必要的项目</p>
-<p><code>org.gradle.console=(auto,plain,rich,verbose)</code><br>自定义console中log的颜色或log的级别。 默认值取决于调用Gradle的方式</p>
-<p><code>org.gradle.daemon=(true,false)</code><br>当设置为true时，将使用Gradle Daemon进程执行构建。默认值为true</p>
-<p><code>org.gradle.daemon.idletimeout=(# of idle millis)</code><br>设置Gradle Daemon进程自动关闭的时间，单位为毫秒。默认值为<code>10800000</code>(3小时)</p>
-<p><code>org.gradle.debug=(true,false)</code><br>当设置为true时，Gradle将在启用远程调试的情况下运行构建，并监听5005端口。该设置项等同于在JVM 命令行中添加<code>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005</code>。该设置会挂起JVM直至有可绑定的debugger。默认为false</p>
-<p><code>org.gradle.java.home=(path to JDK home)</code><br>为Gradle构建进程指定Java home。可设置为<code>jdk</code>或<code>jre</code>路径，但是最好使用<code>jdk</code>。该设置项最合理默认值应该是从PC环境变量（JAVA_HOME或path中的java路径）中获取。该设置不会影响到运行Gradle客户端的JVM所使用的Java版本</p>
-<p><code>org.gradle.jvmargs=(JVM arguments)</code><br>为Gradle Daemon进程指定JVM参数。可以使用该配置修改JVM内存，以提升构建的执行效率。该设置不会影响Gradle客户端VM的JVM设置</p>
-<p><code>org.gradle.logging.level=(quiet,warn,lifecycle,info,debug)</code><br>用于设置Gradle的日志级别，可设置为quiet、warn，lifecycle，info，debug。不区分大小写。默认为<code>lifecycle</code></p>
-<p><code>org.gradle.parallel=(true,false)</code><br>配置后，Gradle将派生到org.gradle.workers.max JVM以并行执行项目</p>
-<p><code>org.gradle.priority=(low,normal)</code><br>为Gradle daemon以及所有由它启动的进程指定调度优先级。默认为<code>normal</code></p>
-<p><code>org.gradle.unsafe.watch-fs=(true,false)</code><br>观察文件系统的开关。允许Gradle下次构建时重用fs信息。默认为false</p>
-<p><code>org.gradle.warning.mode=(all,fail,summary,none)</code><br>当设置为<code>all</code>/<code>summary</code>/<code>none</code>，Gradle会使用不同的警告类型显示</p>
-<p><code>org.gradle.workers.max=(max # of worker processes)</code><br>用于设置worker进程的最大数量。默认为CPU的核心数</p>
-<p>下面例子演示如何使用以上属性</p>
-<p><em>Example 1.在gradle.properties文件中设置属性</em></p>
-<blockquote>
-<p>gradle.properties</p>
-</blockquote>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="attribute">gradlePropertiesProp</span>=gradlePropertiesValue</span><br><span class="line"><span class="attribute">sysProp</span>=shouldBeOverWrittenBySysProp</span><br><span class="line">systemProp.<span class="attribute">system</span>=systemValue</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task printProps &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println commandLineProjectProp</span><br><span class="line">        println gradlePropertiesProp</span><br><span class="line">        println systemProjectProp</span><br><span class="line">        println System.properties[<span class="string">'system'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">$ gradle -q -PcommandLineProjectProp=commandLineProjectPropValue -Dorg.gradle.project.systemProjectProp=systemPropertyValue printProps</span><br><span class="line"></span><br><span class="line">commandLineProjectPropValue</span><br><span class="line">gradlePropertiesValue</span><br><span class="line">systemPropertyValue</span><br><span class="line">systemValue</span><br></pre></td></tr></table></figure>
-
-<h2 id="System-properties"><a href="#System-properties" class="headerlink" title="System properties"></a>System properties</h2><p>使用<code>-D</code>命令行选项，可以传入一些系统属性给运行Gradle的JVM。Gradle命令的-D选项与java命令的-D选项具有相同的效果。<br>也可以在<code>gradle.properties</code>中使用<code>systemProp</code>前缀来设置system properties<br>如：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperUser</span>=myuser</span><br><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperPassword</span>=mypassword</span><br></pre></td></tr></table></figure>
-
-<p>下面列出了可用的系统属性。注意命令行选项方式具有更高的优先级</p>
-<p><code>gradle.wrapperUser=(myuser)</code><br>指定用于从服务器（使用Http基本身份验证）下载Gradle的用户名。</p>
-<p><code>gradle.wrapperPassword=(mypassword)</code><br>指定上一条属性中设置的用户名所对应的密码</p>
-<p><code>gradle.user.home=(path to directory)</code><br>指定Gradle的用户主目录</p>
-<p>在多项目构建中，在除根项目以外的项目中设置的”<code>systemProp.</code>“属性都将被忽略，也就是说，只有根项目的<code>gradle.properties</code>文件中以”<code>systemProp.</code>“为前缀的属性会被检测</p>
-<h2 id="Environment-variables"><a href="#Environment-variables" class="headerlink" title="Environment variables"></a>Environment variables</h2><p><code>gradle</code>命令有以下几个可用的环境变量。命令行选项以及系统变量具有比环境变量更高的优先级</p>
-<p><code>GRADLE_OPTS</code><br>设置Gradle client VM启动时使用的JVM参数。由于Client VM仅处理命令行input/output，因此很少需要更改其VM选项。实际的构建任务是由Gradle daemon进程执行的，因此该环境变量并不会影响构建</p>
-<p><code>GRADLE_USER_HOME</code><br>指定Gradle用户主目录（如果未设置，则默认值为<code>$USER_HOME/.gradle</code>）</p>
-<p><code>JAVA_HOME</code><br>为client VM指定JDK的安装路径。此VM也用于daemon进程，除非在带有<code>org.gradle.java.home</code>的Gradle属性文件中指定了不同的VM</p>
-<h2 id="Project-properties"><a href="#Project-properties" class="headerlink" title="Project properties"></a>Project properties</h2><p>可以直接使用<code>-P</code>命令行选项为<code>Project</code>对象添加一些属性</p>
-<p>当Gradle遇到一些特定名称的系统属性或环境变量时也会为Project设置属性。如：如果环境变量的名称为<code>ORG_GRADLE_PROJECT_prop=somevalue</code>，则Gradle会为Project对象设置一个名为<code>prop</code>值为<code>somevalue</code>的属性。对于系统属性来说，则使用了不同的命名模式，即为<code>org.gradle.project.prop</code>。</p>
-<p>下面两个例子都会子啊Project对象中设置一个名为<code>foo</code>值为<code>bar</code>的属性</p>
-<p><strong>通过系统属性设置Project属性</strong><br><code>org.gradle.project.foo=bar</code></p>
-<p><strong>通过环境变量设置Project属性</strong><br><code>ORG_GRADLE_PROJECT_foo=bar</code></p>
-<blockquote>
-<p>用户主目录中的属性文件优先级要高于项目目录中属性文件</p>
-</blockquote>
-<p>当对一个持续集成服务没有管理员权限并且需要设置一些不容易被看到的属性值时，该特性非常有用。在此场景下，因为你无法使用<code>-P</code>选项，也无法更改系统层级的配置文件，所以正确的策略是修改持续集成构建任务的配置，添加一个与于其模式匹配的环境变量。这对系统上的普通用户是不可见的。</p>
-<p>在构建脚本中可以像使用普通变量那样，通过属性名称即可访问Project的属性</p>
-<blockquote>
-<p>如果应用了一个不存在的Project属性，则会抛出异常，进而构建失败</p>
-<p>在使用<code>Project.hasProperty(java.lang.String)</code>方法访问某个属性之前，应该先检查该Project属性是否存在</p>
-</blockquote>
-<h2 id="配置JVM内存"><a href="#配置JVM内存" class="headerlink" title="配置JVM内存"></a>配置JVM内存</h2><p>可以使用以下方式调整JVM</p>
-<p>Gradle属性<code>org.gradle.jvmargs</code>用以控制运行构建的VM。默认值为<code>-Xmx512m &quot;-XX:MaxMetaspaceSize=256m&quot;</code></p>
-<p><strong>修改构建VM的JVM参数</strong><br><code>org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</code></p>
-<p>环境变量<code>JAVA_OPTS</code>用以控制命令行终端，该终端仅用于显示控制台输出。默认值为<code>-Xmx64m</code></p>
-<p><strong>修改命令行终端VM的JVM参数</strong><br><code>JAVA_OPTS=&quot;-Xmx64m -XX:MaxPermSize=64m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8&quot;</code></p>
-<blockquote>
-<p>有一种情况终端VM也会作为构建VM使用，即：Gradle Daemon进程处于禁用状态，并且终端VM与构建VM的参数设置相同，则终端VM会直接执行构建。其他情况下终端VM会fork出一个新的VM用与执行构建</p>
-</blockquote>
-<p>某些task，如<code>test</code> task，也会fork出额外的JVM进程。可以通过task本身对其进行配置。默认值为<code>-Xmx512m</code></p>
-<p><em>Example 2. 为<code>JavaCompile</code>任务设置Java编译选项</em></p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tasks.withType(JavaCompile) &#123;</span><br><span class="line">    options.compilerArgs += [<span class="string">'-Xdoclint:none'</span>, <span class="string">'-Xlint:none'</span>, <span class="string">'-nowarn'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用Project属性配置任务"><a href="#使用Project属性配置任务" class="headerlink" title="使用Project属性配置任务"></a>使用Project属性配置任务</h2><p>可以根据调用时指定的项目属性更改任务的行为</p>
-<p>假设像确保只有CI才能触发发布版本操作，则简单是实现方式是通过使用Project的<code>isCI</code>属性</p>
-<p><em>Example 3. 禁止CI之外发布版本</em></p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task performRelease &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        <span class="keyword">if</span> (project.hasProperty(<span class="string">"isCI"</span>)) &#123;</span><br><span class="line">            println(<span class="string">"Performing release actions"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidUserDataException(<span class="string">"Cannot perform release outside of CI"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>$ gradle performRelease -PisCI=true –quiet<br>Performing release actions</p>
-</blockquote>
-<h2 id="通过HTTP代理访问Web"><a href="#通过HTTP代理访问Web" class="headerlink" title="通过HTTP代理访问Web"></a>通过HTTP代理访问Web</h2><p>通过标准的JVM系统属性可以配置HTTP/HTTPS代理（用于下载依赖等）。可以直接在构建脚本中设置这些属性，如使用<code>System.setProperty(&#39;http.proxyHost&#39;, &#39;www.somehost.org&#39;)</code>来设置HTTP代理。也可以在<code>gradle.properties</code>中进行设置</p>
-<p><strong><code>在gradle.properties</code>中配置HTTP代理</strong></p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.http.proxyHost=www.somehost.org</span><br><span class="line">systemProp.http.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.http.proxyUser=userid</span><br><span class="line">systemProp.http.proxyPassword=password</span><br><span class="line">systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
-
-<p><strong><code>在gradle.properties</code>中配置HTTPS代理</strong></p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.https.proxyHost=www.somehost.org</span><br><span class="line">systemProp.https.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.https.proxyUser=userid</span><br><span class="line">systemProp.https.proxyPassword=password</span><br><span class="line">systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
-
-<p>为了访问一些特殊网络可能还需要设置一些其他属性。下面是两个参考链接</p>
-<ul>
-<li><a href="https://git-wip-us.apache.org/repos/asf?p=ant.git;a=blob;f=src/main/org/apache/tools/ant/util/ProxySetup.java;hb=HEAD" target="_blank" rel="noopener">ProxySetup.java in the Ant codebase</a></li>
-<li><a href="http://download.oracle.com/javase/7/docs/technotes/guides/net/properties.html" target="_blank" rel="noopener">JDK 7 Networking Properties</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Gradle</category>
-      </categories>
-      <tags>
-        <tag>gradle</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>构建的基础知识</title>
     <url>/2020/08/08/Gradle-Script-Basics/</url>
     <content><![CDATA[<h2 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h2><p>在Gradle生命周期中，我们曾提及构建脚本其实是构建配置脚本。脚本执行，其实就是对一个特定类型对象的配置。例如，build.gradle脚本执行，就是对<code>Project</code>对象的配置。所配置的对象称之为构建脚本的代理对象。下图展示了脚本与代理对象的对应关系</p>
@@ -439,6 +264,128 @@
       </tags>
   </entry>
   <entry>
+    <title>Gradle构建环境</title>
+    <url>/2020/08/04/Gradle-build-environment/</url>
+    <content><![CDATA[<p>Gradle提供多种方式对Gradle本身以及Project的行为进行配置。下面列出了四种配置方式，按优先级从高到低排列（第一个方法优先级最高）：</p>
+<ul>
+<li><code>Common-line flags</code> 如:<code>--build-cache</code>。优先级高于各种属性和环境变量</li>
+<li><code>System properties</code> 如: 存储在<code>gradle.properties</code>中的<code>systemProp.http.proxyHost=somehost.org</code></li>
+<li><code>Gradle properties</code> 如: 存储在项目根目录或<code>GRADLE_USER_HOME</code>目录下<code>gradle.properties</code>中的<code>org.gradle.caching=true</code></li>
+<li><code>Environment variables</code> 如: Gradle运行环境中的<code>GRADLE_OPTS</code>变量</li>
+</ul>
+<p>除了配置构建环境外，还可以通过<code>Project properties</code>来配置特定项目构建，如<code>-PreleaseType=final</code></p>
+<h2 id="Gradle-properties"><a href="#Gradle-properties" class="headerlink" title="Gradle properties"></a>Gradle properties</h2><p>Gradle提供了一些选项，通过这些选项可以很方便的对用于执行构建的Java进程进行配置。虽然可以在本地环境中通过<code>GRADLE_OPTS</code>或<code>JAVA_OPTS</code>对该进程进行配置，但是把诸如JVM内存大小、Java Home位置等配置信息加入版本控制（如git/svn等），可以保证项目组构建环境的一致性。</p>
+<p>配置一致的构建环境非常简单，只需在<code>gradle.properties</code>文件中添加配置即可。所有的<code>gradle.properties</code>合并在一起构成了构建环境的配置。如果多个<code>gradle.properties</code>出现了同一个配置项，则会第一个会生效。</p>
+<p>四种设置方式：</p>
+<ul>
+<li>system properties，例如，当在命令行中设置<code>-Dgradle.user.home</code></li>
+<li><code>GRADLE_USER_HOME</code>目录中的 <code>gradle.properties</code>文件</li>
+<li>项目根目录中的<code>gradle.properties</code>文件</li>
+<li>Gradle安装目录下的<code>gradle.properties</code>文件</li>
+</ul>
+<p>下面列出了一些Gradle构建环境的配置项</p>
+<p><code>org.gradle.caching=(true,false)</code><br>当设置为true时，在可能的情况下，Gradle会复用之前构建的输出以加快构建。</p>
+<p><code>org.gradle.caching.debug=(true,false)</code><br>当设置为true时，所有任务的输入属性的hash以及构建缓存的key都会输出到console中</p>
+<p><code>org.gradle.configureondemand=(true,false)</code><br>启用按需配置，Gradle将尝试仅配置必要的项目</p>
+<p><code>org.gradle.console=(auto,plain,rich,verbose)</code><br>自定义console中log的颜色或log的级别。 默认值取决于调用Gradle的方式</p>
+<p><code>org.gradle.daemon=(true,false)</code><br>当设置为true时，将使用Gradle Daemon进程执行构建。默认值为true</p>
+<p><code>org.gradle.daemon.idletimeout=(# of idle millis)</code><br>设置Gradle Daemon进程自动关闭的时间，单位为毫秒。默认值为<code>10800000</code>(3小时)</p>
+<p><code>org.gradle.debug=(true,false)</code><br>当设置为true时，Gradle将在启用远程调试的情况下运行构建，并监听5005端口。该设置项等同于在JVM 命令行中添加<code>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005</code>。该设置会挂起JVM直至有可绑定的debugger。默认为false</p>
+<p><code>org.gradle.java.home=(path to JDK home)</code><br>为Gradle构建进程指定Java home。可设置为<code>jdk</code>或<code>jre</code>路径，但是最好使用<code>jdk</code>。该设置项最合理默认值应该是从PC环境变量（JAVA_HOME或path中的java路径）中获取。该设置不会影响到运行Gradle客户端的JVM所使用的Java版本</p>
+<p><code>org.gradle.jvmargs=(JVM arguments)</code><br>为Gradle Daemon进程指定JVM参数。可以使用该配置修改JVM内存，以提升构建的执行效率。该设置不会影响Gradle客户端VM的JVM设置</p>
+<p><code>org.gradle.logging.level=(quiet,warn,lifecycle,info,debug)</code><br>用于设置Gradle的日志级别，可设置为quiet、warn，lifecycle，info，debug。不区分大小写。默认为<code>lifecycle</code></p>
+<p><code>org.gradle.parallel=(true,false)</code><br>配置后，Gradle将派生到org.gradle.workers.max JVM以并行执行项目</p>
+<p><code>org.gradle.priority=(low,normal)</code><br>为Gradle daemon以及所有由它启动的进程指定调度优先级。默认为<code>normal</code></p>
+<p><code>org.gradle.unsafe.watch-fs=(true,false)</code><br>观察文件系统的开关。允许Gradle下次构建时重用fs信息。默认为false</p>
+<p><code>org.gradle.warning.mode=(all,fail,summary,none)</code><br>当设置为<code>all</code>/<code>summary</code>/<code>none</code>，Gradle会使用不同的警告类型显示</p>
+<p><code>org.gradle.workers.max=(max # of worker processes)</code><br>用于设置worker进程的最大数量。默认为CPU的核心数</p>
+<p>下面例子演示如何使用以上属性</p>
+<p><em>Example 1.在gradle.properties文件中设置属性</em></p>
+<blockquote>
+<p>gradle.properties</p>
+</blockquote>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="attribute">gradlePropertiesProp</span>=gradlePropertiesValue</span><br><span class="line"><span class="attribute">sysProp</span>=shouldBeOverWrittenBySysProp</span><br><span class="line">systemProp.<span class="attribute">system</span>=systemValue</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task printProps &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println commandLineProjectProp</span><br><span class="line">        println gradlePropertiesProp</span><br><span class="line">        println systemProjectProp</span><br><span class="line">        println System.properties[<span class="string">'system'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">$ gradle -q -PcommandLineProjectProp=commandLineProjectPropValue -Dorg.gradle.project.systemProjectProp=systemPropertyValue printProps</span><br><span class="line"></span><br><span class="line">commandLineProjectPropValue</span><br><span class="line">gradlePropertiesValue</span><br><span class="line">systemPropertyValue</span><br><span class="line">systemValue</span><br></pre></td></tr></table></figure>
+
+<h2 id="System-properties"><a href="#System-properties" class="headerlink" title="System properties"></a>System properties</h2><p>使用<code>-D</code>命令行选项，可以传入一些系统属性给运行Gradle的JVM。Gradle命令的-D选项与java命令的-D选项具有相同的效果。<br>也可以在<code>gradle.properties</code>中使用<code>systemProp</code>前缀来设置system properties<br>如：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperUser</span>=myuser</span><br><span class="line">systemProp<span class="selector-class">.gradle</span><span class="selector-class">.wrapperPassword</span>=mypassword</span><br></pre></td></tr></table></figure>
+
+<p>下面列出了可用的系统属性。注意命令行选项方式具有更高的优先级</p>
+<p><code>gradle.wrapperUser=(myuser)</code><br>指定用于从服务器（使用Http基本身份验证）下载Gradle的用户名。</p>
+<p><code>gradle.wrapperPassword=(mypassword)</code><br>指定上一条属性中设置的用户名所对应的密码</p>
+<p><code>gradle.user.home=(path to directory)</code><br>指定Gradle的用户主目录</p>
+<p>在多项目构建中，在除根项目以外的项目中设置的”<code>systemProp.</code>“属性都将被忽略，也就是说，只有根项目的<code>gradle.properties</code>文件中以”<code>systemProp.</code>“为前缀的属性会被检测</p>
+<h2 id="Environment-variables"><a href="#Environment-variables" class="headerlink" title="Environment variables"></a>Environment variables</h2><p><code>gradle</code>命令有以下几个可用的环境变量。命令行选项以及系统变量具有比环境变量更高的优先级</p>
+<p><code>GRADLE_OPTS</code><br>设置Gradle client VM启动时使用的JVM参数。由于Client VM仅处理命令行input/output，因此很少需要更改其VM选项。实际的构建任务是由Gradle daemon进程执行的，因此该环境变量并不会影响构建</p>
+<p><code>GRADLE_USER_HOME</code><br>指定Gradle用户主目录（如果未设置，则默认值为<code>$USER_HOME/.gradle</code>）</p>
+<p><code>JAVA_HOME</code><br>为client VM指定JDK的安装路径。此VM也用于daemon进程，除非在带有<code>org.gradle.java.home</code>的Gradle属性文件中指定了不同的VM</p>
+<h2 id="Project-properties"><a href="#Project-properties" class="headerlink" title="Project properties"></a>Project properties</h2><p>可以直接使用<code>-P</code>命令行选项为<code>Project</code>对象添加一些属性</p>
+<p>当Gradle遇到一些特定名称的系统属性或环境变量时也会为Project设置属性。如：如果环境变量的名称为<code>ORG_GRADLE_PROJECT_prop=somevalue</code>，则Gradle会为Project对象设置一个名为<code>prop</code>值为<code>somevalue</code>的属性。对于系统属性来说，则使用了不同的命名模式，即为<code>org.gradle.project.prop</code>。</p>
+<p>下面两个例子都会子啊Project对象中设置一个名为<code>foo</code>值为<code>bar</code>的属性</p>
+<p><strong>通过系统属性设置Project属性</strong><br><code>org.gradle.project.foo=bar</code></p>
+<p><strong>通过环境变量设置Project属性</strong><br><code>ORG_GRADLE_PROJECT_foo=bar</code></p>
+<blockquote>
+<p>用户主目录中的属性文件优先级要高于项目目录中属性文件</p>
+</blockquote>
+<p>当对一个持续集成服务没有管理员权限并且需要设置一些不容易被看到的属性值时，该特性非常有用。在此场景下，因为你无法使用<code>-P</code>选项，也无法更改系统层级的配置文件，所以正确的策略是修改持续集成构建任务的配置，添加一个与于其模式匹配的环境变量。这对系统上的普通用户是不可见的。</p>
+<p>在构建脚本中可以像使用普通变量那样，通过属性名称即可访问Project的属性</p>
+<blockquote>
+<p>如果应用了一个不存在的Project属性，则会抛出异常，进而构建失败</p>
+<p>在使用<code>Project.hasProperty(java.lang.String)</code>方法访问某个属性之前，应该先检查该Project属性是否存在</p>
+</blockquote>
+<h2 id="配置JVM内存"><a href="#配置JVM内存" class="headerlink" title="配置JVM内存"></a>配置JVM内存</h2><p>可以使用以下方式调整JVM</p>
+<p>Gradle属性<code>org.gradle.jvmargs</code>用以控制运行构建的VM。默认值为<code>-Xmx512m &quot;-XX:MaxMetaspaceSize=256m&quot;</code></p>
+<p><strong>修改构建VM的JVM参数</strong><br><code>org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</code></p>
+<p>环境变量<code>JAVA_OPTS</code>用以控制命令行终端，该终端仅用于显示控制台输出。默认值为<code>-Xmx64m</code></p>
+<p><strong>修改命令行终端VM的JVM参数</strong><br><code>JAVA_OPTS=&quot;-Xmx64m -XX:MaxPermSize=64m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8&quot;</code></p>
+<blockquote>
+<p>有一种情况终端VM也会作为构建VM使用，即：Gradle Daemon进程处于禁用状态，并且终端VM与构建VM的参数设置相同，则终端VM会直接执行构建。其他情况下终端VM会fork出一个新的VM用与执行构建</p>
+</blockquote>
+<p>某些task，如<code>test</code> task，也会fork出额外的JVM进程。可以通过task本身对其进行配置。默认值为<code>-Xmx512m</code></p>
+<p><em>Example 2. 为<code>JavaCompile</code>任务设置Java编译选项</em></p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tasks.withType(JavaCompile) &#123;</span><br><span class="line">    options.compilerArgs += [<span class="string">'-Xdoclint:none'</span>, <span class="string">'-Xlint:none'</span>, <span class="string">'-nowarn'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Project属性配置任务"><a href="#使用Project属性配置任务" class="headerlink" title="使用Project属性配置任务"></a>使用Project属性配置任务</h2><p>可以根据调用时指定的项目属性更改任务的行为</p>
+<p>假设像确保只有CI才能触发发布版本操作，则简单是实现方式是通过使用Project的<code>isCI</code>属性</p>
+<p><em>Example 3. 禁止CI之外发布版本</em></p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task performRelease &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        <span class="keyword">if</span> (project.hasProperty(<span class="string">"isCI"</span>)) &#123;</span><br><span class="line">            println(<span class="string">"Performing release actions"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidUserDataException(<span class="string">"Cannot perform release outside of CI"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>$ gradle performRelease -PisCI=true –quiet<br>Performing release actions</p>
+</blockquote>
+<h2 id="通过HTTP代理访问Web"><a href="#通过HTTP代理访问Web" class="headerlink" title="通过HTTP代理访问Web"></a>通过HTTP代理访问Web</h2><p>通过标准的JVM系统属性可以配置HTTP/HTTPS代理（用于下载依赖等）。可以直接在构建脚本中设置这些属性，如使用<code>System.setProperty(&#39;http.proxyHost&#39;, &#39;www.somehost.org&#39;)</code>来设置HTTP代理。也可以在<code>gradle.properties</code>中进行设置</p>
+<p><strong><code>在gradle.properties</code>中配置HTTP代理</strong></p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.http.proxyHost=www.somehost.org</span><br><span class="line">systemProp.http.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.http.proxyUser=userid</span><br><span class="line">systemProp.http.proxyPassword=password</span><br><span class="line">systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>在gradle.properties</code>中配置HTTPS代理</strong></p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">systemProp.https.proxyHost=www.somehost.org</span><br><span class="line">systemProp.https.proxyPort=<span class="number">8080</span></span><br><span class="line">systemProp.https.proxyUser=userid</span><br><span class="line">systemProp.https.proxyPassword=password</span><br><span class="line">systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost</span><br></pre></td></tr></table></figure>
+
+<p>为了访问一些特殊网络可能还需要设置一些其他属性。下面是两个参考链接</p>
+<ul>
+<li><a href="https://git-wip-us.apache.org/repos/asf?p=ant.git;a=blob;f=src/main/org/apache/tools/ant/util/ProxySetup.java;hb=HEAD" target="_blank" rel="noopener">ProxySetup.java in the Ant codebase</a></li>
+<li><a href="http://download.oracle.com/javase/7/docs/technotes/guides/net/properties.html" target="_blank" rel="noopener">JDK 7 Networking Properties</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>BIP 32</title>
     <url>/2018/09/27/bip32/</url>
     <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
@@ -549,106 +496,76 @@
       </tags>
   </entry>
   <entry>
-    <title>Task详述</title>
-    <url>/2020/08/16/Gradle-task-details/</url>
-    <content><![CDATA[<h2 id="Task的生命周期"><a href="#Task的生命周期" class="headerlink" title="Task的生命周期"></a>Task的生命周期</h2><p>首先每个task都归属于某个project。编写build脚本（即build.gradle文件）时，可以在脚本文件中定义task。之后运行构建，在构建的配置阶段，会执行project的build.gradle脚本，此时便会依照task创建语句创建Task对象，并对Task对象进行配置（依赖关系等）。配置阶段结束之后，便会输出一个待执行的task图（DAG）。然后构建进入执行阶段，即按照task图中task的依赖关系，执行每个task，并且每个task仅执行一遍。因此有以下结论</p>
-<ol>
-<li>task的创建与配置发生在构建的配置阶段</li>
-<li>task的运行发生在构建的运行阶段</li>
-</ol>
-<h2 id="Task详解"><a href="#Task详解" class="headerlink" title="Task详解"></a>Task详解</h2><h4 id="Task的创建"><a href="#Task的创建" class="headerlink" title="Task的创建"></a><strong>Task的创建</strong></h4><p>创建task很简单，只需在build.gradle文件中使用task相关api即可。创建task的方式有以下几种</p>
-<ol>
-<li><p>调用Project对象的task方法并传入string类型的参数作为task的name</p>
-<blockquote>
-<p>build.gradle</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(<span class="string">'hello'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"hello"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task(<span class="string">'copy'</span>, <span class="string">type:</span> Copy)&#123;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
+    <title>Gradle是什么</title>
+    <url>/2020/07/17/What-is-Gradle/</url>
+    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性    </p>
+<ul>
+<li><p>高效率</p>
+<p>  Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）<br>  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的运行效率</p>
 </li>
-<li><p>使用Project对象中的tasks（TaskContainer对象）</p>
-<blockquote>
-<p>build.gradle</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">tasks.create(<span class="string">'hello'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"hello"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tasks.create(<span class="string">'copy'</span>, Copy) &#123;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
+<li><p>基于JVM</p>
+<p>  Gradle是运行在JVM之上了（因此没有了跨平台的问题），所以用户需要安装JDK才能使用。对熟悉Java平台的用户来说这是一项福利，因为可以使用标准Java Apis实现构建逻辑，如自定义各种任务类型和插件<br>  虽然Gradle基于JVM，但这并不意味着Gradle只能构建java项目，它甚至可以用来构建native项目</p>
 </li>
-<li><p>使用特定的DSL语句，与第一种方式很像</p>
-<blockquote>
-<p>build.gradle</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(hello) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"hello"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task(copy, <span class="string">type:</span> Copy) &#123;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
+<li><p>约定</p>
+<p>  Gradle借鉴了Maven的经验，通过实现约定使常见类型的项目(如Java项目)变得更容易构建。 使用适当的插件，您可以很容易地为许多项目生成精简的构建脚本。 但是这些约定并不会不限制你：Gradle允许你覆盖它们，添加自己的任务，并对你的基于约定的构建进行许多其他定制。</p>
 </li>
-</ol>
-<p>以上三种方式是等效的，本质上无区别。值得注意的是接受多个参数的那个方法，以第一种方式为例，完整的方法声明是<br><code>Task task(Map&lt;String, ?&gt; args, String name, Closure configureClosure);</code><br>其中第一个参数<code>Map&lt;String, ?&gt; args</code>为任务的创建选项，用以控制如何创建该task。可用的选项有：</p>
-<img src="/2020/08/16/Gradle-task-details/task_creation_options.jpg" title="任务创建的可选项">
+<li><p>良好的可扩展性</p>
+<p>  你可以很容易地扩展Gradle以提供自己的任务类型，甚至构建模型。 有关这方面的示例，请参阅Android构建支持：它添加了许多新的构建概念，如风格和构建类型。</p>
+</li>
+<li><p>主流IDE均支持Gradle</p>
+<p>  许多主流的IDE均支持Gradle，如Android Studio，IntelliJ IDEA，Eclipse，NetBeans等</p>
+</li>
+<li><p>构建过程可视化</p>
+<p>  构建过程中构建扫描器会生成大量的日志，这些日志可用于定位构建问题。并能很好的反应构建的性能问题。在你构建发生问题咨询别人时，可以将这些构建日志分享给他，以便于定位问题</p>
+</li>
+</ul>
+<h2 id="关于Gradle你需要知道的五件事"><a href="#关于Gradle你需要知道的五件事" class="headerlink" title="关于Gradle你需要知道的五件事"></a>关于Gradle你需要知道的五件事</h2><p>Gradle是一款灵活且强大的构建工具，但是第一次使用它时，你可能会觉得很难上手。当你理解了以下核心原则，你会觉得Gradle变得简单很多，并且你会在不知不觉中熟练使用它</p>
+<h4 id="1-Gradle是一款通用构建工具"><a href="#1-Gradle是一款通用构建工具" class="headerlink" title="1. Gradle是一款通用构建工具"></a>1. Gradle是一款通用构建工具</h4><p>Gradle可用于构建任何软件，因为它对你尝试构建的内容或应该如何构建几乎没有任何假设。一个最值得注意的限制是，依赖管理模块目前只支持Maven、Ivy的兼容仓库以及文件系统    </p>
+<p>这并不意味着需要做大量的工作才能创建一个构建。 Gradle通过插件添加了一层约定和预构建的功能，使得构建常见类型的项目(比如Java库)变得很容易。 你甚至可以创建和发布自定义插件来封装你自己的约定和构建功能。</p>
+<h4 id="2-核心的model基于task"><a href="#2-核心的model基于task" class="headerlink" title="2. 核心的model基于task"></a>2. 核心的model基于task</h4><p>Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务</p>
+<p>下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示</p>
+<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="DAG示例图">
 
-<h4 id="Task的配置"><a href="#Task的配置" class="headerlink" title="Task的配置"></a><strong>Task的配置</strong></h4><p>再来看下创建Task的完整的方法声明<br><code>Task task(Map&lt;String, ?&gt; args, String name, Closure configureClosure);</code><br>第三个参数是一个闭包，参数名为configureClosure，从名字就能看出该闭包用于配置Task。Project中绝大多数创建task的方法都接受一个闭包或Action用于配置Task。<br>在闭包中可以调用<code>doLast()</code>、<code>doFirst()</code>方法向Task中添加Action。还是以copy为例来看下    </p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(copy, <span class="string">type:</span> Copy) &#123;</span><br><span class="line">   doFirst &#123;</span><br><span class="line">      println <span class="string">"doFirst"</span></span><br><span class="line">   &#125;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">   println <span class="string">"configure task copy"</span></span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"doLast"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>gradlew copy</code>命令的结果时</p>
-<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">&gt; Configure <span class="keyword">project</span> :</span><br><span class="line">before evaluate <span class="string">"app"</span> <span class="keyword">project</span></span><br><span class="line">configure <span class="keyword">task</span> <span class="keyword">copy</span></span><br><span class="line">after evaluate <span class="string">"app"</span> <span class="keyword">project</span></span><br><span class="line"></span><br><span class="line">&gt; <span class="keyword">Task</span> :<span class="keyword">copy</span></span><br><span class="line"><span class="keyword">doFirst</span></span><br><span class="line"><span class="keyword">doLast</span></span><br></pre></td></tr></table></figure>
-
-<p>上例中在构建的配置阶段，创建了一个名为copy的Copy类型的Task，同时用最后传入的闭包对copy task进行了配置。配置即为Task添加Action的过程。上例中Task的配置过程</p>
+<p>几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。</p>
+<p>任务的组成:</p>
+<ul>
+<li>操作 - 执行某些操作，如文件复制或编译源代码等</li>
+<li>输入 - 操作需要用到的值、文件或目录等</li>
+<li>输出 - 操作修改或生成的文件或目录等</li>
+</ul>
+<p>实际上，任务的组成完全取决于task需要执行什么操作。某些task甚至没有action，如标准的生命周期task（方便起见仅仅将多个任务整合在一起而存在）</p>
+<p>另外需要注意的是：Gradle的增量构建支持是十分强大且可靠的，所以为了保持构建的高效运行，在不必要的情况下不要执行clean task</p>
+<h4 id="Gradle有几个固定的构建阶段"><a href="#Gradle有几个固定的构建阶段" class="headerlink" title="Gradle有几个固定的构建阶段"></a>Gradle有几个固定的构建阶段</h4><p>理解Gradle分三个阶段评估和执行构建脚本是很重要的</p>
 <ol>
-<li>调用<code>doFirst {}</code>方法，添加Action，该Action会输出”doFirst”</li>
-<li>调用<code>from()</code>方法，为copy方法指定复制的源文件</li>
-<li>调用<code>into()</code>方法，指定copy方法的目的路径</li>
-<li>打印”configure task copy”</li>
-<li>调用<code>doLast {}</code>方法，添加Action，该Action输出”doLast”</li>
-</ol>
-<p>配置的过程可以理解为初始化Task的过程。上例中比较具有迷惑性的地方在于，闭包中调用from以及into方法，从书写来看，像是在配置阶段就进行了文件的复制，但实际情况是，这两个方法仅指定了待复制文件的路径，以及文件复制的目的路径。而真正的文件复制是在任务执行的时候才进行的，发生在doFirst与doLast之间</p>
-<p>除了通过创建任务时传入闭包配置task之外，也可以将task的定义与配置分开进行，先定义task，然后在其他时机获取task然后直接调用相应方法进行配置。如下面这种方式</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task copy(<span class="string">type:</span>Copy)</span><br><span class="line"></span><br><span class="line">------------------------------------------</span><br><span class="line"></span><br><span class="line">Copy myCopy = tasks.getByName(<span class="string">"myCopy"</span>)</span><br><span class="line">myCopy.from <span class="string">'resources'</span></span><br><span class="line">myCopy.into <span class="string">'target'</span></span><br><span class="line">myCopy.include(<span class="string">'**/*.txt'</span>, <span class="string">'**/*.xml'</span>, <span class="string">'**/*.properties'</span>)</span><br></pre></td></tr></table></figure>
-
-<h4 id="Task的执行"><a href="#Task的执行" class="headerlink" title="Task的执行"></a>Task的执行</h4><p>执行某个task，如copy task，直接执行<code>gradlew copy</code>命令即可。当然如果某任务的执行依赖与其他任务，则执行该任务也会导致前置任务的执行，关于任务依赖的详解说明，在下文介绍。Task的执行即为Task中每个Action的执行。</p>
-<h2 id="Task之间的依赖、顺序"><a href="#Task之间的依赖、顺序" class="headerlink" title="Task之间的依赖、顺序"></a>Task之间的依赖、顺序</h2><h4 id="定义Task的依赖"><a href="#定义Task的依赖" class="headerlink" title="定义Task的依赖"></a><strong>定义Task的依赖</strong></h4><p>使用task的<code>dependsOn()</code>方法以添加依赖<br>有以下几种方式</p>
-<ol>
-<li><p>在创建task的时候通过creation options传入依赖的task，下例展示了跨project的依赖</p>
-<blockquote>
-<p>build.gradle</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">build.gradle</span><br><span class="line"></span><br><span class="line">project(<span class="string">'projectA'</span>) &#123;</span><br><span class="line">   task(<span class="string">'taskX'</span>, <span class="string">dependsOn :</span> <span class="string">':projectB:taskY'</span>) &#123;</span><br><span class="line">      doLast &#123;</span><br><span class="line">         println <span class="string">'taskX'</span></span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">project(<span class="string">'projectB'</span>) &#123;</span><br><span class="line">   task(<span class="string">'taskY'</span>) &#123;</span><br><span class="line">      doLast &#123;</span><br><span class="line">         println <span class="string">'taskY'</span></span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
+<li><p>初始化阶段</p>
+<p>为构建设置环境，决定那些project需要参与构建</p>
 </li>
-<li><p>直接调用task的<code>dependsOn()</code>方法进行依赖。如下：</p>
-<blockquote>
-<p>projectA:build.gradle</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">task(<span class="string">'taskX'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">'taskX'</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<blockquote>
-<p>projectB:build.gradle</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(<span class="string">'taskY'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">'taskY'</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">taskY.dependsOn(<span class="string">':projectA:taskX'</span>)</span><br></pre></td></tr></table></figure>
-</blockquote>
+<li><p>配置阶段</p>
+<p>构造并配置生成的task图，然后根据用户要运行的task确定需要运行哪些task，以及task运行的顺序</p>
+</li>
+<li><p>执行阶段</p>
+<p>运行配置阶段结束时输出的任务</p>
 </li>
 </ol>
+<p>以上这三个阶段组成了构建的生命周期<br>设计良好的构建脚本主要由声明性配置组成，而不是命令性逻辑。在配置阶段对配置项进行评估是很容易理解的。即便如此，很多构建有不少工作（经过评估后在执行阶段）需要做，如通过doLast和doFirst代码块。这一点很重要，因为在配置阶段评估的代码不会看到在执行阶段发生的更改   </p>
+<p>配置阶段另一个非常重要的方面是，每次运行构建时都会对其中涉及的所有内容进行评估。这就是为什么最佳实践是避免在配置阶段做过多工作的原因， 构建扫描器可以帮助你识别这些热点，以及其他功能</p>
+<h4 id="Gradle的扩展方式不止一种"><a href="#Gradle的扩展方式不止一种" class="headerlink" title="Gradle的扩展方式不止一种"></a>Gradle的扩展方式不止一种</h4><p>如果你只用Gradle内建bundle就能构建你的应用，那是极好的，但这几乎不可能。因为大多数构建都有一些特殊需求，这意味着你需要添加自定义构建逻辑  </p>
+<p>Gradle提供了几种机制用以对其进行扩展</p>
+<ul>
+<li>自定义任务类型<br>当你需要执行的操作现有的构建任务满足不了，你可以实现一个你自己的任务类型。通常，最好将自定义任务类型的源文件放在buildSrc目录或打包在插件中。 然后，你就可以像使用Gradle提供的任何任务类型一样使用自定义的任务类型</li>
+<li>自定义任务操作<br>你可以在一个任务的执行前后附加上自定义构建逻辑（通过使用Task.doFirst(),Task.doLast()方法）</li>
+<li>为project和task添加额外属性<br>可以为project或task添加自己的属性，后续你可以在自己的自定义操作或其他任何构建逻辑中使用这些属性。额外属性甚至可以用于那些不是由你创建的task（如Gradle核心插件创建的task）</li>
+<li>自定义约定<br>约定可以很大程度上简化构建，这样用户可以更容易理解并使用他们。 这可以在使用标准项目结构和命名约定的构建中看到，比如Java构建。 你可以编写自己的插件来提供约定-它们只需要为构建的相关方面配置默认值。</li>
+<li>自定义model<br>Gradle允许你在任务、文件和依赖项配置之外的构建中引入新概念。你可以在大多数语言插件中看到这一点，他们将source sets的概念添加到构建中。对构建过程的适当建模可以极大的提高构建的易用性和效率</li>
+</ul>
+<h4 id="构建脚本按照Api进行操作"><a href="#构建脚本按照Api进行操作" class="headerlink" title="构建脚本按照Api进行操作"></a>构建脚本按照Api进行操作</h4><p>可以很容易将Gradle构建脚本视为可执行代码，因为他们本身就是可执行代码。实现细节：设计良好的构建脚本描述构建软件需要哪些步骤，而不是描述这些步骤如何完成工作，这是自定义任务类型及插件的职责</p>
 <blockquote>
-<p>执行<code>gradle -q taskY</code>命令的输出</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">taskX</span><br><span class="line">taskY</span><br></pre></td></tr></table></figure>
+<p>有一种常见的误解，认为Gradle的强大和灵活性来自于它的构建脚本是代码这一事实。 这与事实大相径庭。 提供强大功能的是底层模型和API。 正如我们在最佳实践中建议的那样，你应该避免在构建脚本中放置太多(如果有的话)命令性逻辑。</p>
 </blockquote>
-<p>从第二个例子的运行结果可看出，执行某个任务时，会导致其前置任务的执行</p>
-<h4 id="定义Task的顺序"><a href="#定义Task的顺序" class="headerlink" title="定义Task的顺序"></a><strong>定义Task的顺序</strong></h4><p>除了定义任务之间依赖关系，还可以定义任务的顺序。使用Task的<code>mustRunAfter()</code>和<code>shouldRunAfter()</code>方法即可定义两个任务的顺序。</p>
-<p>任务顺序与依赖的不同之处：<br>任务间的依赖是一种强关系，执行某任务，则其前置任务必须先执行。但是任务间的顺序是一种弱关系，仅定义某任务必须在另一个任务之后，如<code>taskA.mustRunAfter taskB</code>，在执行taskA时taskB不会被执行，只有两个任务都被执行时，才会保证顺序</p>
-<p><code>mustRunAfter()</code>与<code>shouldRunAfter()</code>的区别：<br>则在多个任务执行时，如果用<code>mustRunAfter()</code>定义了它们之间的顺序，则执行顺序必须如此，否则会执行失败，抛出异常。而<code>shouldRunAfter()</code>不会强制保证顺序，某些情况下顺序会被忽略，下面例子很直观：</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task taskX &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">'taskX'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">task taskY &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">'taskY'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">task taskZ &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">'taskZ'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">taskX.dependsOn taskY</span><br><span class="line">taskY.dependsOn taskZ</span><br></pre></td></tr></table></figure>
-
-<p>然后分别使用<code>mustRunAfter()</code>以及<code>shouldRunAfter()</code>定义顺序</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">taskZ.shouldRunAfter taskX</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>gradlew -q taskX</code>命令，输出为：</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">taskZ</span></span><br><span class="line"><span class="attribute">taskY</span></span><br><span class="line"><span class="attribute">taskX</span></span><br></pre></td></tr></table></figure>
-
-<p>可以看到<code>shouldRunAfter()</code>定义的任务顺序被忽略了，下面再来看<code>mustRunAfter()</code></p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">taskZ.mustRunAfter taskX</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>gradlew -q taskX</code>命令，输出为：</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"><span class="string">FAILURE:</span> Build failed with an exception.</span><br><span class="line"></span><br><span class="line">* What went <span class="string">wrong:</span></span><br><span class="line">Circular dependency between the following <span class="string">tasks:</span></span><br><span class="line">:<span class="string">libA:</span>taskX</span><br><span class="line">\--- :<span class="string">libA:</span>taskY</span><br><span class="line">     \--- :<span class="string">libA:</span>taskZ</span><br><span class="line">          \--- :<span class="string">libA:</span>taskX (*)</span><br></pre></td></tr></table></figure>
-
-<p>提示三个任务出现了循环依赖，执行失败</p>
-<p><code>shouldRunAfter()</code>会被忽略的两种情况</p>
-<ol>
-<li>任务依赖与顺序冲突，则按照依赖执行任务，忽略顺序</li>
-<li>启用了并行执行，并且该任务所有依赖的任务都已执行，则该任务会忽略顺序而执行</li>
-</ol>
-<h2 id="自定义任务"><a href="#自定义任务" class="headerlink" title="自定义任务"></a>自定义任务</h2><p>自定义任务线简单了解下，Task是一个接口，Gradle中提供了一些已有的实现，如<code>DefaultTask</code>，<code>Copy</code>，<code>Delete</code>等。在创建任务是可以通过creation options传入type指定要创建的任务类型，如果没有则默认为<code>DefaultTask</code>类型。</p>
-<p>自定义任务需要集成自Gradle中已有的任务类型，最常见的时继承自<code>DefaultTask</code>。   </p>
-<p>自定义任务另一个关键是，使用特定注解，如<code>@Input</code>、<code>@InputFiles</code>、<code>@OutputDirectory</code>等用于指定输入输出。注解有很多。这里不展开写了，后续如果有必要时再写。</p>
+<p>然而，在一种场景中，将构建脚本视为可执行代码是很有用的：理解构建脚本语法如何映射到Gradle API。API文档（由Javadocs和Groovy DSL Reference组成）列出了方法和属性，并引用了闭包和操作。这些在构建脚本上文中意味着什么呢？查看Groovy Build Script Primer了解该问题的答案，这样您就可以有效地使用API文档</p>
+<blockquote>
+<p>由于Gradle运行在JVM之上，所以构建脚本可以使用标准的Java API。Groovy构建脚本可以使用Groovy API，当然Kotlin构建脚本可以使用Kotlin API</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>Gradle</category>
@@ -804,6 +721,355 @@
       </tags>
   </entry>
   <entry>
+    <title>Task详述</title>
+    <url>/2020/08/16/Gradle-task-details/</url>
+    <content><![CDATA[<h2 id="Task的生命周期"><a href="#Task的生命周期" class="headerlink" title="Task的生命周期"></a>Task的生命周期</h2><p>首先每个task都归属于某个project。编写build脚本（即build.gradle文件）时，可以在脚本文件中定义task。之后运行构建，在构建的配置阶段，会执行project的build.gradle脚本，此时便会依照task创建语句创建Task对象，并对Task对象进行配置（依赖关系等）。配置阶段结束之后，便会输出一个待执行的task图（DAG）。然后构建进入执行阶段，即按照task图中task的依赖关系，执行每个task，并且每个task仅执行一遍。因此有以下结论</p>
+<ol>
+<li>task的创建与配置发生在构建的配置阶段</li>
+<li>task的运行发生在构建的运行阶段</li>
+</ol>
+<h2 id="Task详解"><a href="#Task详解" class="headerlink" title="Task详解"></a>Task详解</h2><h4 id="Task的创建"><a href="#Task的创建" class="headerlink" title="Task的创建"></a><strong>Task的创建</strong></h4><p>创建task很简单，只需在build.gradle文件中使用task相关api即可。创建task的方式有以下几种</p>
+<ol>
+<li><p>调用Project对象的task方法并传入string类型的参数作为task的name</p>
+<blockquote>
+<p>build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(<span class="string">'hello'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"hello"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task(<span class="string">'copy'</span>, <span class="string">type:</span> Copy)&#123;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>使用Project对象中的tasks（TaskContainer对象）</p>
+<blockquote>
+<p>build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">tasks.create(<span class="string">'hello'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"hello"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tasks.create(<span class="string">'copy'</span>, Copy) &#123;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>使用特定的DSL语句，与第一种方式很像</p>
+<blockquote>
+<p>build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(hello) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"hello"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task(copy, <span class="string">type:</span> Copy) &#123;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<p>以上三种方式是等效的，本质上无区别。值得注意的是接受多个参数的那个方法，以第一种方式为例，完整的方法声明是<br><code>Task task(Map&lt;String, ?&gt; args, String name, Closure configureClosure);</code><br>其中第一个参数<code>Map&lt;String, ?&gt; args</code>为任务的创建选项，用以控制如何创建该task。可用的选项有：</p>
+<img src="/2020/08/16/Gradle-task-details/task_creation_options.jpg" title="任务创建的可选项">
+
+<h4 id="Task的配置"><a href="#Task的配置" class="headerlink" title="Task的配置"></a><strong>Task的配置</strong></h4><p>再来看下创建Task的完整的方法声明<br><code>Task task(Map&lt;String, ?&gt; args, String name, Closure configureClosure);</code><br>第三个参数是一个闭包，参数名为configureClosure，从名字就能看出该闭包用于配置Task。Project中绝大多数创建task的方法都接受一个闭包或Action用于配置Task。<br>在闭包中可以调用<code>doLast()</code>、<code>doFirst()</code>方法向Task中添加Action。还是以copy为例来看下    </p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(copy, <span class="string">type:</span> Copy) &#123;</span><br><span class="line">   doFirst &#123;</span><br><span class="line">      println <span class="string">"doFirst"</span></span><br><span class="line">   &#125;</span><br><span class="line">   from(file(<span class="string">'srcDir'</span>))</span><br><span class="line">   into(buildDir)</span><br><span class="line">   println <span class="string">"configure task copy"</span></span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">"doLast"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行<code>gradlew copy</code>命令的结果时</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">&gt; Configure <span class="keyword">project</span> :</span><br><span class="line">before evaluate <span class="string">"app"</span> <span class="keyword">project</span></span><br><span class="line">configure <span class="keyword">task</span> <span class="keyword">copy</span></span><br><span class="line">after evaluate <span class="string">"app"</span> <span class="keyword">project</span></span><br><span class="line"></span><br><span class="line">&gt; <span class="keyword">Task</span> :<span class="keyword">copy</span></span><br><span class="line"><span class="keyword">doFirst</span></span><br><span class="line"><span class="keyword">doLast</span></span><br></pre></td></tr></table></figure>
+
+<p>上例中在构建的配置阶段，创建了一个名为copy的Copy类型的Task，同时用最后传入的闭包对copy task进行了配置。配置即为Task添加Action的过程。上例中Task的配置过程</p>
+<ol>
+<li>调用<code>doFirst {}</code>方法，添加Action，该Action会输出”doFirst”</li>
+<li>调用<code>from()</code>方法，为copy方法指定复制的源文件</li>
+<li>调用<code>into()</code>方法，指定copy方法的目的路径</li>
+<li>打印”configure task copy”</li>
+<li>调用<code>doLast {}</code>方法，添加Action，该Action输出”doLast”</li>
+</ol>
+<p>配置的过程可以理解为初始化Task的过程。上例中比较具有迷惑性的地方在于，闭包中调用from以及into方法，从书写来看，像是在配置阶段就进行了文件的复制，但实际情况是，这两个方法仅指定了待复制文件的路径，以及文件复制的目的路径。而真正的文件复制是在任务执行的时候才进行的，发生在doFirst与doLast之间</p>
+<p>除了通过创建任务时传入闭包配置task之外，也可以将task的定义与配置分开进行，先定义task，然后在其他时机获取task然后直接调用相应方法进行配置。如下面这种方式</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task copy(<span class="string">type:</span>Copy)</span><br><span class="line"></span><br><span class="line">------------------------------------------</span><br><span class="line"></span><br><span class="line">Copy myCopy = tasks.getByName(<span class="string">"myCopy"</span>)</span><br><span class="line">myCopy.from <span class="string">'resources'</span></span><br><span class="line">myCopy.into <span class="string">'target'</span></span><br><span class="line">myCopy.include(<span class="string">'**/*.txt'</span>, <span class="string">'**/*.xml'</span>, <span class="string">'**/*.properties'</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Task的执行"><a href="#Task的执行" class="headerlink" title="Task的执行"></a>Task的执行</h4><p>执行某个task，如copy task，直接执行<code>gradlew copy</code>命令即可。当然如果某任务的执行依赖与其他任务，则执行该任务也会导致前置任务的执行，关于任务依赖的详解说明，在下文介绍。Task的执行即为Task中每个Action的执行。</p>
+<h2 id="Task之间的依赖、顺序"><a href="#Task之间的依赖、顺序" class="headerlink" title="Task之间的依赖、顺序"></a>Task之间的依赖、顺序</h2><h4 id="定义Task的依赖"><a href="#定义Task的依赖" class="headerlink" title="定义Task的依赖"></a><strong>定义Task的依赖</strong></h4><p>使用task的<code>dependsOn()</code>方法以添加依赖<br>有以下几种方式</p>
+<ol>
+<li><p>在创建task的时候通过creation options传入依赖的task，下例展示了跨project的依赖</p>
+<blockquote>
+<p>build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">build.gradle</span><br><span class="line"></span><br><span class="line">project(<span class="string">'projectA'</span>) &#123;</span><br><span class="line">   task(<span class="string">'taskX'</span>, <span class="string">dependsOn :</span> <span class="string">':projectB:taskY'</span>) &#123;</span><br><span class="line">      doLast &#123;</span><br><span class="line">         println <span class="string">'taskX'</span></span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">project(<span class="string">'projectB'</span>) &#123;</span><br><span class="line">   task(<span class="string">'taskY'</span>) &#123;</span><br><span class="line">      doLast &#123;</span><br><span class="line">         println <span class="string">'taskY'</span></span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>直接调用task的<code>dependsOn()</code>方法进行依赖。如下：</p>
+<blockquote>
+<p>projectA:build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">task(<span class="string">'taskX'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">'taskX'</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>projectB:build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task(<span class="string">'taskY'</span>) &#123;</span><br><span class="line">   doLast &#123;</span><br><span class="line">      println <span class="string">'taskY'</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">taskY.dependsOn(<span class="string">':projectA:taskX'</span>)</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>执行<code>gradle -q taskY</code>命令的输出</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">taskX</span><br><span class="line">taskY</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>从第二个例子的运行结果可看出，执行某个任务时，会导致其前置任务的执行</p>
+<h4 id="定义Task的顺序"><a href="#定义Task的顺序" class="headerlink" title="定义Task的顺序"></a><strong>定义Task的顺序</strong></h4><p>除了定义任务之间依赖关系，还可以定义任务的顺序。使用Task的<code>mustRunAfter()</code>和<code>shouldRunAfter()</code>方法即可定义两个任务的顺序。</p>
+<p>任务顺序与依赖的不同之处：<br>任务间的依赖是一种强关系，执行某任务，则其前置任务必须先执行。但是任务间的顺序是一种弱关系，仅定义某任务必须在另一个任务之后，如<code>taskA.mustRunAfter taskB</code>，在执行taskA时taskB不会被执行，只有两个任务都被执行时，才会保证顺序</p>
+<p><code>mustRunAfter()</code>与<code>shouldRunAfter()</code>的区别：<br>则在多个任务执行时，如果用<code>mustRunAfter()</code>定义了它们之间的顺序，则执行顺序必须如此，否则会执行失败，抛出异常。而<code>shouldRunAfter()</code>不会强制保证顺序，某些情况下顺序会被忽略，下面例子很直观：</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">task taskX &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">'taskX'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">task taskY &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">'taskY'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">task taskZ &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">'taskZ'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">taskX.dependsOn taskY</span><br><span class="line">taskY.dependsOn taskZ</span><br></pre></td></tr></table></figure>
+
+<p>然后分别使用<code>mustRunAfter()</code>以及<code>shouldRunAfter()</code>定义顺序</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">taskZ.shouldRunAfter taskX</span><br></pre></td></tr></table></figure>
+
+<p>执行<code>gradlew -q taskX</code>命令，输出为：</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">taskZ</span></span><br><span class="line"><span class="attribute">taskY</span></span><br><span class="line"><span class="attribute">taskX</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到<code>shouldRunAfter()</code>定义的任务顺序被忽略了，下面再来看<code>mustRunAfter()</code></p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">taskZ.mustRunAfter taskX</span><br></pre></td></tr></table></figure>
+
+<p>执行<code>gradlew -q taskX</code>命令，输出为：</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"><span class="string">FAILURE:</span> Build failed with an exception.</span><br><span class="line"></span><br><span class="line">* What went <span class="string">wrong:</span></span><br><span class="line">Circular dependency between the following <span class="string">tasks:</span></span><br><span class="line">:<span class="string">libA:</span>taskX</span><br><span class="line">\--- :<span class="string">libA:</span>taskY</span><br><span class="line">     \--- :<span class="string">libA:</span>taskZ</span><br><span class="line">          \--- :<span class="string">libA:</span>taskX (*)</span><br></pre></td></tr></table></figure>
+
+<p>提示三个任务出现了循环依赖，执行失败</p>
+<p><code>shouldRunAfter()</code>会被忽略的两种情况</p>
+<ol>
+<li>任务依赖与顺序冲突，则按照依赖执行任务，忽略顺序</li>
+<li>启用了并行执行，并且该任务所有依赖的任务都已执行，则该任务会忽略顺序而执行</li>
+</ol>
+<h2 id="自定义任务"><a href="#自定义任务" class="headerlink" title="自定义任务"></a>自定义任务</h2><p>自定义任务线简单了解下，Task是一个接口，Gradle中提供了一些已有的实现，如<code>DefaultTask</code>，<code>Copy</code>，<code>Delete</code>等。在创建任务是可以通过creation options传入type指定要创建的任务类型，如果没有则默认为<code>DefaultTask</code>类型。</p>
+<p>自定义任务需要集成自Gradle中已有的任务类型，最常见的时继承自<code>DefaultTask</code>。   </p>
+<p>自定义任务另一个关键是，使用特定注解，如<code>@Input</code>、<code>@InputFiles</code>、<code>@OutputDirectory</code>等用于指定输入输出。注解有很多。这里不展开写了，后续如果有必要时再写。</p>
+]]></content>
+      <categories>
+        <category>Gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala学习资料整理</title>
+    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
+<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br><strong><a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></strong></p>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
+</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
+<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
+<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>依赖配置的相关知识</title>
+    <url>/2020/09/03/what-is-dependency-configurations/</url>
+    <content><![CDATA[<h2 id="依赖配置是什么？"><a href="#依赖配置是什么？" class="headerlink" title="依赖配置是什么？"></a>依赖配置是什么？</h2><p>Gradle项目中声明的依赖都有其适用范围。如某些依赖编译代码时需要用到，而另一些依赖仅用于运行时。Gradle中使用依赖配置（Configuration）来表示这些依赖的作用范围（作用域）。</p>
+<p>许多Gradle插件会为项目添加一些预先定义好的配置（如<code>android-application</code>插件会添加<code>release</code>和<code>debug</code>配置等，Java插件添加了一些来表示源代码编译、执行测试等所需的各种类路径的插件）。下图使用Java插件作为例子</p>
+<img src="/2020/09/03/what-is-dependency-configurations/dependency-management-configurations.png" title="声明用于特定目的的依赖">
+
+<p><strong>配置的继承与组合</strong><br>配置可以继承其他配置，从而形成一个父子层级关系。子配置会继承其父配置声明的所有依赖。</p>
+<p>Gradle核心插件（如Java插件）中大量使用了配置继承。如<code>testImplementation</code>继承了<code>implementation</code>。这种配置层级关系有很实用的目的。编译测试需要在编写测试代码所需依赖之上增加对待测试源码的依赖。如果项目的生产环境的源码引用了Guava，则其在使用JUnit编写并执行测试代码时也需要引用Guava。下图展示了Java插件中的配置依赖所示</p>
+<img src="/2020/09/03/what-is-dependency-configurations/dependency-management-configuration-inheritance.png" title="Java插件中的配置依赖">
+
+<p>在背后，通过调用<code>Configuration.extendsFrom(org.gradle.api.artifacts.Configuration[])</code>方法<code>testImplementation</code>与<code>implementation</code>配置形成了一种父子层级关系。configuration可以继承其他任何configuration，无论它是定义在构建脚本中还是插件中</p>
+<p>以下用冒烟测试作为例子。假如我们要编写一套冒烟测试用例。每个测试用例都会调用一个Http请求用以验证web后端服务。由于底层的测试框架已经默认使用了JUnit。所以我们一个定义一个名为<code>smokeTest</code>的配置，继承自<code>testImplementation</code>以重用已有的测试框架依赖</p>
+<p>代码如下：</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    smokeTest.extendsFrom testImplementation</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'junit:junit:4.13'</span></span><br><span class="line">    smokeTest <span class="string">'org.apache.httpcomponents:httpclient:4.5.5'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="可解析和可消费的配置"><a href="#可解析和可消费的配置" class="headerlink" title="可解析和可消费的配置"></a>可解析和可消费的配置</h2><p>配置是Gradle依赖解析中至关重要的部分。在依赖的解析的上下文中，区分生产者与消费者的是很重要的。如此说来，配置至少有三条规则：</p>
+<ol>
+<li>声明依赖</li>
+<li>作为消费者，把一系列依赖解析为文件</li>
+<li>作为生产者，对外暴漏artifact和依赖项以供其他项目使用（可消费的配置项通常代表生产者给消费者提供的变体）</li>
+</ol>
+<p>例如，为了表达应用<code>app</code>依赖<code>lib</code>，则至少需要一个配置</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">//声明了一个名为"someConfiguration"的配置</span></span><br><span class="line">    someConfiguration</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">// 向`someConfiguration`配置添加一个项目依赖</span></span><br><span class="line">    someConfiguration project(<span class="string">":lib"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置可以通过扩展其他配置以继承其所有依赖。上例中的代码并没有告诉我们任何关于该配置消费者的信息。更为重要的是，他没有告诉我们该如何使用此配置项。假如<code>lib</code>为一个Java库：他可能会对外暴露不同的东西，如它的API、实现或者测试工具。根据要执行的task的不同（根据lib的API进行编译，执行该应用程序，编译测试等），可能要对<code>app</code>的依赖进行的不同的解析。为了解决这种需求，我们通常可以发现一些伴生配置，旨在明确配置的用法：</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">// 声明用于解析应用程序的编译类路径的配置</span></span><br><span class="line">    compileClasspath.extendsFrom(someConfiguration)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 声明用于解析应用程序的运行时类路径的配置</span></span><br><span class="line">    runtimeClasspath.extendsFrom(someConfiguration)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，展示了三种不同的配置，这三种配置分别担任了不同的角色：   </p>
+<ul>
+<li><code>someConfiguration</code>声明了应用程序的依赖。它就像一个篮子用来装该应用的依赖</li>
+<li><code>compileClasspath</code>和<code>runtimeClasspath</code>是要解析的配置：分别表示应用的编译类路径以及运行时类路径</li>
+</ul>
+<p>这种区别由配置中的canBeResolved标志表示。可以解析的配置即为可以计算依赖图的配置，因为它包含进行解析所需的所有信息。也就是说，我们会出计算一个依赖图，解析依赖图中的组件，最终输出artifact。如果某个配置的<code>canBeResolved</code>设置为<code>false</code>，则意味着该配置不会被解析，而仅仅用与声明依赖。原因是根据使用情况（编译类路径、运行时类路径），它可以解析为不同的图。尝试解析一个<code>canBeResolved</code>设置为<code>false</code>的配置是不对的。某种程度上类似于不该被实例化的抽象类(canBeResolved=false)，以及扩展抽象类(canBeResolved=true)的实现类。一个可解析的配置至少会扩展一个不可解析的配置。</p>
+<p>另一方面，对于库项目来说（生产者），我们也使用配置来表示可以消费的内容。例如，<code>lib</code>可能对外暴露了API或运行时（即运行时用到该lib），我们可能会把<code>artifact</code>添加到其一或者两者之中。通常在按照<code>lib</code>进行编译时，仅需要其API，而无需依赖其运行时。因此<code>lib</code>项目会暴露一个<code>apiElements</code>配置，用于给消费者寻找其API。像这样一种配置即为可消费但不可解析的配置。该特性通过配置的<code>canBeResumed</code>标志表示</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">// 供需要使用其API的消费者使用的配置</span></span><br><span class="line">    exposedApi &#123;</span><br><span class="line">        <span class="comment">// 表示该配置不可被解析</span></span><br><span class="line">        canBeResolved = <span class="literal">false</span></span><br><span class="line">        <span class="comment">// 表示该配置可以被消费</span></span><br><span class="line">        canBeConsumed = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 供需要使用其代码的消费者使用的配置</span></span><br><span class="line">    exposedRuntime &#123;</span><br><span class="line">        canBeResolved = <span class="literal">false</span></span><br><span class="line">        canBeConsumed = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总的来说，配置扮演的角色是由<code>canBeResolved</code>和<code>canBeConsumed</code>标志决定的，如下图：</p>
+<img src="/2020/09/03/what-is-dependency-configurations/configuration_roles.jpg" title="configuration roles">
+
+<p>为了向后的兼容性，这两个标志为的默认值为<code>true</code>。但是对于插件作者来说，应该根据需要设置值，否则可能会出现解析错误。</p>
+<h2 id="自定义配置"><a href="#自定义配置" class="headerlink" title="自定义配置"></a>自定义配置</h2><p>自定义配置可用于分离用于不同目的的依赖，以形成不同的依赖域。</p>
+<p>假设你想声明对Jasper Ant任务的依赖关系，以便预编译JSP文件，但这些文件不应该最终出现在用于编译源代码的类路径中。通过自定义配置可以轻松实现此类需求，如下面例子</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    jasper</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    jasper <span class="string">'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.2'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task preCompileJsps &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        ant.taskdef(<span class="string">classname:</span> <span class="string">'org.apache.jasper.JspC'</span>,</span><br><span class="line"><span class="symbol">                    name:</span> <span class="string">'jasper'</span>,</span><br><span class="line"><span class="symbol">                    classpath:</span> configurations.jasper.asPath)</span><br><span class="line">        ant.jasper(<span class="string">validateXml:</span> <span class="literal">false</span>,</span><br><span class="line"><span class="symbol">                   uriroot:</span> file(<span class="string">'src/main/webapp'</span>),</span><br><span class="line"><span class="symbol">                   outputDir:</span> file(<span class="string">"$buildDir/compiled-jsps"</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>项目的配置由<code>configurations</code>对象管理。</p>
+<p>关于依赖配置就先到这里吧，下一篇介绍不同类型的依赖，如文件依赖，module依赖等</p>
+]]></content>
+      <categories>
+        <category>Gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala函数式编程</title>
+    <url>/2018/07/21/scala%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p>从java转向scala已经有一段时间了，虽然平时写代码问题不大，但是因为面向对象编程已经根深蒂固了，一直对函数式编程理解不是很到位，scala虽然是多范式编程语言，但是官方还是鼓励开发者使用函数式编程的，所以很有必要仔细学习并记录一下</p>
+<h2 id="什么是函数式"><a href="#什么是函数式" class="headerlink" title="什么是函数式"></a>什么是函数式</h2><p>函数式编程，不是某一种语言的特性，而是诸多编程思想(如命令式，面向对象等)中的一种。对于它的解释，引用<a href="(http://www.10tiao.com/html/557/201609/2652725732/1.html)">王宏江-Scala中的函数式特性</a>中的一段话</p>
+<blockquote>
+<p>图灵机，以及冯诺依曼对它的实现（冯诺依曼体系），从风格上被归为“命令式”，它的运算过程可以看作不断地修改内存来反映运算的结果，即用命令修改状态；而阿隆佐邱奇提出的 Lambda 演算，则是通过连续的运算（基于函数）得到最终结果。<br>基于Lambda演算的被归为函数式，在众多的函数式编程语言里，Scala的血缘继承自ML 和Haskell 最多。关于ML有本非常好的书《ML for the Working Programmer》，这本书里面提到:<strong>“函数式程序是跟值打交道的，而不是跟状态打交道的。它们的工具是表达式，而不是命令。”</strong></p>
+</blockquote>
+<h4 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h4><p>上面引文里，函数式程序的工具是表达式，那么什么是表达式呢？<br>表达式可以简单理解为有返回值的语句。在scala中只有表达式，因为在scala中任何语句都有返回值，而在java中则不是。如赋值语句在scala中是有返回值的，返回类型为Unit，而在java中赋值语句没有返回值<br>示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> var b = 1</span></span><br><span class="line">b: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = b = 3</span></span><br><span class="line">a: Unit = ()</span><br></pre></td></tr></table></figure>
+
+<p>变量b被重新赋值为3，赋值的结果类型为Unit，并且赋值给了a</p>
+<h4 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h4><p>函数式编程就是把计算机中的运算抽象为数学中的运算，程序中的函数和方法抽象为数学中的函数。如       </p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>):<span class="type">Int</span> = &#123;</span><br><span class="line">  <span class="number">3</span>X + <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">对应于数学中的</span><br><span class="line"></span><br><span class="line">f(<span class="type">X</span>) = <span class="number">3</span>X + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>函数的参数即为数学函数中的未知数(x或y等等)，整个运算过程封装在函数体中，并且不需要依赖除了参数外的其他数据，运算完成后返回运算的结果。  </p>
+<p>对于复杂的运算，抽象为多个函数的嵌套调用，整个运算的过程都是围绕函数进行的，摒弃了命令式编程中对状态的依赖，这也是为什么scala鼓励我们使用val不变量，而尽量少使用var变量</p>
+<p>最终整个应用程序都是由一个一个的函数组成</p>
+<p>为了支持函数式编程，scala中提供了很多函数特性，这些特性在<a href="../../23/scala中的函数/">scala中的函数那篇blog</a>里，简单罗列下</p>
+<ul>
+<li>引入了与其他类型地位平等的函数类型，函数可传递，可作为返回值</li>
+<li>对高阶函数的支持</li>
+<li>函数的部分应用</li>
+<li>函数柯里化</li>
+<li>函数嵌套</li>
+<li>闭包</li>
+</ul>
+<h2 id="函数式编程的特性"><a href="#函数式编程的特性" class="headerlink" title="函数式编程的特性"></a>函数式编程的特性</h2><p>关于函数式编程的特性可以参考<a href="http://www.ruanyifeng.com/blog/2012/04/functional_programming.html" target="_blank" rel="noopener">阮一峰-函数式编程初探</a></p>
+]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
+        <tag>函数式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala中的函数</title>
+    <url>/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>在各类blog及scala书籍中看到的关于函数最多的一句话是</p>
+<blockquote>
+<p>函数是一等公民</p>
+</blockquote>
+<p>可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它</p>
+<h2 id="scala函数基础"><a href="#scala函数基础" class="headerlink" title="scala函数基础"></a>scala函数基础</h2><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
+<li><p>匿名函数</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> (x: Int) =&gt; x + 1</span></span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
+
+<p>固定写法：左边是参数列表，中间符号=&gt;，右边是函数体<br>匿名函数无函数名，也无需给出函数的结果类型</p>
+</li>
+<li><p>函数字面量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = (x: Int) =&gt; x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(10)</span></span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
+
+<p>其中表达式有半部分为一个匿名函数，函数作为一个变量(或不变量)，用变量名+参数表方式调用，与普通方法的调用几乎相同。<br>** 需要注意的是函数字面量声明函数时不需要写出函数的返回值类型，函数体的最后一条表达式的结果会作为返回值返回 **</p>
+</li>
+<li><p>函数值<br>函数字面量与函数值的关系就像类与对象的关系。函数字面量其实就是一个实现了trait Function*的函数类，在运行时实例化了一个函数类，这个实例就是函数值</p>
+</li>
+</ul>
+<h4 id="函数的本质"><a href="#函数的本质" class="headerlink" title="函数的本质"></a>函数的本质</h4><p>scala不像java有基本类型与引用类型之分，scala中一切皆对象，包括函数也是对象。scala中定义了一系列trait，Function0 - Function22，其中0-22表示参数的个数(至于为什么是到22，理论上讲程序中不会出现多于22个参数的函数)。而函数正是Function<em>的实例。如<code>val f = (x: Int) =&gt; x + 1</code>其实就是Function1的实例。下面看下Function</em>的源码，以Function3为例</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** A function of 3 parameters.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function3</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, -<span class="type">T3</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  <span class="comment">/** Apply the body of this function to the arguments.</span></span><br><span class="line"><span class="comment">   *  @return   the result of function application.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">T1</span>, v2: <span class="type">T2</span>, v3: <span class="type">T3</span>): <span class="type">R</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a curried version of this function.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f(x1)(x2)(x3) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">T3</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; (x3: <span class="type">T3</span>) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a tupled version of this function: instead of 3 arguments,</span></span><br><span class="line"><span class="comment">   *  it accepts a single [[scala.Tuple3]] argument.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f((x1, x2, x3)) == f(Tuple3(x1, x2, x3)) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">tupled</span></span>: <span class="type">Tuple3</span>[<span class="type">T1</span>, <span class="type">T2</span>, <span class="type">T3</span>] =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Tuple3</span>(x1, x2, x3) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>() = <span class="string">"&lt;function3&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到其中有一个apply方法(先忽略其他方法)，接受三个泛型参数，所以当我们调用<code>f(1)</code>时，其实是调用了Function1实例的apply方法。</p>
+<h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>在学习过程中，还有一点很困扰，就是我们在类中用def定义的是不是函数，如果不是函数，它又是什么，跟函数又有什么区别呢？<br>首先呢使用def 关键字定义的是方法，不是函数，虽然在实际应用中几乎没有差别，但还是需要了解两者的不同的    </p>
+<p>** 方法 **<br>定义在类中，作为某个对象的成员方法，使用def关键字定义</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def a(x: Int):Int = x + 1</span></span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
+
+<p>** 两者的区别 **</p>
+<ul>
+<li>方法使用def关键字定义，而函数不用(函数使用val/var或干脆匿名)</li>
+<li>方法是类的一部分，函数是对象可以赋值给一个val/var</li>
+<li>函数作为对象可以像任何其他数据类型一样被传递和操作，而方法不行，如果想要传递方法，则需要把方法转换为函数</li>
+<li>定义方法时，如果没有参数，则参数表可以省略不写(即方法名后不写())，而函数不行</li>
+<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(x: Int):Int =&gt; x + 1</span></span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>** 两者的转换 **</p>
+<ul>
+<li><p>第一种情况，方法直接转为函数<br>不能将方法直接声明为一个val/var，如下面的写法会编译错误</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m</span></span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
+
+<p>正确写法</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m _</span></span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
+
+<p>这个转换的其实是使用了部分应用(Partial Applied Function)，下面将会讲到</p>
+</li>
+<li><p>第二种情况，需要函数的地方使用方法<br>这种情况下不需要使用下划线，方法会被自动转换为函数，称之为eta转换。关于eta-expansion与eta-conversion的解释可以参考<a href="http://hongjiang.info/scala-eta-conversion/" target="_blank" rel="noopener">王宏江-scala中的eta-conversion</a>与<a href="https://hongjiang.info/eta-conversion-and-eta-expansion/" target="_blank" rel="noopener">王宏江-再谈eta-conversion与eta-expansion</a></p>
+</li>
+</ul>
+<h2 id="scala函数进阶"><a href="#scala函数进阶" class="headerlink" title="scala函数进阶"></a>scala函数进阶</h2><h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><p>引用<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>中高阶函数的定义</p>
+<blockquote>
+<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：    </p>
+</blockquote>
+<ul>
+<li>接受一个或多个函数作为输入    </li>
+<li>输出一个函数    </li>
+</ul>
+<p>定义应该很容易理解，也就是函数可以接受另一个函数作为参数，或者函数的结果类型为函数类型。    </p>
+<ul>
+<li><p>第一种：如数学中的函数<code>f(x) = x + 1</code>， <code>g(x) = x * 2</code>，则<code>f(g(x)) = (x * 2) + 1</code>, 即为高阶函数。用代码实现即为</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>) = x * <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, g: <span class="type">Int</span> =&gt; <span class="type">Int</span>) = g(x) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二种：结果类型为函数类型</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>):(<span class="type">Int</span> =&gt; <span class="type">Int</span>) = &#123;</span><br><span class="line">  <span class="keyword">val</span> k = x * <span class="number">2</span></span><br><span class="line">  (y: <span class="type">Int</span>) =&gt; y + k + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h4><p>先看下代码如何实现函数的部分应用吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int, z: Int) = x + y + z</span></span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> a(1,2,3)</span></span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = sum(1, _: Int, _: Int)</span></span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> b(2,3)</span></span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中出现了两种写法</p>
+<ul>
+<li>写法一<br><code>val a = sum _</code><br>这行代码表示sum方法的三个参数都为给出，整个参数表都用占位符<code>_</code>代替，所以这行代码的效果其实就是讲方法sum转换为了函数a。与之相同的写法还有<br><code>val a = sum(_)</code></li>
+<li>写法二<br><code>val b = sum(1, _: Int, _: Int)</code><br>这行代码表示，已知三个参数中的x，y和z未给出，用占位符<code>_</code>代替，最后返回一个包含了两个参数的函数b    </li>
+</ul>
+<p>部分应用从数学角度理解比较容易，如上面例子中的sum，其实对应于数学中的<code>sum(x,y,z) = x + y + z</code>，这是一个三元函数(既有三个未知数)，而写法二对sum的部分应用，相当于我们现在得知<code>x = 1</code>，则带入函数得<code>sum(y,z) = 1 + y + z</code>，也就是函数f消去了未知元x。** 整体来看函数的部分应用其实就是数学中的消元。 ** 而写法是对未消去任何参数的一种简写</p>
+<h4 id="函数的柯里化"><a href="#函数的柯里化" class="headerlink" title="函数的柯里化"></a>函数的柯里化</h4><p>在scala中函数函数可以有多个参数列表，而函数柯里化就是将函数的多参数列表转换为多个多参数列表。写法如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int) = x + y</span></span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = a.curried</span></span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
+
+<p>柯里化是通过调用函数对象的curried方法实现的。也就是说调用的是Function*中的curried方法(Function2-Function22拥有curried方法，Function0及Function1没有，因为无参函数和但参函数不需要也不能柯里化)，以Function2为例，我们看下源码的实现</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function2</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; apply(x1, x2)</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>curried的实现是将一个多参函数转换为一个单参函数的函数链，对于上面的例子来说就是把<code>sum(x,y)</code>转换成了<code>sum(x)(y)</code>，<code>sum(1)(2)</code>也就是对两个单参函数的依次调用，而<code>sum(1)</code>或者<code>sum(2)</code>其实相当于对sum函数的部分应用，返回值是一个单参函数</p>
+<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>引用别人blog中对闭包的定义</p>
+<blockquote>
+<p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。</p>
+</blockquote>
+<p>示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> var more = 1</span></span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val add = (i: Int) =&gt; i + more</span></span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
+
+<p>上面例子中add函数的计算依赖于自由变量more，也就是闭包了。闭包很像函数字面量，不同的是，闭包运算的过程不只依赖于输入参数，还需要依赖函数之外的一个或多个自由变量。</p>
+<p>关于闭包的详细解释可以参考<a href="https://zhuanlan.zhihu.com/p/21346046" target="_blank" rel="noopener">知乎-什么是闭包</a>，引用博文中的总结</p>
+<blockquote>
+<p>最简洁、直击要害的回答，我能想到的分别有这么三句（版权属于 ：</p>
+</blockquote>
+<ul>
+<li>闭包是一个有状态（不消失的私有数据）的函数。</li>
+<li>闭包是一个有记忆的函数。</li>
+<li>闭包相当于一个只有一个方法的紧凑对象（a compact object）。</li>
+</ul>
+<p>上面这三句话是等价的</p>
+<h4 id="嵌套函数"><a href="#嵌套函数" class="headerlink" title="嵌套函数"></a>嵌套函数</h4><p>scala允许在函数内部定义函数，称之为局部函数。它的作用域仅限于外部函数，其他位置无法访问到内部函数，可以达到控制访问的效果<br>示例</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> f = (x:<span class="type">Int</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">val</span> innerAdd = (i: <span class="type">Int</span>) =&gt; i + <span class="number">1</span></span><br><span class="line">  innerAdd(x) + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>关于scala中的函数，就先写这么多吧，等到后面开发应用到其他的知识，在作补充。关于函数的部分应用和柯里化的实际意义，在<a href="../../21/scala函数式编程/">scala函数式编程</a>那篇里写出来<br>，这里就不写了</p>
+]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>什么是协程？</title>
     <url>/2020/05/05/coroutine/</url>
     <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
@@ -867,85 +1133,6 @@
       </categories>
       <tags>
         <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Gradle是什么</title>
-    <url>/2020/07/17/What-is-Gradle/</url>
-    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性    </p>
-<ul>
-<li><p>高效率</p>
-<p>  Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）<br>  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的运行效率</p>
-</li>
-<li><p>基于JVM</p>
-<p>  Gradle是运行在JVM之上了（因此没有了跨平台的问题），所以用户需要安装JDK才能使用。对熟悉Java平台的用户来说这是一项福利，因为可以使用标准Java Apis实现构建逻辑，如自定义各种任务类型和插件<br>  虽然Gradle基于JVM，但这并不意味着Gradle只能构建java项目，它甚至可以用来构建native项目</p>
-</li>
-<li><p>约定</p>
-<p>  Gradle借鉴了Maven的经验，通过实现约定使常见类型的项目(如Java项目)变得更容易构建。 使用适当的插件，您可以很容易地为许多项目生成精简的构建脚本。 但是这些约定并不会不限制你：Gradle允许你覆盖它们，添加自己的任务，并对你的基于约定的构建进行许多其他定制。</p>
-</li>
-<li><p>良好的可扩展性</p>
-<p>  你可以很容易地扩展Gradle以提供自己的任务类型，甚至构建模型。 有关这方面的示例，请参阅Android构建支持：它添加了许多新的构建概念，如风格和构建类型。</p>
-</li>
-<li><p>主流IDE均支持Gradle</p>
-<p>  许多主流的IDE均支持Gradle，如Android Studio，IntelliJ IDEA，Eclipse，NetBeans等</p>
-</li>
-<li><p>构建过程可视化</p>
-<p>  构建过程中构建扫描器会生成大量的日志，这些日志可用于定位构建问题。并能很好的反应构建的性能问题。在你构建发生问题咨询别人时，可以将这些构建日志分享给他，以便于定位问题</p>
-</li>
-</ul>
-<h2 id="关于Gradle你需要知道的五件事"><a href="#关于Gradle你需要知道的五件事" class="headerlink" title="关于Gradle你需要知道的五件事"></a>关于Gradle你需要知道的五件事</h2><p>Gradle是一款灵活且强大的构建工具，但是第一次使用它时，你可能会觉得很难上手。当你理解了以下核心原则，你会觉得Gradle变得简单很多，并且你会在不知不觉中熟练使用它</p>
-<h4 id="1-Gradle是一款通用构建工具"><a href="#1-Gradle是一款通用构建工具" class="headerlink" title="1. Gradle是一款通用构建工具"></a>1. Gradle是一款通用构建工具</h4><p>Gradle可用于构建任何软件，因为它对你尝试构建的内容或应该如何构建几乎没有任何假设。一个最值得注意的限制是，依赖管理模块目前只支持Maven、Ivy的兼容仓库以及文件系统    </p>
-<p>这并不意味着需要做大量的工作才能创建一个构建。 Gradle通过插件添加了一层约定和预构建的功能，使得构建常见类型的项目(比如Java库)变得很容易。 你甚至可以创建和发布自定义插件来封装你自己的约定和构建功能。</p>
-<h4 id="2-核心的model基于task"><a href="#2-核心的model基于task" class="headerlink" title="2. 核心的model基于task"></a>2. 核心的model基于task</h4><p>Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务</p>
-<p>下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示</p>
-<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="DAG示例图">
-
-<p>几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。</p>
-<p>任务的组成:</p>
-<ul>
-<li>操作 - 执行某些操作，如文件复制或编译源代码等</li>
-<li>输入 - 操作需要用到的值、文件或目录等</li>
-<li>输出 - 操作修改或生成的文件或目录等</li>
-</ul>
-<p>实际上，任务的组成完全取决于task需要执行什么操作。某些task甚至没有action，如标准的生命周期task（方便起见仅仅将多个任务整合在一起而存在）</p>
-<p>另外需要注意的是：Gradle的增量构建支持是十分强大且可靠的，所以为了保持构建的高效运行，在不必要的情况下不要执行clean task</p>
-<h4 id="Gradle有几个固定的构建阶段"><a href="#Gradle有几个固定的构建阶段" class="headerlink" title="Gradle有几个固定的构建阶段"></a>Gradle有几个固定的构建阶段</h4><p>理解Gradle分三个阶段评估和执行构建脚本是很重要的</p>
-<ol>
-<li><p>初始化阶段</p>
-<p>为构建设置环境，决定那些project需要参与构建</p>
-</li>
-<li><p>配置阶段</p>
-<p>构造并配置生成的task图，然后根据用户要运行的task确定需要运行哪些task，以及task运行的顺序</p>
-</li>
-<li><p>执行阶段</p>
-<p>运行配置阶段结束时输出的任务</p>
-</li>
-</ol>
-<p>以上这三个阶段组成了构建的生命周期<br>设计良好的构建脚本主要由声明性配置组成，而不是命令性逻辑。在配置阶段对配置项进行评估是很容易理解的。即便如此，很多构建有不少工作（经过评估后在执行阶段）需要做，如通过doLast和doFirst代码块。这一点很重要，因为在配置阶段评估的代码不会看到在执行阶段发生的更改   </p>
-<p>配置阶段另一个非常重要的方面是，每次运行构建时都会对其中涉及的所有内容进行评估。这就是为什么最佳实践是避免在配置阶段做过多工作的原因， 构建扫描器可以帮助你识别这些热点，以及其他功能</p>
-<h4 id="Gradle的扩展方式不止一种"><a href="#Gradle的扩展方式不止一种" class="headerlink" title="Gradle的扩展方式不止一种"></a>Gradle的扩展方式不止一种</h4><p>如果你只用Gradle内建bundle就能构建你的应用，那是极好的，但这几乎不可能。因为大多数构建都有一些特殊需求，这意味着你需要添加自定义构建逻辑  </p>
-<p>Gradle提供了几种机制用以对其进行扩展</p>
-<ul>
-<li>自定义任务类型<br>当你需要执行的操作现有的构建任务满足不了，你可以实现一个你自己的任务类型。通常，最好将自定义任务类型的源文件放在buildSrc目录或打包在插件中。 然后，你就可以像使用Gradle提供的任何任务类型一样使用自定义的任务类型</li>
-<li>自定义任务操作<br>你可以在一个任务的执行前后附加上自定义构建逻辑（通过使用Task.doFirst(),Task.doLast()方法）</li>
-<li>为project和task添加额外属性<br>可以为project或task添加自己的属性，后续你可以在自己的自定义操作或其他任何构建逻辑中使用这些属性。额外属性甚至可以用于那些不是由你创建的task（如Gradle核心插件创建的task）</li>
-<li>自定义约定<br>约定可以很大程度上简化构建，这样用户可以更容易理解并使用他们。 这可以在使用标准项目结构和命名约定的构建中看到，比如Java构建。 你可以编写自己的插件来提供约定-它们只需要为构建的相关方面配置默认值。</li>
-<li>自定义model<br>Gradle允许你在任务、文件和依赖项配置之外的构建中引入新概念。你可以在大多数语言插件中看到这一点，他们将source sets的概念添加到构建中。对构建过程的适当建模可以极大的提高构建的易用性和效率</li>
-</ul>
-<h4 id="构建脚本按照Api进行操作"><a href="#构建脚本按照Api进行操作" class="headerlink" title="构建脚本按照Api进行操作"></a>构建脚本按照Api进行操作</h4><p>可以很容易将Gradle构建脚本视为可执行代码，因为他们本身就是可执行代码。实现细节：设计良好的构建脚本描述构建软件需要哪些步骤，而不是描述这些步骤如何完成工作，这是自定义任务类型及插件的职责</p>
-<blockquote>
-<p>有一种常见的误解，认为Gradle的强大和灵活性来自于它的构建脚本是代码这一事实。 这与事实大相径庭。 提供强大功能的是底层模型和API。 正如我们在最佳实践中建议的那样，你应该避免在构建脚本中放置太多(如果有的话)命令性逻辑。</p>
-</blockquote>
-<p>然而，在一种场景中，将构建脚本视为可执行代码是很有用的：理解构建脚本语法如何映射到Gradle API。API文档（由Javadocs和Groovy DSL Reference组成）列出了方法和属性，并引用了闭包和操作。这些在构建脚本上文中意味着什么呢？查看Groovy Build Script Primer了解该问题的答案，这样您就可以有效地使用API文档</p>
-<blockquote>
-<p>由于Gradle运行在JVM之上，所以构建脚本可以使用标准的Java API。Groovy构建脚本可以使用Groovy API，当然Kotlin构建脚本可以使用Kotlin API</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Gradle</category>
-      </categories>
-      <tags>
-        <tag>gradle</tag>
       </tags>
   </entry>
   <entry>
@@ -1085,123 +1272,6 @@
 ]]></content>
       <tags>
         <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>scala中的函数</title>
-    <url>/2018/07/23/scala%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>在各类blog及scala书籍中看到的关于函数最多的一句话是</p>
-<blockquote>
-<p>函数是一等公民</p>
-</blockquote>
-<p>可以看出函数在scala中举足轻重的地位，因此很有必要去全面的掌握它</p>
-<h2 id="scala函数基础"><a href="#scala函数基础" class="headerlink" title="scala函数基础"></a>scala函数基础</h2><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
-<li><p>匿名函数</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> (x: Int) =&gt; x + 1</span></span><br><span class="line">res0: Int =&gt; Int = $$Lambda$1026/1792711692@7412ed6b</span><br></pre></td></tr></table></figure>
-
-<p>固定写法：左边是参数列表，中间符号=&gt;，右边是函数体<br>匿名函数无函数名，也无需给出函数的结果类型</p>
-</li>
-<li><p>函数字面量</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = (x: Int) =&gt; x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(10)</span></span><br><span class="line">res0: Int = 11</span><br></pre></td></tr></table></figure>
-
-<p>其中表达式有半部分为一个匿名函数，函数作为一个变量(或不变量)，用变量名+参数表方式调用，与普通方法的调用几乎相同。<br>** 需要注意的是函数字面量声明函数时不需要写出函数的返回值类型，函数体的最后一条表达式的结果会作为返回值返回 **</p>
-</li>
-<li><p>函数值<br>函数字面量与函数值的关系就像类与对象的关系。函数字面量其实就是一个实现了trait Function*的函数类，在运行时实例化了一个函数类，这个实例就是函数值</p>
-</li>
-</ul>
-<h4 id="函数的本质"><a href="#函数的本质" class="headerlink" title="函数的本质"></a>函数的本质</h4><p>scala不像java有基本类型与引用类型之分，scala中一切皆对象，包括函数也是对象。scala中定义了一系列trait，Function0 - Function22，其中0-22表示参数的个数(至于为什么是到22，理论上讲程序中不会出现多于22个参数的函数)。而函数正是Function<em>的实例。如<code>val f = (x: Int) =&gt; x + 1</code>其实就是Function1的实例。下面看下Function</em>的源码，以Function3为例</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** A function of 3 parameters.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function3</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, -<span class="type">T3</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  <span class="comment">/** Apply the body of this function to the arguments.</span></span><br><span class="line"><span class="comment">   *  @return   the result of function application.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">T1</span>, v2: <span class="type">T2</span>, v3: <span class="type">T3</span>): <span class="type">R</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a curried version of this function.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f(x1)(x2)(x3) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">T3</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; (x3: <span class="type">T3</span>) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Creates a tupled version of this function: instead of 3 arguments,</span></span><br><span class="line"><span class="comment">   *  it accepts a single [[scala.Tuple3]] argument.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  @return   a function `f` such that `f((x1, x2, x3)) == f(Tuple3(x1, x2, x3)) == apply(x1, x2, x3)`</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">tupled</span></span>: <span class="type">Tuple3</span>[<span class="type">T1</span>, <span class="type">T2</span>, <span class="type">T3</span>] =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Tuple3</span>(x1, x2, x3) =&gt; apply(x1, x2, x3)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>() = <span class="string">"&lt;function3&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到其中有一个apply方法(先忽略其他方法)，接受三个泛型参数，所以当我们调用<code>f(1)</code>时，其实是调用了Function1实例的apply方法。</p>
-<h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>在学习过程中，还有一点很困扰，就是我们在类中用def定义的是不是函数，如果不是函数，它又是什么，跟函数又有什么区别呢？<br>首先呢使用def 关键字定义的是方法，不是函数，虽然在实际应用中几乎没有差别，但还是需要了解两者的不同的    </p>
-<p>** 方法 **<br>定义在类中，作为某个对象的成员方法，使用def关键字定义</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def a(x: Int):Int = x + 1</span></span><br><span class="line">a: (x: Int)Int</span><br></pre></td></tr></table></figure>
-
-<p>** 两者的区别 **</p>
-<ul>
-<li>方法使用def关键字定义，而函数不用(函数使用val/var或干脆匿名)</li>
-<li>方法是类的一部分，函数是对象可以赋值给一个val/var</li>
-<li>函数作为对象可以像任何其他数据类型一样被传递和操作，而方法不行，如果想要传递方法，则需要把方法转换为函数</li>
-<li>定义方法时，如果没有参数，则参数表可以省略不写(即方法名后不写())，而函数不行</li>
-<li>定义函数时参数列表后不能声明结果类型，如下面的写法会编译错误<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> f(x: Int):Int =&gt; x + 1</span></span><br><span class="line">&lt;console&gt;:1: error: ';' expected but '=&gt;' found.</span><br><span class="line">       f(x: Int):Int =&gt; x + 1</span><br><span class="line">                     ^</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>** 两者的转换 **</p>
-<ul>
-<li><p>第一种情况，方法直接转为函数<br>不能将方法直接声明为一个val/var，如下面的写法会编译错误</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m</span></span><br><span class="line">&lt;console&gt;:12: error: missing argument list for method m</span><br><span class="line">Unapplied methods are only converted to functions when a function type is expected.</span><br><span class="line">You can make this conversion explicit by writing `m _` or `m(_)` instead of `m`.</span><br><span class="line">       val f = m</span><br></pre></td></tr></table></figure>
-
-<p>正确写法</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def m(x: Int):Int = x + 1</span></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val f = m _</span></span><br><span class="line">f: Int =&gt; Int = $$Lambda$1069/727861082@4990b335</span><br></pre></td></tr></table></figure>
-
-<p>这个转换的其实是使用了部分应用(Partial Applied Function)，下面将会讲到</p>
-</li>
-<li><p>第二种情况，需要函数的地方使用方法<br>这种情况下不需要使用下划线，方法会被自动转换为函数，称之为eta转换。关于eta-expansion与eta-conversion的解释可以参考<a href="http://hongjiang.info/scala-eta-conversion/" target="_blank" rel="noopener">王宏江-scala中的eta-conversion</a>与<a href="https://hongjiang.info/eta-conversion-and-eta-expansion/" target="_blank" rel="noopener">王宏江-再谈eta-conversion与eta-expansion</a></p>
-</li>
-</ul>
-<h2 id="scala函数进阶"><a href="#scala函数进阶" class="headerlink" title="scala函数进阶"></a>scala函数进阶</h2><h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><p>引用<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>中高阶函数的定义</p>
-<blockquote>
-<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：    </p>
-</blockquote>
-<ul>
-<li>接受一个或多个函数作为输入    </li>
-<li>输出一个函数    </li>
-</ul>
-<p>定义应该很容易理解，也就是函数可以接受另一个函数作为参数，或者函数的结果类型为函数类型。    </p>
-<ul>
-<li><p>第一种：如数学中的函数<code>f(x) = x + 1</code>， <code>g(x) = x * 2</code>，则<code>f(g(x)) = (x * 2) + 1</code>, 即为高阶函数。用代码实现即为</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>) = x * <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, g: <span class="type">Int</span> =&gt; <span class="type">Int</span>) = g(x) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>第二种：结果类型为函数类型</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(x: <span class="type">Int</span>):(<span class="type">Int</span> =&gt; <span class="type">Int</span>) = &#123;</span><br><span class="line">  <span class="keyword">val</span> k = x * <span class="number">2</span></span><br><span class="line">  (y: <span class="type">Int</span>) =&gt; y + k + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h4><p>先看下代码如何实现函数的部分应用吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int, z: Int) = x + y + z</span></span><br><span class="line">sum: (x: Int, y: Int, z: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int, Int) =&gt; Int = $$Lambda$1055/565627330@309cedb6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> a(1,2,3)</span></span><br><span class="line">res0: Int = 6</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = sum(1, _: Int, _: Int)</span></span><br><span class="line">b: (Int, Int) =&gt; Int = $$Lambda$1060/605472344@6d5f4900</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> b(2,3)</span></span><br><span class="line">res1: Int = 6</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中出现了两种写法</p>
-<ul>
-<li>写法一<br><code>val a = sum _</code><br>这行代码表示sum方法的三个参数都为给出，整个参数表都用占位符<code>_</code>代替，所以这行代码的效果其实就是讲方法sum转换为了函数a。与之相同的写法还有<br><code>val a = sum(_)</code></li>
-<li>写法二<br><code>val b = sum(1, _: Int, _: Int)</code><br>这行代码表示，已知三个参数中的x，y和z未给出，用占位符<code>_</code>代替，最后返回一个包含了两个参数的函数b    </li>
-</ul>
-<p>部分应用从数学角度理解比较容易，如上面例子中的sum，其实对应于数学中的<code>sum(x,y,z) = x + y + z</code>，这是一个三元函数(既有三个未知数)，而写法二对sum的部分应用，相当于我们现在得知<code>x = 1</code>，则带入函数得<code>sum(y,z) = 1 + y + z</code>，也就是函数f消去了未知元x。** 整体来看函数的部分应用其实就是数学中的消元。 ** 而写法是对未消去任何参数的一种简写</p>
-<h4 id="函数的柯里化"><a href="#函数的柯里化" class="headerlink" title="函数的柯里化"></a>函数的柯里化</h4><p>在scala中函数函数可以有多个参数列表，而函数柯里化就是将函数的多参数列表转换为多个多参数列表。写法如下</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> def sum(x: Int, y: Int) = x + y</span></span><br><span class="line">sum: (x: Int, y: Int)Int</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = sum _</span></span><br><span class="line">a: (Int, Int) =&gt; Int = $$Lambda$1075/571435580@5eb041b5</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val b = a.curried</span></span><br><span class="line">b: Int =&gt; (Int =&gt; Int) = scala.Function2$$Lambda$1076/1263872787@524dd373</span><br></pre></td></tr></table></figure>
-
-<p>柯里化是通过调用函数对象的curried方法实现的。也就是说调用的是Function*中的curried方法(Function2-Function22拥有curried方法，Function0及Function1没有，因为无参函数和但参函数不需要也不能柯里化)，以Function2为例，我们看下源码的实现</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function2</span>[-<span class="type">T1</span>, -<span class="type">T2</span>, +<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">AnyRef</span> </span>&#123; self =&gt;</span><br><span class="line">  ...</span><br><span class="line">  <span class="meta">@annotation</span>.unspecialized <span class="function"><span class="keyword">def</span> <span class="title">curried</span></span>: <span class="type">T1</span> =&gt; <span class="type">T2</span> =&gt; <span class="type">R</span> = &#123;</span><br><span class="line">    (x1: <span class="type">T1</span>) =&gt; (x2: <span class="type">T2</span>) =&gt; apply(x1, x2)</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>curried的实现是将一个多参函数转换为一个单参函数的函数链，对于上面的例子来说就是把<code>sum(x,y)</code>转换成了<code>sum(x)(y)</code>，<code>sum(1)(2)</code>也就是对两个单参函数的依次调用，而<code>sum(1)</code>或者<code>sum(2)</code>其实相当于对sum函数的部分应用，返回值是一个单参函数</p>
-<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>引用别人blog中对闭包的定义</p>
-<blockquote>
-<p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。</p>
-</blockquote>
-<p>示例</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> var more = 1</span></span><br><span class="line">more: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val add = (i: Int) =&gt; i + more</span></span><br><span class="line">add: Int =&gt; Int = $$Lambda$1045/640294829@6be6931f</span><br></pre></td></tr></table></figure>
-
-<p>上面例子中add函数的计算依赖于自由变量more，也就是闭包了。闭包很像函数字面量，不同的是，闭包运算的过程不只依赖于输入参数，还需要依赖函数之外的一个或多个自由变量。</p>
-<p>关于闭包的详细解释可以参考<a href="https://zhuanlan.zhihu.com/p/21346046" target="_blank" rel="noopener">知乎-什么是闭包</a>，引用博文中的总结</p>
-<blockquote>
-<p>最简洁、直击要害的回答，我能想到的分别有这么三句（版权属于 ：</p>
-</blockquote>
-<ul>
-<li>闭包是一个有状态（不消失的私有数据）的函数。</li>
-<li>闭包是一个有记忆的函数。</li>
-<li>闭包相当于一个只有一个方法的紧凑对象（a compact object）。</li>
-</ul>
-<p>上面这三句话是等价的</p>
-<h4 id="嵌套函数"><a href="#嵌套函数" class="headerlink" title="嵌套函数"></a>嵌套函数</h4><p>scala允许在函数内部定义函数，称之为局部函数。它的作用域仅限于外部函数，其他位置无法访问到内部函数，可以达到控制访问的效果<br>示例</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> f = (x:<span class="type">Int</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">val</span> innerAdd = (i: <span class="type">Int</span>) =&gt; i + <span class="number">1</span></span><br><span class="line">  innerAdd(x) + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>关于scala中的函数，就先写这么多吧，等到后面开发应用到其他的知识，在作补充。关于函数的部分应用和柯里化的实际意义，在<a href="../../21/scala函数式编程/">scala函数式编程</a>那篇里写出来<br>，这里就不写了</p>
-]]></content>
-      <categories>
-        <category>Scala</category>
-      </categories>
-      <tags>
-        <tag>scala</tag>
       </tags>
   </entry>
 </search>

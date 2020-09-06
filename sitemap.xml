@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hcendless.ink/2020/09/03/what-is-dependency-configurations/</loc>
+    
+    <lastmod>2020-09-06T08:55:02.906Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hcendless.ink/2020/08/22/Gradle-dependency-management/</loc>
     
     <lastmod>2020-09-02T13:09:22.417Z</lastmod>
