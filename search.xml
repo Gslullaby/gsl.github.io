@@ -112,155 +112,176 @@
       </tags>
   </entry>
   <entry>
-    <title>构建的基础知识</title>
-    <url>/2020/08/08/Gradle-Script-Basics/</url>
-    <content><![CDATA[<h2 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h2><p>在Gradle生命周期中，我们曾提及构建脚本其实是构建配置脚本。脚本执行，其实就是对一个特定类型对象的配置。例如，build.gradle脚本执行，就是对<code>Project</code>对象的配置。所配置的对象称之为构建脚本的代理对象。下图展示了脚本与代理对象的对应关系</p>
-<img src="/2020/08/08/Gradle-Script-Basics/script_delegate.jpg" title="脚本与代理对象对应关系">
+    <title>Gradle中的三种依赖方式</title>
+    <url>/2020/09/06/different-kind-of-dependencies/</url>
+    <content><![CDATA[<h2 id="Module依赖"><a href="#Module依赖" class="headerlink" title="Module依赖"></a>Module依赖</h2><p>Module依赖方式是最常用的依赖方式。即从仓库中引用一个Module。如下面例子</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">// map方式声明</span></span><br><span class="line">    runtimeOnly <span class="string">group:</span> <span class="string">'org.springframework'</span>, <span class="string">name:</span> <span class="string">'spring-core'</span>, <span class="string">version:</span> <span class="string">'2.5'</span></span><br><span class="line">    <span class="comment">// string方式声明</span></span><br><span class="line">    runtimeOnly <span class="string">'org.springframework:spring-core:2.5'</span>,</span><br><span class="line">            <span class="string">'org.springframework:spring-aop:2.5'</span></span><br><span class="line">    runtimeOnly(</span><br><span class="line">        [<span class="string">group:</span> <span class="string">'org.springframework'</span>, <span class="string">name:</span> <span class="string">'spring-core'</span>, <span class="string">version:</span> <span class="string">'2.5'</span>],</span><br><span class="line">        [<span class="string">group:</span> <span class="string">'org.springframework'</span>, <span class="string">name:</span> <span class="string">'spring-aop'</span>, <span class="string">version:</span> <span class="string">'2.5'</span>]</span><br><span class="line">    )</span><br><span class="line">    runtimeOnly(<span class="string">'org.hibernate:hibernate:3.0.5'</span>) &#123;</span><br><span class="line">        transitive = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    runtimeOnly <span class="string">group:</span> <span class="string">'org.hibernate'</span>, <span class="string">name:</span> <span class="string">'hibernate'</span>, <span class="string">version:</span> <span class="string">'3.0.5'</span>, <span class="string">transitive:</span> <span class="literal">true</span></span><br><span class="line">    runtimeOnly(<span class="string">group:</span> <span class="string">'org.hibernate'</span>, <span class="string">name:</span> <span class="string">'hibernate'</span>, <span class="string">version:</span> <span class="string">'3.0.5'</span>) &#123;</span><br><span class="line">        transitive = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>在构建脚本中可以访问到代理对象的属性以及方法</p>
-<p>每个构建脚本的代理对象都实现了<code>Script</code>接口。该接口中定义的属性和方法在构建脚本中均可访问</p>
-<h4 id="构建脚本的结构"><a href="#构建脚本的结构" class="headerlink" title="构建脚本的结构"></a><strong>构建脚本的结构</strong></h4><p>构建脚本由0到多个语句及脚本代码块组成。语句可以包含方法调用，属性赋值，成员变量的定义等。脚本块是对一个接收一个闭包作为参数的方法调用。闭包可以看作是配置闭包，因为闭包的调用即为对相应代理对象的配置。</p>
-<p>下面是一些常用的顶层脚本块</p>
-<ul>
-<li><p><code>allprojects {}</code> </p>
+<p>如上面例子所示，有两种方式声明Module依赖：</p>
+<ol>
+<li>string方式</li>
+<li>map方式</li>
+</ol>
+<p>module依赖有一组API对依赖进行配置。API包含了一些属性及配置方法。使用string方式进行声明时，仅能使用API中的部分属性。但是map方式可以使用全部属性。</p>
 <blockquote>
-<p>配置当前project及其所有子project</p>
+<p>module依赖的解析方式<br>当声明了一项module依赖，Gradle会从声明的仓库中查找metadata文件（.module、.pom、ivy.xml）。如果找到了metadata文件，则进行解析并下载该module的artifact。若未找到则从Gradle 6.0开始，需要配置用于查找metadata的metadata源。</p>
 </blockquote>
-</li>
-<li><p><code>buildscript {}</code></p>
 <blockquote>
-<p>为当前project配置构建脚本的classpath</p>
+<p>在Maven中，一个module有且仅有一个artifact<br>但在Gradle和lvy中，一个module可以拥有多个artifact。每个artifact可以拥有一组不同的依赖</p>
 </blockquote>
-</li>
-<li><p><code>dependencies {}</code></p>
-<blockquote>
-<p>为当前project配置依赖（第三方lib等）</p>
-</blockquote>
-</li>
-<li><p><code>repositories {}</code></p>
-<blockquote>
-<p>为当前project配置资源库（下载依赖库的仓库，如jcenter等）</p>
-</blockquote>
-</li>
-<li><p><code>sourceSets {}</code></p>
-<blockquote>
-<p>为当前project配置源码及资源等（如Android中的java代码，资源文件等）</p>
-</blockquote>
-</li>
-<li><p><code>subprojects {}</code></p>
-<blockquote>
-<p>配置当前project的所有子project</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="几个核心类型"><a href="#几个核心类型" class="headerlink" title="几个核心类型"></a><strong>几个核心类型</strong></h4><ul>
-<li><p><code>Project</code></p>
-<blockquote>
-<p>该接口是从构建脚本中与Gradle交互的核心API。</p>
-</blockquote>
-</li>
-<li><p><code>Task</code></p>
-<blockquote>
-<p>Task代表一个原子操作，是构建的最小单位</p>
-</blockquote>
-</li>
-<li><p><code>Gradle</code></p>
-<blockquote>
-<p>表示对Gradle的调用</p>
-</blockquote>
-</li>
-<li><p><code>Settings</code></p>
-<blockquote>
-<p>声明了实例化和配置要参与构建的Project实例所需的配置</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="Prject与Task的关系"><a href="#Prject与Task的关系" class="headerlink" title="Prject与Task的关系"></a><strong>Prject与Task的关系</strong></h4><p>Gradle中的一切都建立在两个基本概念之上：project和task</p>
-<p>每个Gradle构建都由一个或多个Project组成。Project取决于要构建什么类型的项目。例如，project可能是JAR或web应用。也可能是其他项目输出的JAR打包成的ZIP等。项目也可以不是待构建的事物，也可以是待做任务，如部署应用至测试或生产环境。</p>
-<p>每个Project由一个或多个Task组成。任务即构建执行的原子操作。如编译指定的类，打一个JAR包，生成Javadoc或发布库至仓库等</p>
-<p>下面是一个单项目的示例，该但项目中定义了一些简单的任务</p>
-<h2 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h2><p>该接口中包含了与Gradle交互的主要API。在Project对象中，可以访问Gradle的所有特性</p>
-<h4 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a><strong>Lifecycle</strong></h4><p><code>build.gradle</code>文件与<code>Project</code>对象是一对一的关系。在构建初始化阶段，Gradle会为每个参与构建的项目创建一个Project对象。创建步骤如下：   </p>
-<ul>
-<li>首先为构建创建一个<code>Settings</code>对象</li>
-<li>分析<code>settings.gradle</code>脚本，并根据该脚本配置<code>Settings</code>对象</li>
-<li>使用配置好的<code>Settings</code>对象，创建参与构建的项目对应的<code>Project</code>对象</li>
-<li>最后，通过执行项目的<code>build.gradle</code>脚本来配置与之对应的<code>Project</code>对象。Project按广度优先顺序进行配置，即父Project先于子Project配置。不过可以通过调用<code>Project.evaluationDependsOnChildren()</code>或<code>Project.evaluationDependsOn(java.lang.String)</code>改变初始化顺序</li>
-</ul>
-<h4 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a><strong>Tasks</strong></h4><p><code>Project</code>本质上是<code>Task</code>对象的集合。通过调用<code>TaskContainer</code>的<code>create()</code>方法为<code>Project</code>添加任务，如<code>TaskContainer.create(java.lang.String)</code>。<code>TaskContainer</code>中提供了一些方法，用以查询已定义的<code>Task</code>，如<code>TaskCollection.getByName(java.lang.String)</code></p>
-<h4 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a><strong>Dependencies</strong></h4><p>project为了完成工作，通常需要某些依赖。同样的，project通常也会输出结果供其他project使用。依赖按配置分组，从仓库中上传下载。可以使用<code>Project.getConfigurations()</code>方法返回的<code>ConfigurationContainer</code>对象来管理配置。使用<code>Project.getDependencies()</code>方法返回的<code>DependencyHandler</code>对象管理依赖。使用<code>Project.getRepositories()</code>方法返回的<code>RepositoryHandler</code>对象管理仓库</p>
-<h4 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a><strong>Plugins</strong></h4><p>插件可用于构建的模块化以及重用project配置。使用<code>PluginAware.apply(java.util.Map)</code>方法或使用<code>PluginDependenciesSpec</code>来应用插件</p>
-<h4 id="Dynamic-Project-Properties"><a href="#Dynamic-Project-Properties" class="headerlink" title="Dynamic Project Properties"></a><strong>Dynamic Project Properties</strong></h4><p>Gradle执行<code>build.gradle</code>脚本来配置与之对应的<code>Project</code>对象。脚本中使用的任何属性及方法都是对<code>Project</code>代理对象的访问。也就是说，可以直接在脚本中使用<code>Project</code>接口的任一方法和属性。</p>
-<p>例如：</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">defaultTasks(<span class="string">'some-task'</span>)  <span class="comment">// Delegates to Project.defaultTasks()</span></span><br><span class="line">reportsDir = file(<span class="string">'reports'</span>) <span class="comment">// Delegates to Project.file() and the Java Plugin</span></span><br></pre></td></tr></table></figure>
+<h2 id="文件依赖"><a href="#文件依赖" class="headerlink" title="文件依赖"></a>文件依赖</h2><p>某些项目可能并不依赖于二进制资源库中的lib。而是将依赖托管到某个共享磁盘，或是把依赖与源码一起加入到vc（git，svn等）中。这种依赖即为文件依赖，文件依赖没有metadata（依赖传递信息，作者等信息）</p>
+<img src="/2020/09/06/different-kind-of-dependencies/dependency-management-file-dependencies.png" title="从本地文件系统或共享磁盘中解析文件依赖">
 
-<p>也可以通过<code>project</code>属性访问<code>Project</code>实例。某些情况下，以这种方式访问会使脚本更加清晰。如，可以使用<code>project.name</code>访问project的name，而不是使用直接用<code>name</code>属性</p>
-<p>project有5个属性域，用以搜索属性。在build文件中可以通过属性名或调用<code>Project.property(java.lang.string)</code>方法访问属性。下面是5个属性域：</p>
-<ul>
-<li><code>Project</code>对象本身。该域中包含了<code>Project</code>接口实现类中顶一个任何属性（拥有get&amp;set方法）。例如，<code>Project.getRootProject()</code>方法用以访问<code>rootProject</code>属性。属性的可读可写性取决于get/set方法的声明</li>
-<li>project的<em>额外(extra)</em>属性。每个project都维护了一个额外属性的map，属性名（任意）-&gt;属性值。额外属性均可读可写</li>
-<li>由插件引入的扩展。每个扩展相当于一个只读的属性，扩展名即属性名</li>
-<li>由插件引入的convention属性。插件可以通过Porject中的<code>Convention</code>对象向其中加入方法和属性。该域中属性的可读可写性取决于<code>Convention</code>对象</li>
-<li>project中的task。可以将task的name看作属性名对其进行访问。该域中的属性是只读的。例如，名为<code>compile</code>的task可以作为<code>compile</code>属性进行访问</li>
-<li>extra属性和convention属性是从项目的父级继承的，直到根项目。 该域中的的属性是只读的。</li>
-</ul>
-<p>当访问一个属性时，project按以上顺序从域中进行查找，如果未找到，则抛出异常</p>
-<h4 id="Extra-Properties"><a href="#Extra-Properties" class="headerlink" title="Extra Properties"></a><strong>Extra Properties</strong></h4><p>所有的extra属性都必须通过”ext”命名空间来定义。额外属性定义后，即可在所属对象中直接访问（可以是Project、Task或者sub-project），可以读取也可更改。下面是一个例子</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">project.ext.prop1 = <span class="string">"foo"</span></span><br><span class="line">task doStuff &#123;</span><br><span class="line">    ext.prop2 = <span class="string">"bar"</span></span><br><span class="line">&#125;</span><br><span class="line">subprojects &#123; ext.$&#123;prop3&#125; = <span class="literal">false</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>下例展示了分别从<code>ant</code>、<code>libs</code>和<code>tools</code>目录解析依赖</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    antContrib</span><br><span class="line">    externalLibs</span><br><span class="line">    deploymentTools</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    antContrib files(<span class="string">'ant/antcontrib.jar'</span>)</span><br><span class="line">    externalLibs files(<span class="string">'libs/commons-lang.jar'</span>, <span class="string">'libs/log4j.jar'</span>)</span><br><span class="line">    deploymentTools(fileTree(<span class="string">'tools'</span>) &#123; include <span class="string">'*.exe'</span> &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>通过”ext”读取extra属性</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">ext.isSnapshot = version.endsWith(<span class="string">"-SNAPSHOT"</span>)</span><br><span class="line"><span class="keyword">if</span> (isSnapshot) &#123;</span><br><span class="line">    <span class="comment">// do snapshot stuff</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上例所示，每项文件依赖都需要定义文件的在fs中的精确路径。</p>
+<blockquote>
+<p>需要注意的是<code>FileTree</code>中定义的文件的顺序是不稳定的。即使用<code>freeTree</code>声明文件依赖，最终的解析结果可能会不同，进而可能会影响到以此解析结果作为输出的任务的可缓存性。因此建议尽使用<code>files</code></p>
+</blockquote>
+<p>还可以使用某个任务的输出文件作为文件依赖的源，如下例</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation files(<span class="string">"$buildDir/classes"</span>) &#123;</span><br><span class="line">        <span class="comment">// 声明使用compile任务输出的文件作为源</span></span><br><span class="line">        builtBy <span class="string">'compile'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// compile任务，实际应用中会输出一系列文件</span></span><br><span class="line">task compile &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">'compiling classes'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试task，打印每个配置的编译classpath</span></span><br><span class="line">task list(<span class="string">dependsOn:</span> configurations.compileClasspath) &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println <span class="string">"classpath = $&#123;configurations.compileClasspath.collect &#123; File file -&gt; file.name &#125;&#125;"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="Dynamic-Methods"><a href="#Dynamic-Methods" class="headerlink" title="Dynamic Methods"></a><strong>Dynamic Methods</strong></h4><p>project同样由5个方法域，用以查找方法</p>
-<ul>
-<li><code>Project</code>对象本身</li>
-<li>build文件。build文件中可以定义方法，project从其中查找特定的方法。</li>
-<li>由插件引入的扩展。扩展可以看作一个接受一个闭包或<code>Action</code>作为参数的方法</li>
-<li>由插件引入的convention方法。插件可以通过project的<code>Convention</code>对象向其中添加属性和方法</li>
-<li>project中的task。每个Task都会拥有一个与Task同名的方法，该方法接受一个闭包或<code>Action</code>作为参数,并且使用传入的闭包关联到Task的<code>Task.configure(groovy.lang.Closure)</code>方法。例如，project有一个名为<code>compile</code>的方法，则一个<code>void compile(Closure ConfigureClosure)</code>方法会添加至project中</li>
-<li>继承自父Project的方法</li>
-<li>project中值为闭包的属性。闭包可以看作一个方法，直接传入参数调用</li>
-</ul>
-<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><p>前文中已经给出了Task的定义，以及Task与Project的关系，这里不再赘述。    </p>
-<p>下面介绍下Task的属性、创建、执行。以及Task之间的依赖关系的声明等</p>
-<h4 id="Task的组成"><a href="#Task的组成" class="headerlink" title="Task的组成"></a><strong>Task的组成</strong></h4><p>Task由一系列的<code>Action</code>组成。Task的执行，即为其中<code>Action</code>的执行（调用<code>Action.execute(T)</code>）。可以通过调用<code>Task.doFirst(org.gradle.api.Action)</code>或<code>Task.doLast(org.gradle.api.Action)</code>方法向Task中添加<code>Action</code>，Task中还有两个接受<code>groovy.lang.Closure</code>闭包作为参数的同名方法，同样可以向Task中添加Action。</p>
-<p>Task中的两个特殊异常，<code>StopActionException</code>和<code>StopExecutionException</code>。其中<code>StopActionException</code>会导致当前<code>Action</code>中止执行，转而执行下一个<code>Action</code>。而<code>StopExecutionException</code>会中止当前<code>Task</code>，转而执行下一个<code>Task</code>。可以通过抛出这两个异常来跳过某些执行错误的<code>Action</code>或<code>Task</code></p>
-<h4 id="Task之间的依赖关系"><a href="#Task之间的依赖关系" class="headerlink" title="Task之间的依赖关系"></a><strong>Task之间的依赖关系</strong></h4><p>一个Task的执行可能依赖于其他Task，也可能必须在某个Task执行完成后才能开始执行。Gradle会保证任务按照它们之间的依赖关系执行。</p>
-<p>下面几组方法可以声明Task间的依赖关系，每组中的两个方法是等效的。</p>
-<ul>
-<li><code>Task.dependsOn(java.lang.Object[])</code> 或 <code>Task.setDependsOn(java.lang.Iterable)</code></li>
-<li><code>Task.mustRunAfter(java.lang.Object[])</code> 或 <code>Task.setMustRunAfter(java.lang.Iterable</code></li>
-<li><code>Task.shouldRunAfter(java.lang.Object[])</code> 或 <code>Task.setShouldRunAfter(java.lang.Iterable)</code></li>
-</ul>
-<p>可以使用以下类型作为参数来指定任务间的依赖关系</p>
-<ul>
-<li><code>String</code>、<code>CharSequence</code>或<code>groovy.lang.GString</code>类型的任务路径或任务名。当千project的task的相对路径。这种方式可以引用其他project中的task</li>
-<li><code>Task</code>类型</li>
-<li><code>TaskDependency</code>类型</li>
-<li><code>TaskReference</code>类型</li>
-<li><code>Buildable</code>类型</li>
-<li><code>RegularFileProperty</code>或<code>DirectoryPerty</code>类型</li>
-<li><code>Provider&lt;T&gt;</code>类型。其中泛型为这里列出的任意类型之一</li>
-<li><code>Iterable</code>、<code>Collection</code>、<code>Map</code>或array类型。其中元素类型为这里列出的任意类型之一。其中元素最终可递归的转换为task</li>
-<li><code>Callable</code>类型。<code>call()</code>方法返回类型为这里列出的任意类型之一，并且最终可转换为task，返回值<code>null</code>会被视为空集合</li>
-<li>Groovy闭包<code>Closure</code>或Kotlin函数。闭包或函数返回类型为这里列出的任意类型之一，并且最终可转换为task，返回值<code>null</code>会被视为空集合</li>
-<li>其他类型会导致error</li>
-</ul>
-<h4 id="Task的动态属性"><a href="#Task的动态属性" class="headerlink" title="Task的动态属性"></a><strong>Task的动态属性</strong></h4><p><code>Task</code>有四个属性域。在构建文件中可以通过属性名直接访问属性，或通过调用<code>Task.property(java.lang.String)</code>方法访问属性。可以通过调用<code>Task.setProperty(java.lang.String, java.lang.Object)</code>方法改变属性值</p>
-<ul>
-<li><code>Task</code>对象本身。<code>Task</code>实现类中拥有get和set方法的字段即为属性。属性的读写性取决于get、set方法的声明</li>
-<li>通过插件添加至任务的扩展。每个扩展即为一个同名的属性</li>
-<li>通过插件引入的<em>convention</em>属性。插件可以通过<code>Convention</code>对象向Task中添加属性及方法。属性的读写性取决于<code>Convention</code>对象</li>
-<li>与project一样，task也可以添加额外属性。每个task都维护了一个额外属性的map，属性名（任意）-&gt;属性值。额外属性均可读可写</li>
-</ul>
-<h4 id="Task并行执行"><a href="#Task并行执行" class="headerlink" title="Task并行执行"></a><strong>Task并行执行</strong></h4><p>默认情况下，多个task是不会并行执行，除非一个task正在等待异步操作完成，并且有其他task在等待执行。在构建初始化时，可以通过<code>--parallel</code>标志启用并行执行，不同project的task可以并行执行</p>
-<p>本篇只是简单介绍了包括Project、Task在内的基本概念。关于Project、Task以及实战操作会在后续文章中详细介绍</p>
+<p>list任务的输出为：</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">$ gradle -q list</span><br><span class="line">compiling classes</span><br><span class="line">classpath = [classes]</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目依赖"><a href="#项目依赖" class="headerlink" title="项目依赖"></a>项目依赖</h2><p>一个项目通常会被分解为多个组件module，以提高项目的可维护性并去除了强耦合。项目中的组件module之间可以互相依赖，以重用代码</p>
+<img src="/2020/09/06/different-kind-of-dependencies/dependency-management-project-dependencies.png" title="多项目构建中，项目间的互相依赖">
+
+<p>Gradle会对module之间的依赖关系进行建模。因为每个module由一个Gradle项目标识，因此这些将这些依赖称为项目依赖</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation project(<span class="string">':shared'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在运行时，构建会自动确保以正确的顺序构建项目依赖项，并将其添加到类路径以进行编译。</p>
+<p>至此三种依赖方式就介绍完了…</p>
 ]]></content>
       <categories>
         <category>Gradle</category>
       </categories>
       <tags>
         <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala函数式编程</title>
+    <url>/2018/07/21/scala%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p>从java转向scala已经有一段时间了，虽然平时写代码问题不大，但是因为面向对象编程已经根深蒂固了，一直对函数式编程理解不是很到位，scala虽然是多范式编程语言，但是官方还是鼓励开发者使用函数式编程的，所以很有必要仔细学习并记录一下</p>
+<h2 id="什么是函数式"><a href="#什么是函数式" class="headerlink" title="什么是函数式"></a>什么是函数式</h2><p>函数式编程，不是某一种语言的特性，而是诸多编程思想(如命令式，面向对象等)中的一种。对于它的解释，引用<a href="(http://www.10tiao.com/html/557/201609/2652725732/1.html)">王宏江-Scala中的函数式特性</a>中的一段话</p>
+<blockquote>
+<p>图灵机，以及冯诺依曼对它的实现（冯诺依曼体系），从风格上被归为“命令式”，它的运算过程可以看作不断地修改内存来反映运算的结果，即用命令修改状态；而阿隆佐邱奇提出的 Lambda 演算，则是通过连续的运算（基于函数）得到最终结果。<br>基于Lambda演算的被归为函数式，在众多的函数式编程语言里，Scala的血缘继承自ML 和Haskell 最多。关于ML有本非常好的书《ML for the Working Programmer》，这本书里面提到:<strong>“函数式程序是跟值打交道的，而不是跟状态打交道的。它们的工具是表达式，而不是命令。”</strong></p>
+</blockquote>
+<h4 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h4><p>上面引文里，函数式程序的工具是表达式，那么什么是表达式呢？<br>表达式可以简单理解为有返回值的语句。在scala中只有表达式，因为在scala中任何语句都有返回值，而在java中则不是。如赋值语句在scala中是有返回值的，返回类型为Unit，而在java中赋值语句没有返回值<br>示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span> var b = 1</span><br><span class="line">b: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span> val a = b = 3</span><br><span class="line">a: Unit = ()</span><br></pre></td></tr></table></figure>
+
+<p>变量b被重新赋值为3，赋值的结果类型为Unit，并且赋值给了a</p>
+<h4 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h4><p>函数式编程就是把计算机中的运算抽象为数学中的运算，程序中的函数和方法抽象为数学中的函数。如       </p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>):<span class="type">Int</span> = &#123;</span><br><span class="line">  <span class="number">3</span>X + <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">对应于数学中的</span><br><span class="line"></span><br><span class="line">f(<span class="type">X</span>) = <span class="number">3</span>X + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>函数的参数即为数学函数中的未知数(x或y等等)，整个运算过程封装在函数体中，并且不需要依赖除了参数外的其他数据，运算完成后返回运算的结果。  </p>
+<p>对于复杂的运算，抽象为多个函数的嵌套调用，整个运算的过程都是围绕函数进行的，摒弃了命令式编程中对状态的依赖，这也是为什么scala鼓励我们使用val不变量，而尽量少使用var变量</p>
+<p>最终整个应用程序都是由一个一个的函数组成</p>
+<p>为了支持函数式编程，scala中提供了很多函数特性，这些特性在<a href="../../23/scala中的函数/">scala中的函数那篇blog</a>里，简单罗列下</p>
+<ul>
+<li>引入了与其他类型地位平等的函数类型，函数可传递，可作为返回值</li>
+<li>对高阶函数的支持</li>
+<li>函数的部分应用</li>
+<li>函数柯里化</li>
+<li>函数嵌套</li>
+<li>闭包</li>
+</ul>
+<h2 id="函数式编程的特性"><a href="#函数式编程的特性" class="headerlink" title="函数式编程的特性"></a>函数式编程的特性</h2><p>关于函数式编程的特性可以参考<a href="http://www.ruanyifeng.com/blog/2012/04/functional_programming.html" target="_blank" rel="noopener">阮一峰-函数式编程初探</a></p>
+]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
+        <tag>函数式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>依赖配置的相关知识</title>
+    <url>/2020/09/03/what-is-dependency-configurations/</url>
+    <content><![CDATA[<h2 id="依赖配置是什么？"><a href="#依赖配置是什么？" class="headerlink" title="依赖配置是什么？"></a>依赖配置是什么？</h2><p>Gradle项目中声明的依赖都有其适用范围。如某些依赖编译代码时需要用到，而另一些依赖仅用于运行时。Gradle中使用依赖配置（Configuration）来表示这些依赖的作用范围（作用域）。</p>
+<p>许多Gradle插件会为项目添加一些预先定义好的配置（如<code>android-application</code>插件会添加<code>release</code>和<code>debug</code>配置等，Java插件添加了一些来表示源代码编译、执行测试等所需的各种类路径的插件）。下图使用Java插件作为例子</p>
+<img src="/2020/09/03/what-is-dependency-configurations/dependency-management-configurations.png" title="声明用于特定目的的依赖">
+
+<p><strong>配置的继承与组合</strong><br>配置可以继承其他配置，从而形成一个父子层级关系。子配置会继承其父配置声明的所有依赖。</p>
+<p>Gradle核心插件（如Java插件）中大量使用了配置继承。如<code>testImplementation</code>继承了<code>implementation</code>。这种配置层级关系有很实用的目的。编译测试需要在编写测试代码所需依赖之上增加对待测试源码的依赖。如果项目的生产环境的源码引用了Guava，则其在使用JUnit编写并执行测试代码时也需要引用Guava。下图展示了Java插件中的配置依赖所示</p>
+<img src="/2020/09/03/what-is-dependency-configurations/dependency-management-configuration-inheritance.png" title="Java插件中的配置依赖">
+
+<p>在背后，通过调用<code>Configuration.extendsFrom(org.gradle.api.artifacts.Configuration[])</code>方法<code>testImplementation</code>与<code>implementation</code>配置形成了一种父子层级关系。configuration可以继承其他任何configuration，无论它是定义在构建脚本中还是插件中</p>
+<p>以下用冒烟测试作为例子。假如我们要编写一套冒烟测试用例。每个测试用例都会调用一个Http请求用以验证web后端服务。由于底层的测试框架已经默认使用了JUnit。所以我们一个定义一个名为<code>smokeTest</code>的配置，继承自<code>testImplementation</code>以重用已有的测试框架依赖</p>
+<p>代码如下：</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    smokeTest.extendsFrom testImplementation</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'junit:junit:4.13'</span></span><br><span class="line">    smokeTest <span class="string">'org.apache.httpcomponents:httpclient:4.5.5'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="可解析和可消费的配置"><a href="#可解析和可消费的配置" class="headerlink" title="可解析和可消费的配置"></a>可解析和可消费的配置</h2><p>配置是Gradle依赖解析中至关重要的部分。在依赖的解析的上下文中，区分生产者与消费者的是很重要的。如此说来，配置至少有三条规则：</p>
+<ol>
+<li>声明依赖</li>
+<li>作为消费者，把一系列依赖解析为文件</li>
+<li>作为生产者，对外暴漏artifact和依赖项以供其他项目使用（可消费的配置项通常代表生产者给消费者提供的变体）</li>
+</ol>
+<p>例如，为了表达应用<code>app</code>依赖<code>lib</code>，则至少需要一个配置</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">//声明了一个名为"someConfiguration"的配置</span></span><br><span class="line">    someConfiguration</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">// 向`someConfiguration`配置添加一个项目依赖</span></span><br><span class="line">    someConfiguration project(<span class="string">":lib"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置可以通过扩展其他配置以继承其所有依赖。上例中的代码并没有告诉我们任何关于该配置消费者的信息。更为重要的是，他没有告诉我们该如何使用此配置项。假如<code>lib</code>为一个Java库：他可能会对外暴露不同的东西，如它的API、实现或者测试工具。根据要执行的task的不同（根据lib的API进行编译，执行该应用程序，编译测试等），可能要对<code>app</code>的依赖进行的不同的解析。为了解决这种需求，我们通常可以发现一些伴生配置，旨在明确配置的用法：</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">// 声明用于解析应用程序的编译类路径的配置</span></span><br><span class="line">    compileClasspath.extendsFrom(someConfiguration)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 声明用于解析应用程序的运行时类路径的配置</span></span><br><span class="line">    runtimeClasspath.extendsFrom(someConfiguration)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，展示了三种不同的配置，这三种配置分别担任了不同的角色：   </p>
+<ul>
+<li><code>someConfiguration</code>声明了应用程序的依赖。它就像一个篮子用来装该应用的依赖</li>
+<li><code>compileClasspath</code>和<code>runtimeClasspath</code>是要解析的配置：分别表示应用的编译类路径以及运行时类路径</li>
+</ul>
+<p>这种区别由配置中的canBeResolved标志表示。可以解析的配置即为可以计算依赖图的配置，因为它包含进行解析所需的所有信息。也就是说，我们会出计算一个依赖图，解析依赖图中的组件，最终输出artifact。如果某个配置的<code>canBeResolved</code>设置为<code>false</code>，则意味着该配置不会被解析，而仅仅用与声明依赖。原因是根据使用情况（编译类路径、运行时类路径），它可以解析为不同的图。尝试解析一个<code>canBeResolved</code>设置为<code>false</code>的配置是不对的。某种程度上类似于不该被实例化的抽象类(canBeResolved=false)，以及扩展抽象类(canBeResolved=true)的实现类。一个可解析的配置至少会扩展一个不可解析的配置。</p>
+<p>另一方面，对于库项目来说（生产者），我们也使用配置来表示可以消费的内容。例如，<code>lib</code>可能对外暴露了API或运行时（即运行时用到该lib），我们可能会把<code>artifact</code>添加到其一或者两者之中。通常在按照<code>lib</code>进行编译时，仅需要其API，而无需依赖其运行时。因此<code>lib</code>项目会暴露一个<code>apiElements</code>配置，用于给消费者寻找其API。像这样一种配置即为可消费但不可解析的配置。该特性通过配置的<code>canBeResumed</code>标志表示</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">// 供需要使用其API的消费者使用的配置</span></span><br><span class="line">    exposedApi &#123;</span><br><span class="line">        <span class="comment">// 表示该配置不可被解析</span></span><br><span class="line">        canBeResolved = <span class="literal">false</span></span><br><span class="line">        <span class="comment">// 表示该配置可以被消费</span></span><br><span class="line">        canBeConsumed = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 供需要使用其代码的消费者使用的配置</span></span><br><span class="line">    exposedRuntime &#123;</span><br><span class="line">        canBeResolved = <span class="literal">false</span></span><br><span class="line">        canBeConsumed = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总的来说，配置扮演的角色是由<code>canBeResolved</code>和<code>canBeConsumed</code>标志决定的，如下图：</p>
+<img src="/2020/09/03/what-is-dependency-configurations/configuration_roles.jpg" title="configuration roles">
+
+<p>为了向后的兼容性，这两个标志为的默认值为<code>true</code>。但是对于插件作者来说，应该根据需要设置值，否则可能会出现解析错误。</p>
+<h2 id="自定义配置"><a href="#自定义配置" class="headerlink" title="自定义配置"></a>自定义配置</h2><p>自定义配置可用于分离用于不同目的的依赖，以形成不同的依赖域。</p>
+<p>假设你想声明对Jasper Ant任务的依赖关系，以便预编译JSP文件，但这些文件不应该最终出现在用于编译源代码的类路径中。通过自定义配置可以轻松实现此类需求，如下面例子</p>
+<blockquote>
+<p>build.gradle</p>
+</blockquote>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    jasper</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    jasper <span class="string">'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.2'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task preCompileJsps &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        ant.taskdef(<span class="string">classname:</span> <span class="string">'org.apache.jasper.JspC'</span>,</span><br><span class="line"><span class="symbol">                    name:</span> <span class="string">'jasper'</span>,</span><br><span class="line"><span class="symbol">                    classpath:</span> configurations.jasper.asPath)</span><br><span class="line">        ant.jasper(<span class="string">validateXml:</span> <span class="literal">false</span>,</span><br><span class="line"><span class="symbol">                   uriroot:</span> file(<span class="string">'src/main/webapp'</span>),</span><br><span class="line"><span class="symbol">                   outputDir:</span> file(<span class="string">"$buildDir/compiled-jsps"</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>项目的配置由<code>configurations</code>对象管理。</p>
+<p>关于依赖配置就先到这里吧，下一篇介绍不同类型的依赖，如文件依赖，module依赖等</p>
+]]></content>
+      <categories>
+        <category>Gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scala学习资料整理</title>
+    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
+<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br><strong><a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></strong></p>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
+</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
+<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
+<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>scala</tag>
       </tags>
   </entry>
   <entry>
@@ -377,195 +398,6 @@
 <li><a href="https://git-wip-us.apache.org/repos/asf?p=ant.git;a=blob;f=src/main/org/apache/tools/ant/util/ProxySetup.java;hb=HEAD" target="_blank" rel="noopener">ProxySetup.java in the Ant codebase</a></li>
 <li><a href="http://download.oracle.com/javase/7/docs/technotes/guides/net/properties.html" target="_blank" rel="noopener">JDK 7 Networking Properties</a></li>
 </ul>
-]]></content>
-      <categories>
-        <category>Gradle</category>
-      </categories>
-      <tags>
-        <tag>gradle</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BIP 32</title>
-    <url>/2018/09/27/bip32/</url>
-    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
-<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
-<p>本文分为两部分</p>
-<ul>
-<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
-<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
-</ul>
-<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
-<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
-<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
-<ul>
-<li>整数模数曲线顺序（用n表示）</li>
-<li>曲线上点的坐标</li>
-<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
-</ul>
-<p>作为标准的转换函数，我们假设</p>
-<ul>
-<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
-<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
-<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
-<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
-<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
-</ul>
-<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
-<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
-<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
-</ol>
-<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
-<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
-<ol>
-<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
-<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
-<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
-<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
-<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
-</ol>
-<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
-<ol>
-<li>返回值K = point(k)</li>
-<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
-</ol>
-<p>两种通过父私钥计算子公钥的方法</p>
-<ol>
-<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
-<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
-</ol>
-<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
-<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
-<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
-<ul>
-<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
-<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
-</ul>
-<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
-<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
-<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
-<p>密钥id的钱32位称为指纹</p>
-<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
-<ol>
-<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
-<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
-<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
-<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
-<li>32byte：链码</li>
-<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
-</ol>
-<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
-<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
-<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
-<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
-<ol>
-<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
-<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
-<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
-<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
-</ol>
-<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
-<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
-
-<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
-<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
-<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
-<ul>
-<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
-<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
-</ul>
-<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
-<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
-<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
-<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
-<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
-]]></content>
-      <categories>
-        <category>区块链</category>
-      </categories>
-      <tags>
-        <tag>区块链</tag>
-        <tag>BIP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Gradle是什么</title>
-    <url>/2020/07/17/What-is-Gradle/</url>
-    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性    </p>
-<ul>
-<li><p>高效率</p>
-<p>  Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）<br>  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的运行效率</p>
-</li>
-<li><p>基于JVM</p>
-<p>  Gradle是运行在JVM之上了（因此没有了跨平台的问题），所以用户需要安装JDK才能使用。对熟悉Java平台的用户来说这是一项福利，因为可以使用标准Java Apis实现构建逻辑，如自定义各种任务类型和插件<br>  虽然Gradle基于JVM，但这并不意味着Gradle只能构建java项目，它甚至可以用来构建native项目</p>
-</li>
-<li><p>约定</p>
-<p>  Gradle借鉴了Maven的经验，通过实现约定使常见类型的项目(如Java项目)变得更容易构建。 使用适当的插件，您可以很容易地为许多项目生成精简的构建脚本。 但是这些约定并不会不限制你：Gradle允许你覆盖它们，添加自己的任务，并对你的基于约定的构建进行许多其他定制。</p>
-</li>
-<li><p>良好的可扩展性</p>
-<p>  你可以很容易地扩展Gradle以提供自己的任务类型，甚至构建模型。 有关这方面的示例，请参阅Android构建支持：它添加了许多新的构建概念，如风格和构建类型。</p>
-</li>
-<li><p>主流IDE均支持Gradle</p>
-<p>  许多主流的IDE均支持Gradle，如Android Studio，IntelliJ IDEA，Eclipse，NetBeans等</p>
-</li>
-<li><p>构建过程可视化</p>
-<p>  构建过程中构建扫描器会生成大量的日志，这些日志可用于定位构建问题。并能很好的反应构建的性能问题。在你构建发生问题咨询别人时，可以将这些构建日志分享给他，以便于定位问题</p>
-</li>
-</ul>
-<h2 id="关于Gradle你需要知道的五件事"><a href="#关于Gradle你需要知道的五件事" class="headerlink" title="关于Gradle你需要知道的五件事"></a>关于Gradle你需要知道的五件事</h2><p>Gradle是一款灵活且强大的构建工具，但是第一次使用它时，你可能会觉得很难上手。当你理解了以下核心原则，你会觉得Gradle变得简单很多，并且你会在不知不觉中熟练使用它</p>
-<h4 id="1-Gradle是一款通用构建工具"><a href="#1-Gradle是一款通用构建工具" class="headerlink" title="1. Gradle是一款通用构建工具"></a>1. Gradle是一款通用构建工具</h4><p>Gradle可用于构建任何软件，因为它对你尝试构建的内容或应该如何构建几乎没有任何假设。一个最值得注意的限制是，依赖管理模块目前只支持Maven、Ivy的兼容仓库以及文件系统    </p>
-<p>这并不意味着需要做大量的工作才能创建一个构建。 Gradle通过插件添加了一层约定和预构建的功能，使得构建常见类型的项目(比如Java库)变得很容易。 你甚至可以创建和发布自定义插件来封装你自己的约定和构建功能。</p>
-<h4 id="2-核心的model基于task"><a href="#2-核心的model基于task" class="headerlink" title="2. 核心的model基于task"></a>2. 核心的model基于task</h4><p>Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务</p>
-<p>下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示</p>
-<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="DAG示例图">
-
-<p>几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。</p>
-<p>任务的组成:</p>
-<ul>
-<li>操作 - 执行某些操作，如文件复制或编译源代码等</li>
-<li>输入 - 操作需要用到的值、文件或目录等</li>
-<li>输出 - 操作修改或生成的文件或目录等</li>
-</ul>
-<p>实际上，任务的组成完全取决于task需要执行什么操作。某些task甚至没有action，如标准的生命周期task（方便起见仅仅将多个任务整合在一起而存在）</p>
-<p>另外需要注意的是：Gradle的增量构建支持是十分强大且可靠的，所以为了保持构建的高效运行，在不必要的情况下不要执行clean task</p>
-<h4 id="Gradle有几个固定的构建阶段"><a href="#Gradle有几个固定的构建阶段" class="headerlink" title="Gradle有几个固定的构建阶段"></a>Gradle有几个固定的构建阶段</h4><p>理解Gradle分三个阶段评估和执行构建脚本是很重要的</p>
-<ol>
-<li><p>初始化阶段</p>
-<p>为构建设置环境，决定那些project需要参与构建</p>
-</li>
-<li><p>配置阶段</p>
-<p>构造并配置生成的task图，然后根据用户要运行的task确定需要运行哪些task，以及task运行的顺序</p>
-</li>
-<li><p>执行阶段</p>
-<p>运行配置阶段结束时输出的任务</p>
-</li>
-</ol>
-<p>以上这三个阶段组成了构建的生命周期<br>设计良好的构建脚本主要由声明性配置组成，而不是命令性逻辑。在配置阶段对配置项进行评估是很容易理解的。即便如此，很多构建有不少工作（经过评估后在执行阶段）需要做，如通过doLast和doFirst代码块。这一点很重要，因为在配置阶段评估的代码不会看到在执行阶段发生的更改   </p>
-<p>配置阶段另一个非常重要的方面是，每次运行构建时都会对其中涉及的所有内容进行评估。这就是为什么最佳实践是避免在配置阶段做过多工作的原因， 构建扫描器可以帮助你识别这些热点，以及其他功能</p>
-<h4 id="Gradle的扩展方式不止一种"><a href="#Gradle的扩展方式不止一种" class="headerlink" title="Gradle的扩展方式不止一种"></a>Gradle的扩展方式不止一种</h4><p>如果你只用Gradle内建bundle就能构建你的应用，那是极好的，但这几乎不可能。因为大多数构建都有一些特殊需求，这意味着你需要添加自定义构建逻辑  </p>
-<p>Gradle提供了几种机制用以对其进行扩展</p>
-<ul>
-<li>自定义任务类型<br>当你需要执行的操作现有的构建任务满足不了，你可以实现一个你自己的任务类型。通常，最好将自定义任务类型的源文件放在buildSrc目录或打包在插件中。 然后，你就可以像使用Gradle提供的任何任务类型一样使用自定义的任务类型</li>
-<li>自定义任务操作<br>你可以在一个任务的执行前后附加上自定义构建逻辑（通过使用Task.doFirst(),Task.doLast()方法）</li>
-<li>为project和task添加额外属性<br>可以为project或task添加自己的属性，后续你可以在自己的自定义操作或其他任何构建逻辑中使用这些属性。额外属性甚至可以用于那些不是由你创建的task（如Gradle核心插件创建的task）</li>
-<li>自定义约定<br>约定可以很大程度上简化构建，这样用户可以更容易理解并使用他们。 这可以在使用标准项目结构和命名约定的构建中看到，比如Java构建。 你可以编写自己的插件来提供约定-它们只需要为构建的相关方面配置默认值。</li>
-<li>自定义model<br>Gradle允许你在任务、文件和依赖项配置之外的构建中引入新概念。你可以在大多数语言插件中看到这一点，他们将source sets的概念添加到构建中。对构建过程的适当建模可以极大的提高构建的易用性和效率</li>
-</ul>
-<h4 id="构建脚本按照Api进行操作"><a href="#构建脚本按照Api进行操作" class="headerlink" title="构建脚本按照Api进行操作"></a>构建脚本按照Api进行操作</h4><p>可以很容易将Gradle构建脚本视为可执行代码，因为他们本身就是可执行代码。实现细节：设计良好的构建脚本描述构建软件需要哪些步骤，而不是描述这些步骤如何完成工作，这是自定义任务类型及插件的职责</p>
-<blockquote>
-<p>有一种常见的误解，认为Gradle的强大和灵活性来自于它的构建脚本是代码这一事实。 这与事实大相径庭。 提供强大功能的是底层模型和API。 正如我们在最佳实践中建议的那样，你应该避免在构建脚本中放置太多(如果有的话)命令性逻辑。</p>
-</blockquote>
-<p>然而，在一种场景中，将构建脚本视为可执行代码是很有用的：理解构建脚本语法如何映射到Gradle API。API文档（由Javadocs和Groovy DSL Reference组成）列出了方法和属性，并引用了闭包和操作。这些在构建脚本上文中意味着什么呢？查看Groovy Build Script Primer了解该问题的答案，这样您就可以有效地使用API文档</p>
-<blockquote>
-<p>由于Gradle运行在JVM之上，所以构建脚本可以使用标准的Java API。Groovy构建脚本可以使用Groovy API，当然Kotlin构建脚本可以使用Kotlin API</p>
-</blockquote>
 ]]></content>
       <categories>
         <category>Gradle</category>
@@ -721,6 +553,237 @@
       </tags>
   </entry>
   <entry>
+    <title>构建的基础知识</title>
+    <url>/2020/08/08/Gradle-Script-Basics/</url>
+    <content><![CDATA[<h2 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h2><p>在Gradle生命周期中，我们曾提及构建脚本其实是构建配置脚本。脚本执行，其实就是对一个特定类型对象的配置。例如，build.gradle脚本执行，就是对<code>Project</code>对象的配置。所配置的对象称之为构建脚本的代理对象。下图展示了脚本与代理对象的对应关系</p>
+<img src="/2020/08/08/Gradle-Script-Basics/script_delegate.jpg" title="脚本与代理对象对应关系">
+
+<p>在构建脚本中可以访问到代理对象的属性以及方法</p>
+<p>每个构建脚本的代理对象都实现了<code>Script</code>接口。该接口中定义的属性和方法在构建脚本中均可访问</p>
+<h4 id="构建脚本的结构"><a href="#构建脚本的结构" class="headerlink" title="构建脚本的结构"></a><strong>构建脚本的结构</strong></h4><p>构建脚本由0到多个语句及脚本代码块组成。语句可以包含方法调用，属性赋值，成员变量的定义等。脚本块是对一个接收一个闭包作为参数的方法调用。闭包可以看作是配置闭包，因为闭包的调用即为对相应代理对象的配置。</p>
+<p>下面是一些常用的顶层脚本块</p>
+<ul>
+<li><p><code>allprojects {}</code> </p>
+<blockquote>
+<p>配置当前project及其所有子project</p>
+</blockquote>
+</li>
+<li><p><code>buildscript {}</code></p>
+<blockquote>
+<p>为当前project配置构建脚本的classpath</p>
+</blockquote>
+</li>
+<li><p><code>dependencies {}</code></p>
+<blockquote>
+<p>为当前project配置依赖（第三方lib等）</p>
+</blockquote>
+</li>
+<li><p><code>repositories {}</code></p>
+<blockquote>
+<p>为当前project配置资源库（下载依赖库的仓库，如jcenter等）</p>
+</blockquote>
+</li>
+<li><p><code>sourceSets {}</code></p>
+<blockquote>
+<p>为当前project配置源码及资源等（如Android中的java代码，资源文件等）</p>
+</blockquote>
+</li>
+<li><p><code>subprojects {}</code></p>
+<blockquote>
+<p>配置当前project的所有子project</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="几个核心类型"><a href="#几个核心类型" class="headerlink" title="几个核心类型"></a><strong>几个核心类型</strong></h4><ul>
+<li><p><code>Project</code></p>
+<blockquote>
+<p>该接口是从构建脚本中与Gradle交互的核心API。</p>
+</blockquote>
+</li>
+<li><p><code>Task</code></p>
+<blockquote>
+<p>Task代表一个原子操作，是构建的最小单位</p>
+</blockquote>
+</li>
+<li><p><code>Gradle</code></p>
+<blockquote>
+<p>表示对Gradle的调用</p>
+</blockquote>
+</li>
+<li><p><code>Settings</code></p>
+<blockquote>
+<p>声明了实例化和配置要参与构建的Project实例所需的配置</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Prject与Task的关系"><a href="#Prject与Task的关系" class="headerlink" title="Prject与Task的关系"></a><strong>Prject与Task的关系</strong></h4><p>Gradle中的一切都建立在两个基本概念之上：project和task</p>
+<p>每个Gradle构建都由一个或多个Project组成。Project取决于要构建什么类型的项目。例如，project可能是JAR或web应用。也可能是其他项目输出的JAR打包成的ZIP等。项目也可以不是待构建的事物，也可以是待做任务，如部署应用至测试或生产环境。</p>
+<p>每个Project由一个或多个Task组成。任务即构建执行的原子操作。如编译指定的类，打一个JAR包，生成Javadoc或发布库至仓库等</p>
+<p>下面是一个单项目的示例，该但项目中定义了一些简单的任务</p>
+<h2 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h2><p>该接口中包含了与Gradle交互的主要API。在Project对象中，可以访问Gradle的所有特性</p>
+<h4 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a><strong>Lifecycle</strong></h4><p><code>build.gradle</code>文件与<code>Project</code>对象是一对一的关系。在构建初始化阶段，Gradle会为每个参与构建的项目创建一个Project对象。创建步骤如下：   </p>
+<ul>
+<li>首先为构建创建一个<code>Settings</code>对象</li>
+<li>分析<code>settings.gradle</code>脚本，并根据该脚本配置<code>Settings</code>对象</li>
+<li>使用配置好的<code>Settings</code>对象，创建参与构建的项目对应的<code>Project</code>对象</li>
+<li>最后，通过执行项目的<code>build.gradle</code>脚本来配置与之对应的<code>Project</code>对象。Project按广度优先顺序进行配置，即父Project先于子Project配置。不过可以通过调用<code>Project.evaluationDependsOnChildren()</code>或<code>Project.evaluationDependsOn(java.lang.String)</code>改变初始化顺序</li>
+</ul>
+<h4 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a><strong>Tasks</strong></h4><p><code>Project</code>本质上是<code>Task</code>对象的集合。通过调用<code>TaskContainer</code>的<code>create()</code>方法为<code>Project</code>添加任务，如<code>TaskContainer.create(java.lang.String)</code>。<code>TaskContainer</code>中提供了一些方法，用以查询已定义的<code>Task</code>，如<code>TaskCollection.getByName(java.lang.String)</code></p>
+<h4 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a><strong>Dependencies</strong></h4><p>project为了完成工作，通常需要某些依赖。同样的，project通常也会输出结果供其他project使用。依赖按配置分组，从仓库中上传下载。可以使用<code>Project.getConfigurations()</code>方法返回的<code>ConfigurationContainer</code>对象来管理配置。使用<code>Project.getDependencies()</code>方法返回的<code>DependencyHandler</code>对象管理依赖。使用<code>Project.getRepositories()</code>方法返回的<code>RepositoryHandler</code>对象管理仓库</p>
+<h4 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a><strong>Plugins</strong></h4><p>插件可用于构建的模块化以及重用project配置。使用<code>PluginAware.apply(java.util.Map)</code>方法或使用<code>PluginDependenciesSpec</code>来应用插件</p>
+<h4 id="Dynamic-Project-Properties"><a href="#Dynamic-Project-Properties" class="headerlink" title="Dynamic Project Properties"></a><strong>Dynamic Project Properties</strong></h4><p>Gradle执行<code>build.gradle</code>脚本来配置与之对应的<code>Project</code>对象。脚本中使用的任何属性及方法都是对<code>Project</code>代理对象的访问。也就是说，可以直接在脚本中使用<code>Project</code>接口的任一方法和属性。</p>
+<p>例如：</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">defaultTasks(<span class="string">'some-task'</span>)  <span class="comment">// Delegates to Project.defaultTasks()</span></span><br><span class="line">reportsDir = file(<span class="string">'reports'</span>) <span class="comment">// Delegates to Project.file() and the Java Plugin</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以通过<code>project</code>属性访问<code>Project</code>实例。某些情况下，以这种方式访问会使脚本更加清晰。如，可以使用<code>project.name</code>访问project的name，而不是使用直接用<code>name</code>属性</p>
+<p>project有5个属性域，用以搜索属性。在build文件中可以通过属性名或调用<code>Project.property(java.lang.string)</code>方法访问属性。下面是5个属性域：</p>
+<ul>
+<li><code>Project</code>对象本身。该域中包含了<code>Project</code>接口实现类中顶一个任何属性（拥有get&amp;set方法）。例如，<code>Project.getRootProject()</code>方法用以访问<code>rootProject</code>属性。属性的可读可写性取决于get/set方法的声明</li>
+<li>project的<em>额外(extra)</em>属性。每个project都维护了一个额外属性的map，属性名（任意）-&gt;属性值。额外属性均可读可写</li>
+<li>由插件引入的扩展。每个扩展相当于一个只读的属性，扩展名即属性名</li>
+<li>由插件引入的convention属性。插件可以通过Porject中的<code>Convention</code>对象向其中加入方法和属性。该域中属性的可读可写性取决于<code>Convention</code>对象</li>
+<li>project中的task。可以将task的name看作属性名对其进行访问。该域中的属性是只读的。例如，名为<code>compile</code>的task可以作为<code>compile</code>属性进行访问</li>
+<li>extra属性和convention属性是从项目的父级继承的，直到根项目。 该域中的的属性是只读的。</li>
+</ul>
+<p>当访问一个属性时，project按以上顺序从域中进行查找，如果未找到，则抛出异常</p>
+<h4 id="Extra-Properties"><a href="#Extra-Properties" class="headerlink" title="Extra Properties"></a><strong>Extra Properties</strong></h4><p>所有的extra属性都必须通过”ext”命名空间来定义。额外属性定义后，即可在所属对象中直接访问（可以是Project、Task或者sub-project），可以读取也可更改。下面是一个例子</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">project.ext.prop1 = <span class="string">"foo"</span></span><br><span class="line">task doStuff &#123;</span><br><span class="line">    ext.prop2 = <span class="string">"bar"</span></span><br><span class="line">&#125;</span><br><span class="line">subprojects &#123; ext.$&#123;prop3&#125; = <span class="literal">false</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过”ext”读取extra属性</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">ext.isSnapshot = version.endsWith(<span class="string">"-SNAPSHOT"</span>)</span><br><span class="line"><span class="keyword">if</span> (isSnapshot) &#123;</span><br><span class="line">    <span class="comment">// do snapshot stuff</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Dynamic-Methods"><a href="#Dynamic-Methods" class="headerlink" title="Dynamic Methods"></a><strong>Dynamic Methods</strong></h4><p>project同样由5个方法域，用以查找方法</p>
+<ul>
+<li><code>Project</code>对象本身</li>
+<li>build文件。build文件中可以定义方法，project从其中查找特定的方法。</li>
+<li>由插件引入的扩展。扩展可以看作一个接受一个闭包或<code>Action</code>作为参数的方法</li>
+<li>由插件引入的convention方法。插件可以通过project的<code>Convention</code>对象向其中添加属性和方法</li>
+<li>project中的task。每个Task都会拥有一个与Task同名的方法，该方法接受一个闭包或<code>Action</code>作为参数,并且使用传入的闭包关联到Task的<code>Task.configure(groovy.lang.Closure)</code>方法。例如，project有一个名为<code>compile</code>的方法，则一个<code>void compile(Closure ConfigureClosure)</code>方法会添加至project中</li>
+<li>继承自父Project的方法</li>
+<li>project中值为闭包的属性。闭包可以看作一个方法，直接传入参数调用</li>
+</ul>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><p>前文中已经给出了Task的定义，以及Task与Project的关系，这里不再赘述。    </p>
+<p>下面介绍下Task的属性、创建、执行。以及Task之间的依赖关系的声明等</p>
+<h4 id="Task的组成"><a href="#Task的组成" class="headerlink" title="Task的组成"></a><strong>Task的组成</strong></h4><p>Task由一系列的<code>Action</code>组成。Task的执行，即为其中<code>Action</code>的执行（调用<code>Action.execute(T)</code>）。可以通过调用<code>Task.doFirst(org.gradle.api.Action)</code>或<code>Task.doLast(org.gradle.api.Action)</code>方法向Task中添加<code>Action</code>，Task中还有两个接受<code>groovy.lang.Closure</code>闭包作为参数的同名方法，同样可以向Task中添加Action。</p>
+<p>Task中的两个特殊异常，<code>StopActionException</code>和<code>StopExecutionException</code>。其中<code>StopActionException</code>会导致当前<code>Action</code>中止执行，转而执行下一个<code>Action</code>。而<code>StopExecutionException</code>会中止当前<code>Task</code>，转而执行下一个<code>Task</code>。可以通过抛出这两个异常来跳过某些执行错误的<code>Action</code>或<code>Task</code></p>
+<h4 id="Task之间的依赖关系"><a href="#Task之间的依赖关系" class="headerlink" title="Task之间的依赖关系"></a><strong>Task之间的依赖关系</strong></h4><p>一个Task的执行可能依赖于其他Task，也可能必须在某个Task执行完成后才能开始执行。Gradle会保证任务按照它们之间的依赖关系执行。</p>
+<p>下面几组方法可以声明Task间的依赖关系，每组中的两个方法是等效的。</p>
+<ul>
+<li><code>Task.dependsOn(java.lang.Object[])</code> 或 <code>Task.setDependsOn(java.lang.Iterable)</code></li>
+<li><code>Task.mustRunAfter(java.lang.Object[])</code> 或 <code>Task.setMustRunAfter(java.lang.Iterable</code></li>
+<li><code>Task.shouldRunAfter(java.lang.Object[])</code> 或 <code>Task.setShouldRunAfter(java.lang.Iterable)</code></li>
+</ul>
+<p>可以使用以下类型作为参数来指定任务间的依赖关系</p>
+<ul>
+<li><code>String</code>、<code>CharSequence</code>或<code>groovy.lang.GString</code>类型的任务路径或任务名。当千project的task的相对路径。这种方式可以引用其他project中的task</li>
+<li><code>Task</code>类型</li>
+<li><code>TaskDependency</code>类型</li>
+<li><code>TaskReference</code>类型</li>
+<li><code>Buildable</code>类型</li>
+<li><code>RegularFileProperty</code>或<code>DirectoryPerty</code>类型</li>
+<li><code>Provider&lt;T&gt;</code>类型。其中泛型为这里列出的任意类型之一</li>
+<li><code>Iterable</code>、<code>Collection</code>、<code>Map</code>或array类型。其中元素类型为这里列出的任意类型之一。其中元素最终可递归的转换为task</li>
+<li><code>Callable</code>类型。<code>call()</code>方法返回类型为这里列出的任意类型之一，并且最终可转换为task，返回值<code>null</code>会被视为空集合</li>
+<li>Groovy闭包<code>Closure</code>或Kotlin函数。闭包或函数返回类型为这里列出的任意类型之一，并且最终可转换为task，返回值<code>null</code>会被视为空集合</li>
+<li>其他类型会导致error</li>
+</ul>
+<h4 id="Task的动态属性"><a href="#Task的动态属性" class="headerlink" title="Task的动态属性"></a><strong>Task的动态属性</strong></h4><p><code>Task</code>有四个属性域。在构建文件中可以通过属性名直接访问属性，或通过调用<code>Task.property(java.lang.String)</code>方法访问属性。可以通过调用<code>Task.setProperty(java.lang.String, java.lang.Object)</code>方法改变属性值</p>
+<ul>
+<li><code>Task</code>对象本身。<code>Task</code>实现类中拥有get和set方法的字段即为属性。属性的读写性取决于get、set方法的声明</li>
+<li>通过插件添加至任务的扩展。每个扩展即为一个同名的属性</li>
+<li>通过插件引入的<em>convention</em>属性。插件可以通过<code>Convention</code>对象向Task中添加属性及方法。属性的读写性取决于<code>Convention</code>对象</li>
+<li>与project一样，task也可以添加额外属性。每个task都维护了一个额外属性的map，属性名（任意）-&gt;属性值。额外属性均可读可写</li>
+</ul>
+<h4 id="Task并行执行"><a href="#Task并行执行" class="headerlink" title="Task并行执行"></a><strong>Task并行执行</strong></h4><p>默认情况下，多个task是不会并行执行，除非一个task正在等待异步操作完成，并且有其他task在等待执行。在构建初始化时，可以通过<code>--parallel</code>标志启用并行执行，不同project的task可以并行执行</p>
+<p>本篇只是简单介绍了包括Project、Task在内的基本概念。关于Project、Task以及实战操作会在后续文章中详细介绍</p>
+]]></content>
+      <categories>
+        <category>Gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Gradle是什么</title>
+    <url>/2020/07/17/What-is-Gradle/</url>
+    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gradle是一款开源的自动化构建工具，它设计的灵活性使得它几乎能构建任何类型的软件。下面列出了一些它的重要特性    </p>
+<ul>
+<li><p>高效率</p>
+<p>  Gradle仅仅去执行那些输入或输出发生了改变的task，避免执行不必要的task。也可以使用构建缓存复用之前task的output，甚至可以跨设备使用构建缓存（多设备共享构建缓存）<br>  Gradle的实现中有许多其他方面的优化，开发组也在持续改进Gradle的运行效率</p>
+</li>
+<li><p>基于JVM</p>
+<p>  Gradle是运行在JVM之上了（因此没有了跨平台的问题），所以用户需要安装JDK才能使用。对熟悉Java平台的用户来说这是一项福利，因为可以使用标准Java Apis实现构建逻辑，如自定义各种任务类型和插件<br>  虽然Gradle基于JVM，但这并不意味着Gradle只能构建java项目，它甚至可以用来构建native项目</p>
+</li>
+<li><p>约定</p>
+<p>  Gradle借鉴了Maven的经验，通过实现约定使常见类型的项目(如Java项目)变得更容易构建。 使用适当的插件，您可以很容易地为许多项目生成精简的构建脚本。 但是这些约定并不会不限制你：Gradle允许你覆盖它们，添加自己的任务，并对你的基于约定的构建进行许多其他定制。</p>
+</li>
+<li><p>良好的可扩展性</p>
+<p>  你可以很容易地扩展Gradle以提供自己的任务类型，甚至构建模型。 有关这方面的示例，请参阅Android构建支持：它添加了许多新的构建概念，如风格和构建类型。</p>
+</li>
+<li><p>主流IDE均支持Gradle</p>
+<p>  许多主流的IDE均支持Gradle，如Android Studio，IntelliJ IDEA，Eclipse，NetBeans等</p>
+</li>
+<li><p>构建过程可视化</p>
+<p>  构建过程中构建扫描器会生成大量的日志，这些日志可用于定位构建问题。并能很好的反应构建的性能问题。在你构建发生问题咨询别人时，可以将这些构建日志分享给他，以便于定位问题</p>
+</li>
+</ul>
+<h2 id="关于Gradle你需要知道的五件事"><a href="#关于Gradle你需要知道的五件事" class="headerlink" title="关于Gradle你需要知道的五件事"></a>关于Gradle你需要知道的五件事</h2><p>Gradle是一款灵活且强大的构建工具，但是第一次使用它时，你可能会觉得很难上手。当你理解了以下核心原则，你会觉得Gradle变得简单很多，并且你会在不知不觉中熟练使用它</p>
+<h4 id="1-Gradle是一款通用构建工具"><a href="#1-Gradle是一款通用构建工具" class="headerlink" title="1. Gradle是一款通用构建工具"></a>1. Gradle是一款通用构建工具</h4><p>Gradle可用于构建任何软件，因为它对你尝试构建的内容或应该如何构建几乎没有任何假设。一个最值得注意的限制是，依赖管理模块目前只支持Maven、Ivy的兼容仓库以及文件系统    </p>
+<p>这并不意味着需要做大量的工作才能创建一个构建。 Gradle通过插件添加了一层约定和预构建的功能，使得构建常见类型的项目(比如Java库)变得很容易。 你甚至可以创建和发布自定义插件来封装你自己的约定和构建功能。</p>
+<h4 id="2-核心的model基于task"><a href="#2-核心的model基于task" class="headerlink" title="2. 核心的model基于task"></a>2. 核心的model基于task</h4><p>Gradle将models构建成一个task（工作的基本单元）的有向无环图（DAGs - Directed Acyclic Graphs）。意思是说，构建本质上配置了一组task，并根据他们的依赖关系将它们链接在一起，从而构成了一个有向无环图。一旦任务图创建完成，Gradle就确定了哪些任务需要以什么顺序执行，然后就调度执行这些任务</p>
+<p>下面的图为任务图示例，第一幅为抽象任务图，第二幅为具体任务图。任务间的依赖关系使用箭头来表示</p>
+<img src="/2020/07/17/What-is-Gradle/task-dag-examples.png" title="DAG示例图">
+
+<p>几乎所有的构建过程都可以通过这种方式建模为任务图，这也是Gradle拥有如此灵活性的原因之一。任务既可以通过插件定义，也可以通过你自己的构建脚本定义，任务通过其依赖机制链接在一起。</p>
+<p>任务的组成:</p>
+<ul>
+<li>操作 - 执行某些操作，如文件复制或编译源代码等</li>
+<li>输入 - 操作需要用到的值、文件或目录等</li>
+<li>输出 - 操作修改或生成的文件或目录等</li>
+</ul>
+<p>实际上，任务的组成完全取决于task需要执行什么操作。某些task甚至没有action，如标准的生命周期task（方便起见仅仅将多个任务整合在一起而存在）</p>
+<p>另外需要注意的是：Gradle的增量构建支持是十分强大且可靠的，所以为了保持构建的高效运行，在不必要的情况下不要执行clean task</p>
+<h4 id="Gradle有几个固定的构建阶段"><a href="#Gradle有几个固定的构建阶段" class="headerlink" title="Gradle有几个固定的构建阶段"></a>Gradle有几个固定的构建阶段</h4><p>理解Gradle分三个阶段评估和执行构建脚本是很重要的</p>
+<ol>
+<li><p>初始化阶段</p>
+<p>为构建设置环境，决定那些project需要参与构建</p>
+</li>
+<li><p>配置阶段</p>
+<p>构造并配置生成的task图，然后根据用户要运行的task确定需要运行哪些task，以及task运行的顺序</p>
+</li>
+<li><p>执行阶段</p>
+<p>运行配置阶段结束时输出的任务</p>
+</li>
+</ol>
+<p>以上这三个阶段组成了构建的生命周期<br>设计良好的构建脚本主要由声明性配置组成，而不是命令性逻辑。在配置阶段对配置项进行评估是很容易理解的。即便如此，很多构建有不少工作（经过评估后在执行阶段）需要做，如通过doLast和doFirst代码块。这一点很重要，因为在配置阶段评估的代码不会看到在执行阶段发生的更改   </p>
+<p>配置阶段另一个非常重要的方面是，每次运行构建时都会对其中涉及的所有内容进行评估。这就是为什么最佳实践是避免在配置阶段做过多工作的原因， 构建扫描器可以帮助你识别这些热点，以及其他功能</p>
+<h4 id="Gradle的扩展方式不止一种"><a href="#Gradle的扩展方式不止一种" class="headerlink" title="Gradle的扩展方式不止一种"></a>Gradle的扩展方式不止一种</h4><p>如果你只用Gradle内建bundle就能构建你的应用，那是极好的，但这几乎不可能。因为大多数构建都有一些特殊需求，这意味着你需要添加自定义构建逻辑  </p>
+<p>Gradle提供了几种机制用以对其进行扩展</p>
+<ul>
+<li>自定义任务类型<br>当你需要执行的操作现有的构建任务满足不了，你可以实现一个你自己的任务类型。通常，最好将自定义任务类型的源文件放在buildSrc目录或打包在插件中。 然后，你就可以像使用Gradle提供的任何任务类型一样使用自定义的任务类型</li>
+<li>自定义任务操作<br>你可以在一个任务的执行前后附加上自定义构建逻辑（通过使用Task.doFirst(),Task.doLast()方法）</li>
+<li>为project和task添加额外属性<br>可以为project或task添加自己的属性，后续你可以在自己的自定义操作或其他任何构建逻辑中使用这些属性。额外属性甚至可以用于那些不是由你创建的task（如Gradle核心插件创建的task）</li>
+<li>自定义约定<br>约定可以很大程度上简化构建，这样用户可以更容易理解并使用他们。 这可以在使用标准项目结构和命名约定的构建中看到，比如Java构建。 你可以编写自己的插件来提供约定-它们只需要为构建的相关方面配置默认值。</li>
+<li>自定义model<br>Gradle允许你在任务、文件和依赖项配置之外的构建中引入新概念。你可以在大多数语言插件中看到这一点，他们将source sets的概念添加到构建中。对构建过程的适当建模可以极大的提高构建的易用性和效率</li>
+</ul>
+<h4 id="构建脚本按照Api进行操作"><a href="#构建脚本按照Api进行操作" class="headerlink" title="构建脚本按照Api进行操作"></a>构建脚本按照Api进行操作</h4><p>可以很容易将Gradle构建脚本视为可执行代码，因为他们本身就是可执行代码。实现细节：设计良好的构建脚本描述构建软件需要哪些步骤，而不是描述这些步骤如何完成工作，这是自定义任务类型及插件的职责</p>
+<blockquote>
+<p>有一种常见的误解，认为Gradle的强大和灵活性来自于它的构建脚本是代码这一事实。 这与事实大相径庭。 提供强大功能的是底层模型和API。 正如我们在最佳实践中建议的那样，你应该避免在构建脚本中放置太多(如果有的话)命令性逻辑。</p>
+</blockquote>
+<p>然而，在一种场景中，将构建脚本视为可执行代码是很有用的：理解构建脚本语法如何映射到Gradle API。API文档（由Javadocs和Groovy DSL Reference组成）列出了方法和属性，并引用了闭包和操作。这些在构建脚本上文中意味着什么呢？查看Groovy Build Script Primer了解该问题的答案，这样您就可以有效地使用API文档</p>
+<blockquote>
+<p>由于Gradle运行在JVM之上，所以构建脚本可以使用标准的Java API。Groovy构建脚本可以使用Groovy API，当然Kotlin构建脚本可以使用Kotlin API</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Task详述</title>
     <url>/2020/08/16/Gradle-task-details/</url>
     <content><![CDATA[<h2 id="Task的生命周期"><a href="#Task的生命周期" class="headerlink" title="Task的生命周期"></a>Task的生命周期</h2><p>首先每个task都归属于某个project。编写build脚本（即build.gradle文件）时，可以在脚本文件中定义task。之后运行构建，在构建的配置阶段，会执行project的build.gradle脚本，此时便会依照task创建语句创建Task对象，并对Task对象进行配置（依赖关系等）。配置阶段结束之后，便会输出一个待执行的task图（DAG）。然后构建进入执行阶段，即按照task图中task的依赖关系，执行每个task，并且每个task仅执行一遍。因此有以下结论</p>
@@ -830,126 +893,318 @@
       </tags>
   </entry>
   <entry>
-    <title>scala学习资料整理</title>
-    <url>/2018/07/21/scala%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</url>
-    <content><![CDATA[<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><strong><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">twitter scala school</a></strong> Scala课堂是Twitter启动的一系列讲座，用来帮助有经验的工程师成为高效的Scala 程序员<br><strong><a href="http://twitter.github.io/effectivescala/" target="_blank" rel="noopener">twitter - Effective Scala</a></strong> Twitter的Scala最佳实践    </p>
-<h2 id="优质blog"><a href="#优质blog" class="headerlink" title="优质blog"></a>优质blog</h2><p><strong><a href="https://hongjiang.info/scala/" target="_blank" rel="noopener">王宏江scala系列</a></strong><br><strong><a href="http://www.lihaoyi.com/" target="_blank" rel="noopener">李浩毅blog</a></strong></p>
-<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><p><strong><a href="https://scala.cool/" target="_blank" rel="noopener">Scala中的集合</a></strong><br><strong><a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design
-</a></strong><br><strong><a href="http://colobu.com/2016/11/17/Benchmarking-Scala-Collections/" target="_blank" rel="noopener">Scala Collection的性能(李浩毅blog的译文)</a></strong></p>
-<h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><strong><a href="https://my.oschina.net/joymufeng/blog/863823" target="_blank" rel="noopener">Scala中的下划线</a></strong></p>
-<h5 id="持续更新中…"><a href="#持续更新中…" class="headerlink" title="持续更新中…"></a>持续更新中…</h5>]]></content>
-      <categories>
-        <category>Scala</category>
-      </categories>
-      <tags>
-        <tag>scala</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>依赖配置的相关知识</title>
-    <url>/2020/09/03/what-is-dependency-configurations/</url>
-    <content><![CDATA[<h2 id="依赖配置是什么？"><a href="#依赖配置是什么？" class="headerlink" title="依赖配置是什么？"></a>依赖配置是什么？</h2><p>Gradle项目中声明的依赖都有其适用范围。如某些依赖编译代码时需要用到，而另一些依赖仅用于运行时。Gradle中使用依赖配置（Configuration）来表示这些依赖的作用范围（作用域）。</p>
-<p>许多Gradle插件会为项目添加一些预先定义好的配置（如<code>android-application</code>插件会添加<code>release</code>和<code>debug</code>配置等，Java插件添加了一些来表示源代码编译、执行测试等所需的各种类路径的插件）。下图使用Java插件作为例子</p>
-<img src="/2020/09/03/what-is-dependency-configurations/dependency-management-configurations.png" title="声明用于特定目的的依赖">
-
-<p><strong>配置的继承与组合</strong><br>配置可以继承其他配置，从而形成一个父子层级关系。子配置会继承其父配置声明的所有依赖。</p>
-<p>Gradle核心插件（如Java插件）中大量使用了配置继承。如<code>testImplementation</code>继承了<code>implementation</code>。这种配置层级关系有很实用的目的。编译测试需要在编写测试代码所需依赖之上增加对待测试源码的依赖。如果项目的生产环境的源码引用了Guava，则其在使用JUnit编写并执行测试代码时也需要引用Guava。下图展示了Java插件中的配置依赖所示</p>
-<img src="/2020/09/03/what-is-dependency-configurations/dependency-management-configuration-inheritance.png" title="Java插件中的配置依赖">
-
-<p>在背后，通过调用<code>Configuration.extendsFrom(org.gradle.api.artifacts.Configuration[])</code>方法<code>testImplementation</code>与<code>implementation</code>配置形成了一种父子层级关系。configuration可以继承其他任何configuration，无论它是定义在构建脚本中还是插件中</p>
-<p>以下用冒烟测试作为例子。假如我们要编写一套冒烟测试用例。每个测试用例都会调用一个Http请求用以验证web后端服务。由于底层的测试框架已经默认使用了JUnit。所以我们一个定义一个名为<code>smokeTest</code>的配置，继承自<code>testImplementation</code>以重用已有的测试框架依赖</p>
-<p>代码如下：</p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    smokeTest.extendsFrom testImplementation</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'junit:junit:4.13'</span></span><br><span class="line">    smokeTest <span class="string">'org.apache.httpcomponents:httpclient:4.5.5'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="可解析和可消费的配置"><a href="#可解析和可消费的配置" class="headerlink" title="可解析和可消费的配置"></a>可解析和可消费的配置</h2><p>配置是Gradle依赖解析中至关重要的部分。在依赖的解析的上下文中，区分生产者与消费者的是很重要的。如此说来，配置至少有三条规则：</p>
+    <title>BIP 32</title>
+    <url>/2018/09/27/bip32/</url>
+    <content><![CDATA[<p>此篇为BIP 32的译文，介绍分层确定性钱包<br><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍分层确定性钱包（HD Wallet）：一种可以在不同系统间部分或全部共享，有或没有花费的能力的钱包</p>
+<p>该规范旨在为可在不同客户端之间通信的确定性钱包设定标准。虽然本文描述的钱包有很多特性，但对于钱包客户端来说并不是每个特性都需要实现    </p>
+<p>本文分为两部分</p>
+<ul>
+<li>第一部分主要介绍如何从单一种子派生出一颗秘钥树</li>
+<li>第二部分主要介绍如何利用派生出来的秘钥树构建钱包</li>
+</ul>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h4 id="非确定性钱包的缺点"><a href="#非确定性钱包的缺点" class="headerlink" title="非确定性钱包的缺点"></a>非确定性钱包的缺点</h4><p>现有的一些Bitcoin客户端使用随机生成的秘钥，为了避免为每笔交易后都进行备份，这些客户端会创建一个（默认）包含100个秘钥的秘钥池。并且这种钱包很难跨系统共享，或者多端同时使用。虽然可以使用钱包的加密特性隐藏私钥并且不共享密码，但是这也导致钱包失去了生成公钥的能力。</p>
+<h4 id="确定性钱包及非确定钱包"><a href="#确定性钱包及非确定钱包" class="headerlink" title="确定性钱包及非确定钱包"></a>确定性钱包及非确定钱包</h4><p>确定性钱包不需要如此高频率的备份，而且由于椭圆曲线的数学特性，他可以在不暴露私钥的情况下计算出公钥。该特性就当于一个网络商店商家可以让他的服务器为每个顾客或每笔订单都生成一个新地址（即公钥hash），并且服务器不需要获取私钥。<br>然而，确定性钱包只有一条密钥对链组成。这个事实意味着钱包只能全部共享或不共享两种选择。但是在某些场景下我们只希望共享部分密钥（如只共享公钥）。还是拿网络商店举例，网络服务器并不需要访问商户的所有公钥，他们只需要获取用于接受客户付款的地址对应的公钥，而不是商户消费时生成的找零地址。而分层确定性钱包支持从单一root多条密钥链的特性，使得选择性的分享成为了可能。    </p>
+<h2 id="密钥生成规范"><a href="#密钥生成规范" class="headerlink" title="密钥生成规范"></a>密钥生成规范</h2><h4 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h4><p>在本文的其余部分，我们将假定比特币中使用的公钥加密算法，即为secp256k1定义的字段和曲线参数椭圆曲线加密算法。变量如下</p>
+<ul>
+<li>整数模数曲线顺序（用n表示）</li>
+<li>曲线上点的坐标</li>
+<li>字节序列<br>另外两个坐标的加法（+）定义为EC组操作的应用<br>级联（||）是把一个字节序列附加到另一个字节序列的操作</li>
+</ul>
+<p>作为标准的转换函数，我们假设</p>
+<ul>
+<li>point(t):返回secp256k1基点与EC点做乘法（重复应用EC组操作）得到的坐标对与整数p。</li>
+<li>ser32(i):把一个32位的无符号整数序列化为一个4字节序列，高位在前</li>
+<li>ser256(p):把一个整数序列化为一个32字节序列，高位在前</li>
+<li>serP(P):使用SEC1的压缩格式将坐标对p(x,y)序列化为字节序列：(0x02 or 0x03) || ser256(x),其中头部字节为y坐标的奇偶校验</li>
+<li>parse256(p):将32字节序列转化为一个256位数字，高位字节优先</li>
+</ul>
+<h4 id="扩展密钥"><a href="#扩展密钥" class="headerlink" title="扩展密钥"></a>扩展密钥</h4><p>接下来，我们顶一个一个函数，该函数可以从一个给定的父密钥派生出一定数量的子密钥。为了防止派生密钥仅依赖父密钥本身，我们会额外加入一个256位的熵对私钥与公钥进行扩展。熵称之为链码，链码对于相应的公私钥是相同的，都为32字节<br>我们把一个扩展私钥表示为(k,c)，k为普通私钥，c为256位的熵。扩展公钥表示为(K,c)，其中K=point(k)，c为256位的熵<br>每个扩展密钥有2<sup>31</sup>个普通子密钥，以及2<sup>31</sup>个强化子密钥，每个密钥都有一个下标。普通密钥的下标为0 - 2<sup>31</sup>-1，强化密钥的下标为2<sup>31</sup> - 2<sup>32</sup>-1，为了方便，我们使用i(H)来标记强化密钥，i<sub>H</sub> = i + 2<sup>31</sup></p>
+<h4 id="子密钥派生函数（CKD：child-key-derivation）"><a href="#子密钥派生函数（CKD：child-key-derivation）" class="headerlink" title="子密钥派生函数（CKD：child key derivation）"></a>子密钥派生函数（CKD：child key derivation）</h4><p>给定一个父扩展密钥及其下标i，可以计算出相应的子扩展密钥，算法取决于子扩展密钥是否是一个强化密钥（或即i是否&gt;=2^31），以及我们是否在讨论私钥或公钥</p>
+<h6 id="父私钥-gt-子私钥"><a href="#父私钥-gt-子私钥" class="headerlink" title="父私钥 -&gt; 子私钥"></a>父私钥 -&gt; 子私钥</h6><p>函数CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i) &rarr; (k<sub>i</sub>, c<sub>i</sub>)</p>
 <ol>
-<li>声明依赖</li>
-<li>作为消费者，把一系列依赖解析为文件</li>
-<li>作为生产者，对外暴漏artifact和依赖项以供其他项目使用（可消费的配置项通常代表生产者给消费者提供的变体）</li>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则为强化子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = 0x00 || ser<sub>256</sub>(k<sub>par</sub>) || ser<sub>32</sub>(i))（注意：0x00为填充字节，保证私钥长度为33字节），如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(point(k<sub>par</sub>)) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = parse<sub>256</sub>(I<sub>L</sub>) + k<sub>par</sub> (mod n)</li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 k<sub>i</sub> = 0的情况下，生成的密钥是无效的，这时应该继续计算下一个子密钥(发生的概率小于 1/2127)</li>
 </ol>
-<p>例如，为了表达应用<code>app</code>依赖<code>lib</code>，则至少需要一个配置</p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">//声明了一个名为"someConfiguration"的配置</span></span><br><span class="line">    someConfiguration</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">// 向`someConfiguration`配置添加一个项目依赖</span></span><br><span class="line">    someConfiguration project(<span class="string">":lib"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>配置可以通过扩展其他配置以继承其所有依赖。上例中的代码并没有告诉我们任何关于该配置消费者的信息。更为重要的是，他没有告诉我们该如何使用此配置项。假如<code>lib</code>为一个Java库：他可能会对外暴露不同的东西，如它的API、实现或者测试工具。根据要执行的task的不同（根据lib的API进行编译，执行该应用程序，编译测试等），可能要对<code>app</code>的依赖进行的不同的解析。为了解决这种需求，我们通常可以发现一些伴生配置，旨在明确配置的用法：</p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">// 声明用于解析应用程序的编译类路径的配置</span></span><br><span class="line">    compileClasspath.extendsFrom(someConfiguration)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 声明用于解析应用程序的运行时类路径的配置</span></span><br><span class="line">    runtimeClasspath.extendsFrom(someConfiguration)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，展示了三种不同的配置，这三种配置分别担任了不同的角色：   </p>
+<p>HMAC-SHA512函数，可查看<a href="http://tools.ietf.org/html/rfc4231" target="_blank" rel="noopener">RFC 4231</a></p>
+<h6 id="父公钥-gt-子公钥"><a href="#父公钥-gt-子公钥" class="headerlink" title="父公钥 -&gt; 子公钥"></a>父公钥 -&gt; 子公钥</h6><p>函数CKDpub((K<sub>par</sub>, c<sub>par</sub>), i) &rarr; (K<sub>i</sub>, c<sub>i</sub>)，仅适用于普通子密钥</p>
+<ol>
+<li>判断下标i是否大于等于2<sup>31</sup>，如果满足则返回失败，如果不满足则为普通子密钥，计算I = HMAC-SHA512(Key = c<sub>par</sub>, Data = ser<sub>P</sub>(K<sub>par</sub>) || ser<sub>32</sub>(i))</li>
+<li>将I分为两个32字节序列，I<sub>L</sub>和I<sub>R</sub></li>
+<li>返回的子密钥k<sub>i</sub> = point(parse<sub>256</sub>(I<sub>L</sub>)) + K<sub>par</sub></li>
+<li>链码(熵)c<sub>i</sub>为I<sub>R</sub></li>
+<li>在parse<sub>256</sub>(I<sub>L</sub>) ≥ n 或 K<sub>i</sub>是无穷远的一个点时，这时应该继续计算下一个子密钥</li>
+</ol>
+<h6 id="父私钥-gt-子公钥"><a href="#父私钥-gt-子公钥" class="headerlink" title="父私钥 -&gt; 子公钥"></a>父私钥 -&gt; 子公钥</h6><p>函数N((k, c)) &rarr; (K, c)计算出与扩展私钥相对应的扩展公钥</p>
+<ol>
+<li>返回值K = point(k)</li>
+<li>返回链码(熵)c即为函数输入中传递过来的链码</li>
+</ol>
+<p>两种通过父私钥计算子公钥的方法</p>
+<ol>
+<li>N(CKDpriv((k<sub>par</sub>, c<sub>par</sub>), i))(适用于任何条件)</li>
+<li>CKDpub(N(k<sub>par</sub>, c<sub>par</sub>), i)（仅适用于生成普通子公钥）</li>
+</ol>
+<h6 id="父公钥-gt-子私钥"><a href="#父公钥-gt-子私钥" class="headerlink" title="父公钥 -&gt; 子私钥"></a>父公钥 -&gt; 子私钥</h6><p>不可能</p>
+<h4 id="密钥树"><a href="#密钥树" class="headerlink" title="密钥树"></a>密钥树</h4><p>下一步我们使用若干个CKD结构构建一颗密钥树。从单一根节点开始，即主密钥m，对多个i计算CKDpriv(m,i)，进而得到1级派生子密钥。由于派生出来的密钥也都是扩展密钥，所以CKDpriv也可以应用于这些密钥。</p>
+<p>为了方便书写，我们把CKDpriv(CKDpriv(CKDpriv(m,3<sub>H</sub>),2),5)简写为m/3<sub>H</sub>/2/5，同样的，对于公钥，我们把CKDpub(CKDpub(CKDpub(M,3),2),5)简写为M/3/2/5。因此有了下面的等式</p>
 <ul>
-<li><code>someConfiguration</code>声明了应用程序的依赖。它就像一个篮子用来装该应用的依赖</li>
-<li><code>compileClasspath</code>和<code>runtimeClasspath</code>是要解析的配置：分别表示应用的编译类路径以及运行时类路径</li>
+<li>N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c.</li>
+<li>N(m/a<sub>H</sub>/b/c) = N(m/a<sub>H</sub>/b)/c = N(m/a<sub>H</sub>)/b/c.</li>
 </ul>
-<p>这种区别由配置中的canBeResolved标志表示。可以解析的配置即为可以计算依赖图的配置，因为它包含进行解析所需的所有信息。也就是说，我们会出计算一个依赖图，解析依赖图中的组件，最终输出artifact。如果某个配置的<code>canBeResolved</code>设置为<code>false</code>，则意味着该配置不会被解析，而仅仅用与声明依赖。原因是根据使用情况（编译类路径、运行时类路径），它可以解析为不同的图。尝试解析一个<code>canBeResolved</code>设置为<code>false</code>的配置是不对的。某种程度上类似于不该被实例化的抽象类(canBeResolved=false)，以及扩展抽象类(canBeResolved=true)的实现类。一个可解析的配置至少会扩展一个不可解析的配置。</p>
-<p>另一方面，对于库项目来说（生产者），我们也使用配置来表示可以消费的内容。例如，<code>lib</code>可能对外暴露了API或运行时（即运行时用到该lib），我们可能会把<code>artifact</code>添加到其一或者两者之中。通常在按照<code>lib</code>进行编译时，仅需要其API，而无需依赖其运行时。因此<code>lib</code>项目会暴露一个<code>apiElements</code>配置，用于给消费者寻找其API。像这样一种配置即为可消费但不可解析的配置。该特性通过配置的<code>canBeResumed</code>标志表示</p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    <span class="comment">// 供需要使用其API的消费者使用的配置</span></span><br><span class="line">    exposedApi &#123;</span><br><span class="line">        <span class="comment">// 表示该配置不可被解析</span></span><br><span class="line">        canBeResolved = <span class="literal">false</span></span><br><span class="line">        <span class="comment">// 表示该配置可以被消费</span></span><br><span class="line">        canBeConsumed = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 供需要使用其代码的消费者使用的配置</span></span><br><span class="line">    exposedRuntime &#123;</span><br><span class="line">        canBeResolved = <span class="literal">false</span></span><br><span class="line">        canBeConsumed = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是，N(m/a<sub>H</sub>)不能写为N(m)/a<sub>H</sub>，因为我们无法通过父扩展公钥计算出子扩展私钥</p>
+<p>每个叶子节点都对应于一个真正的密钥，叶子节点的链码会被忽略，只有节点中的公私钥是有用的。因为这种结构，我们有了父扩展私钥，就可以计算出所有的子扩展公钥及子扩展私钥，知道了父扩展公钥，就可以计算出所有的非强化子扩展公钥</p>
+<h4 id="密钥id"><a href="#密钥id" class="headerlink" title="密钥id"></a>密钥id</h4><p>可以使用序列化的ECDSA公钥的Hash160作为扩展密钥的id，忽略链码。id对应于比特币中地址。不建议使用Base58对id进行编码，因为id可能被作为地址（并且钱包软件不需要接受对链密钥本身的付款）。</p>
+<p>密钥id的钱32位称为指纹</p>
+<h4 id="扩展密钥序列化格式"><a href="#扩展密钥序列化格式" class="headerlink" title="扩展密钥序列化格式"></a>扩展密钥序列化格式</h4><p>扩展公钥及扩展私钥格式如下</p>
+<ol>
+<li>4byte：版本号(主网: 0x0488B21E public, 0x0488ADE4 private; 测试网: 0x043587CF public, 0x04358394 private)</li>
+<li>1byte：深度，根节点：0x00，一级节点：0x01 以此类推</li>
+<li>4byte：父密钥的指纹(主密钥为0x00000000)</li>
+<li>4byte：子节点个数(这里的英文看不懂 T T)</li>
+<li>32byte：链码</li>
+<li>33byte：原生公私钥数据(公钥部分为ser<sub>P</sub>(K)，私钥部分为0x00 || ser<sub>256</sub>(k))</li>
+</ol>
+<p>这78byte的数据可以像比特币其他数据一样使用Base58进行编码，首先要添加32位的校验码(通过两次SHA-256生成)，然后转为Base58编码格式，编码后输出长度为112位的字符串。版本号部分经过Base58编码，对应的字符串为，主网：xprv、xpub，测试网：tprv、tpub</p>
+<p>注意：上面格式中父密钥的指纹仅为了方便软件(钱包)检测父子节点使用，并且软件需要处理冲突，在内部，可以使用完整的160位id。</p>
+<p>在导入序列化扩展公钥时，必须验证公钥数据中的X坐标是否存在于椭圆曲线上。 如果不是，则扩展公钥无效</p>
+<h4 id="主密钥生成"><a href="#主密钥生成" class="headerlink" title="主密钥生成"></a>主密钥生成</h4><p>可能的扩展密钥对总数几乎为2<sup>512</sup>，但是生成出来的密钥为256位，所以安全性会折半。主密钥并不是直接生成的，而是使用已有的种子代替。主密钥生成步骤如下：</p>
+<ol>
+<li>使用prng算法生成种子序列S，长度为128 - 512位之间。建议使用256位</li>
+<li>计算I = HMAC-SHA512(Key = “Bitcoin seed”, Data = S)，直接使用比特币种子作为输入</li>
+<li>将I分为两个32字节序列，I<sub>L</sub> and I<sub>R</sub></li>
+<li>使用parse<sub>256</sub>(I<sub>L</sub>)作为主私钥，I<sub>R</sub>作为主链码</li>
+</ol>
+<p>在I<sub>L</sub> = 0 或 ≥n的情况下，生成的主密钥无效，需要重新生成</p>
+<img src="/2018/09/27/bip32/derivation.png" title="主密钥生成">
 
-<p>总的来说，配置扮演的角色是由<code>canBeResolved</code>和<code>canBeConsumed</code>标志决定的，如下图：</p>
-<img src="/2020/09/03/what-is-dependency-configurations/configuration_roles.jpg" title="configuration roles">
-
-<p>为了向后的兼容性，这两个标志为的默认值为<code>true</code>。但是对于插件作者来说，应该根据需要设置值，否则可能会出现解析错误。</p>
-<h2 id="自定义配置"><a href="#自定义配置" class="headerlink" title="自定义配置"></a>自定义配置</h2><p>自定义配置可用于分离用于不同目的的依赖，以形成不同的依赖域。</p>
-<p>假设你想声明对Jasper Ant任务的依赖关系，以便预编译JSP文件，但这些文件不应该最终出现在用于编译源代码的类路径中。通过自定义配置可以轻松实现此类需求，如下面例子</p>
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">configurations &#123;</span><br><span class="line">    jasper</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    jasper <span class="string">'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.2'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task preCompileJsps &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        ant.taskdef(<span class="string">classname:</span> <span class="string">'org.apache.jasper.JspC'</span>,</span><br><span class="line"><span class="symbol">                    name:</span> <span class="string">'jasper'</span>,</span><br><span class="line"><span class="symbol">                    classpath:</span> configurations.jasper.asPath)</span><br><span class="line">        ant.jasper(<span class="string">validateXml:</span> <span class="literal">false</span>,</span><br><span class="line"><span class="symbol">                   uriroot:</span> file(<span class="string">'src/main/webapp'</span>),</span><br><span class="line"><span class="symbol">                   outputDir:</span> file(<span class="string">"$buildDir/compiled-jsps"</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>项目的配置由<code>configurations</code>对象管理。</p>
-<p>关于依赖配置就先到这里吧，下一篇介绍不同类型的依赖，如文件依赖，module依赖等</p>
+<h2 id="分层确定性钱包结构"><a href="#分层确定性钱包结构" class="headerlink" title="分层确定性钱包结构"></a>分层确定性钱包结构</h2><p>前面的部分中描述了密钥树及其节点，下一步是在此基础上构建一个钱包。本文中介绍的仅为一种范例，但是建议开发者开发钱包时模仿范例的兼容性，但也不是所有的功能都需要支持</p>
+<h4 id="范例钱包的结构"><a href="#范例钱包的结构" class="headerlink" title="范例钱包的结构"></a>范例钱包的结构</h4><p>一个HDW可以看做一系列账户的集合，每个账户都有个编号，默认账户account(“”)的编码为0。钱包可以不支持多账户，如果不支持，则使用默认账户。</p>
+<p>每个账户都是两条密钥链组成：内部链，外部链。外部链用来生成新的公共钱包地址，内部链可用于所有其他的操作(更改地址，生成地址，可以是任何不需要通信的操作)，支持双密钥链的钱包，应该使用外部链以支持所有的操作</p>
+<ul>
+<li>m/i<sub>H</sub>/0/k 为从主密钥m导出的第i个账号的外部链的第k个密钥对</li>
+<li>m/i<sub>H</sub>/1/k 为从主密钥m导出的第i个账号的内部链的第k个密钥对</li>
+</ul>
+<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><h4 id="全钱包共享"><a href="#全钱包共享" class="headerlink" title="全钱包共享"></a>全钱包共享</h4><p>在两个系统需要访问同一个钱包，并且两个系统都需要有花费的功能，则需要共享主扩展私钥。每个网络节点需要为外部链维护一个前瞻密钥缓池，其中保存n个前瞻密钥，用于监听收到的付款。对内部内部链的展望可能非常小，因为不存在任何缺口。注意账户名无法通过区块链同步，仍然需要手动输入。</p>
+<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>如果一名审计员需要获取所有交易(收支)记录，则可以将所有账户的扩展公钥共享给审计员。这样审计员就可以查看当前钱包的所有交易(收支)了</p>
+<h4 id="公司多部门场景"><a href="#公司多部门场景" class="headerlink" title="公司多部门场景"></a>公司多部门场景</h4><p>当一家公司拥有数个独立的部门，则这些部门可以使用从同一主密钥派生出来的钱包。进而公司的领导通过维护一个超级钱包，就可以看到各个部门的收支情况了，甚至可以在各部门之间转移资金</p>
+<h4 id="合作企业间交易"><a href="#合作企业间交易" class="headerlink" title="合作企业间交易"></a>合作企业间交易</h4><p>可以使用特定账户的外部链的扩展公钥作为“超级地址”，可以使得即使高频交易也不容易被别人追踪到，但无需为每笔付款都申请一个新地址。矿池操作员也可以使用这种机制作为可变支付地址</p>
+<h4 id="不安全的收款人"><a href="#不安全的收款人" class="headerlink" title="不安全的收款人"></a>不安全的收款人</h4><p>当运行电子商务的服务器，存在安全风险时，他需要知道用于收款的公共地址。服务器只需要知道单个账户外部链扩展公钥。这意味着非法访问网络服务器的人最多只能查看交易记录，但是无法盗取资金，如果存在多台服务器，则他只攻破一台服务器，也无法访问到其它服务器的交易记录</p>
 ]]></content>
       <categories>
-        <category>Gradle</category>
+        <category>区块链</category>
       </categories>
       <tags>
-        <tag>gradle</tag>
+        <tag>区块链</tag>
+        <tag>BIP</tag>
       </tags>
   </entry>
   <entry>
-    <title>scala函数式编程</title>
-    <url>/2018/07/21/scala%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p>从java转向scala已经有一段时间了，虽然平时写代码问题不大，但是因为面向对象编程已经根深蒂固了，一直对函数式编程理解不是很到位，scala虽然是多范式编程语言，但是官方还是鼓励开发者使用函数式编程的，所以很有必要仔细学习并记录一下</p>
-<h2 id="什么是函数式"><a href="#什么是函数式" class="headerlink" title="什么是函数式"></a>什么是函数式</h2><p>函数式编程，不是某一种语言的特性，而是诸多编程思想(如命令式，面向对象等)中的一种。对于它的解释，引用<a href="(http://www.10tiao.com/html/557/201609/2652725732/1.html)">王宏江-Scala中的函数式特性</a>中的一段话</p>
-<blockquote>
-<p>图灵机，以及冯诺依曼对它的实现（冯诺依曼体系），从风格上被归为“命令式”，它的运算过程可以看作不断地修改内存来反映运算的结果，即用命令修改状态；而阿隆佐邱奇提出的 Lambda 演算，则是通过连续的运算（基于函数）得到最终结果。<br>基于Lambda演算的被归为函数式，在众多的函数式编程语言里，Scala的血缘继承自ML 和Haskell 最多。关于ML有本非常好的书《ML for the Working Programmer》，这本书里面提到:<strong>“函数式程序是跟值打交道的，而不是跟状态打交道的。它们的工具是表达式，而不是命令。”</strong></p>
-</blockquote>
-<h4 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h4><p>上面引文里，函数式程序的工具是表达式，那么什么是表达式呢？<br>表达式可以简单理解为有返回值的语句。在scala中只有表达式，因为在scala中任何语句都有返回值，而在java中则不是。如赋值语句在scala中是有返回值的，返回类型为Unit，而在java中赋值语句没有返回值<br>示例</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">scala&gt;</span><span class="bash"> var b = 1</span></span><br><span class="line">b: Int = 1</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"> val a = b = 3</span></span><br><span class="line">a: Unit = ()</span><br></pre></td></tr></table></figure>
-
-<p>变量b被重新赋值为3，赋值的结果类型为Unit，并且赋值给了a</p>
-<h4 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h4><p>函数式编程就是把计算机中的运算抽象为数学中的运算，程序中的函数和方法抽象为数学中的函数。如       </p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>):<span class="type">Int</span> = &#123;</span><br><span class="line">  <span class="number">3</span>X + <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">对应于数学中的</span><br><span class="line"></span><br><span class="line">f(<span class="type">X</span>) = <span class="number">3</span>X + <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>函数的参数即为数学函数中的未知数(x或y等等)，整个运算过程封装在函数体中，并且不需要依赖除了参数外的其他数据，运算完成后返回运算的结果。  </p>
-<p>对于复杂的运算，抽象为多个函数的嵌套调用，整个运算的过程都是围绕函数进行的，摒弃了命令式编程中对状态的依赖，这也是为什么scala鼓励我们使用val不变量，而尽量少使用var变量</p>
-<p>最终整个应用程序都是由一个一个的函数组成</p>
-<p>为了支持函数式编程，scala中提供了很多函数特性，这些特性在<a href="../../23/scala中的函数/">scala中的函数那篇blog</a>里，简单罗列下</p>
-<ul>
-<li>引入了与其他类型地位平等的函数类型，函数可传递，可作为返回值</li>
-<li>对高阶函数的支持</li>
-<li>函数的部分应用</li>
-<li>函数柯里化</li>
-<li>函数嵌套</li>
-<li>闭包</li>
+    <title>GitHub Pages + Hexo搭建博客汇总</title>
+    <url>/2019/08/18/hexo_github_pages/</url>
+    <content><![CDATA[<p>网上关于GitHub Pages + Hexo搭建博客的教程较多，因此此文旨在查缺补漏，记录整个流程，汇总一些参考的优质blog，以及梳理我在搭建过程中遇到的问题。</p>
+<h2 id="如何搭建个人blog"><a href="#如何搭建个人blog" class="headerlink" title="如何搭建个人blog"></a>如何搭建个人blog</h2><p>在开始之前，我先想了下如何搭建个人blog。既然blog是个网站，那么首先能想到的是，需要自己开发一个网站出来啊，有了网站，还需要服务器来部署我们的网站，然后还需要一个域名，方便访问我们的网站。    </p>
+<h4 id="因此我们要做的工作有"><a href="#因此我们要做的工作有" class="headerlink" title="因此我们要做的工作有"></a>因此我们要做的工作有</h4><ul>
+<li>开发自己的网站（网站设计，UI开发，评论统计系统集成维护等）</li>
+<li>搭建服务器（部署网站，维护等）</li>
+<li>购买域名（绑定域名）</li>
 </ul>
-<h2 id="函数式编程的特性"><a href="#函数式编程的特性" class="headerlink" title="函数式编程的特性"></a>函数式编程的特性</h2><p>关于函数式编程的特性可以参考<a href="http://www.ruanyifeng.com/blog/2012/04/functional_programming.html" target="_blank" rel="noopener">阮一峰-函数式编程初探</a></p>
+<p>首先开发网赚需要耗费巨大精力，其次购买服务器和域名都需要花钱，而我的初衷只是写blog啊，然而却需要做这么多，那岂不是舍本逐末了。好在已经有现成且免费的框架和工具，GitHub Pages<br>和Hexo帮我们做了上面几乎所有的事儿</p>
+<h4 id="GitHub-Pages介绍"><a href="#GitHub-Pages介绍" class="headerlink" title="GitHub Pages介绍"></a>GitHub Pages介绍</h4><p>GitHub Pages是Github提供的一个免费静态网站的托管服务，旨在直接从GitHub仓库托管个人/组织/项目的页面，并且为站点提供了默认域名github.io<br>。也就是说GitHub Pages帮我们解决了 <strong>服务器和域名</strong> 这两大难题</p>
+<p>详细介绍：<a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages官网</a></p>
+<h4 id="Hexo介绍"><a href="#Hexo介绍" class="headerlink" title="Hexo介绍"></a>Hexo介绍</h4><p>Hexo是一款基于Node.js的静态博客框架。通过Hexo，用户可以定制自己喜欢的网站主题，专注与使用Markdown编写blog，它会帮用户生成静态网站并托管在GitHub，相当的简便。因此Hexo帮我们解决了** 开发网站 ** 的难题</p>
+<p>详细介绍：<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>  </p>
+<h2 id="搭建个人blog的流程"><a href="#搭建个人blog的流程" class="headerlink" title="搭建个人blog的流程"></a>搭建个人blog的流程</h2><p>在使用Hexo极力推荐阅读** <a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a> ** ,文档里的说明要比许多blog里清晰的多</p>
+<h4 id="搭建前的准备工作"><a href="#搭建前的准备工作" class="headerlink" title="搭建前的准备工作"></a>搭建前的准备工作</h4><p>安装流程在上文中的<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>里有详细说明</p>
+<ul>
+<li>安装Git</li>
+<li>安装Node.js</li>
+<li>安装Hexo  </li>
+</ul>
+<h4 id="搭建流程"><a href="#搭建流程" class="headerlink" title="搭建流程"></a>搭建流程</h4><p>这里只列出简单流程，定制主题，及git分支设置在后面介绍</p>
+<ol>
+<li><p>GitHub上创建新仓库，仓库名为 ** GitHub用户名.github.io **</p>
+<blockquote>
+<p>这里需要注意，仓库的名字必须为上面的格式，否则部署后将无法访问blog</p>
+</blockquote>
+</li>
+<li><p>GitHub新建分支hexo，并设置为默认分支</p>
+</li>
+<li><p>使用Git克隆新建仓库到本地（此时为hexo分支）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/github_user_name/github_user_name.github.io.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在仓库根目录使用hexo init命令初始化（此时为hexo分支）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上一步完成后依次使用hexo g 与 hexo s（此时为hexo分支），其中g为generator，s为server</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开浏览器输入localhost:4000查看本地blog效果，如下图</p>
+<img src="/2019/08/18/hexo_github_pages/hexo_landscape.jpeg" title="Hexo默认主题"></li>
+<li><p>修改仓库根目录下的_config.yml文件，修改deploy中的以下字段并保存，注意branch要设置为master</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span>    </span><br><span class="line"><span class="attr">    type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">    repo:</span> <span class="attr">https://github.com/github_user_name/github_user_name.github.io.git</span></span><br><span class="line"><span class="attr">    branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>提交本地变更至hexo分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">'commit msg'</span></span><br><span class="line">$ git push origin hexo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用hexo d命令完成blog部署</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="blog目录结构"><a href="#blog目录结构" class="headerlink" title="blog目录结构"></a>blog目录结构</h4><p>在上面流程的第4步中，执行完hexo init命令后，会在文件夹下生成hexo工程，以下简要展示生成的目录结构及各个目录的作用，更为详细的解释见<a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">Hexo目录结构</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|-- _config.yml      // 网站全局配置文件，详细说明见</span><br><span class="line">|-- package.json     //</span><br><span class="line">|-- scaffolds        //</span><br><span class="line">|-- source           // 网站资源文件夹，存放网站图片，文章等</span><br><span class="line">   |-- _drafts</span><br><span class="line">   |-- _posts        // 我们的Markdown和HTML文件存放在次文件夹</span><br><span class="line">|-- themes</span><br><span class="line">   |-- landscape     // 官方默认的主题</span><br><span class="line">   |-- next          // next主题</span><br></pre></td></tr></table></figure>
+
+<p>经过第4步之后，通过修改_config.yml文件进行网站的配置,如网站title，author等，详情见<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="noopener">Hexo网站配置</a>。其中最应该注意的是deploy字段，该字段用于配置网站的部署，如网站部署到git的xxx仓库的xxx分支，或是地址为xxx.xxx.xxx.xxx的服务器，详情见<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">Hexo deploy</a>    </p>
+<h4 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h4><p>Hexo允许用户自定义主题，下面展示主题的设置方式</p>
+<ol>
+<li><p>挑选自己喜欢的主题，找到其仓库地址</p>
+</li>
+<li><p>命令行cd 定位到themes文件夹，将主题clone至该文件夹</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes</span><br><span class="line">$ git <span class="built_in">clone</span> &lt;theme repo&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在clone完成后，新添加的文件夹名称即为主题名称xxx，打开_config.yml将theme字段的landscape修改为xxx</p>
+</li>
+</ol>
+<p>关于主题的挑选，如果没有web前段经验，最好挑选那些star数计较高，社区比较活跃，经常迭代维护的主题，如我自己使用的next主题，下面是我在挑选主题时参考的资料   </p>
+<p><a href="https://www.zhihu.com/question/24422335/answer/46357100" target="_blank" rel="noopener">知乎-有哪些好看的Hexo主题</a></p>
+<blockquote>
+<p>高赞回答用python爬虫爬出来的主题star排行榜 ,推荐参考这个挑选主题     </p>
+</blockquote>
+<p><a href="https://hexo.io/themes/index.html" target="_blank" rel="noopener">官方主题列表</a></p>
+<blockquote>
+<p>官方没有对主题进行排名，挑选时稍微麻烦些</p>
+</blockquote>
+<p><a href="https://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">推荐NexT主题</a></p>
+<blockquote>
+<p>NexT主题外观比较简洁利落，并且社区活跃，有详尽的中文文档，主题的外观也可进行各种灵活的配置，是前段盲的必备良药。对于该主题的详细用法，其官方文档中有详细的说明，也就不再赘述了</p>
+</blockquote>
+<h4 id="关于git仓库的说明"><a href="#关于git仓库的说明" class="headerlink" title="关于git仓库的说明"></a>关于git仓库的说明</h4><p>在搭建流程中的前两步，建立完仓库后，又新建了一个hexo分支，并且设置为默认分支。这是因为我们在维护我们的网站时，要维护以下两部分内容</p>
+<ul>
+<li><p>Hexo工程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo init之后生成的部分</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成的静态网站</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">之前在_config.yml中配置了deploy的git仓库及分支，这里我配置的是master分支，在执行了hexo deploy命令之后，Hexo就会生成静态静态网站提交至master分支并自动部署</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>这两部分都需要提交至git仓库的，第一部分提交至git，我们就可以随时随地只要有电脑网络就可以clone工程，写blog并更新网站。第二部分是GitHub Pages部署网站必须的部分。这两部分的内容互不相干，因此建议新建hexo分支，用于存储我们的Hexo工程，master分支用于部署网站</p>
+<p>参考的文档：<a href="https://www.zhihu.com/question/21193762" target="_blank" rel="noopener">知乎-使用Hexo，如果换了电脑怎么更新博客</a></p>
+<h4 id="关于NexT主题个人签名不显示的问题"><a href="#关于NexT主题个人签名不显示的问题" class="headerlink" title="关于NexT主题个人签名不显示的问题"></a>关于NexT主题个人签名不显示的问题</h4><p>在NexT主题配置文件_config.yml中，如果设置seo字段为true，则网站配置文件_config.yml中的description字段会被用于seo，而不会显示为签名，这时如果想要显示个人签名，需要额外添加signature字段</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="string">随行、随记</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo-SEO优化"><a href="#Hexo-SEO优化" class="headerlink" title="Hexo SEO优化"></a>Hexo SEO优化</h2><p>辛辛苦苦搭好了blog，写了文章，最后发现浏览器里搜不到啊，根本没人看啊，怎么办啊，好没有成就感。这时候就需要SEO出马了，那么什么是SEO呢？</p>
+<blockquote>
+<p>SEO 英文全称Search Engine Optimization 即搜索引擎优化。是一种利用搜索引擎规则提高网站在有关引擎内的自然排名</p>
+</blockquote>
+<p>既然是针对搜索引擎的优化，那么也就是针对Baidu和Google的优化了。相关blog有很多，并且都是死套路，所以这里就挑选几篇比较新比较好的blog列出来</p>
+<p><a href="https://hoxis.github.io/Hexo+Next%20SEO%E4%BC%98%E5%8C%96.html" target="_blank" rel="noopener">Hexo博客Next主题SEO优化方法</a><br><a href="https://juejin.im/post/5ae7f8a2f265da0ba266c5c6" target="_blank" rel="noopener">Hexo个人博客SEO优化系列</a></p>
 ]]></content>
       <categories>
-        <category>Scala</category>
+        <category>Web前端</category>
       </categories>
       <tags>
-        <tag>scala</tag>
-        <tag>函数式</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub Pages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是协程？</title>
+    <url>/2020/05/05/coroutine/</url>
+    <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
+<h2 id="协程的定义"><a href="#协程的定义" class="headerlink" title="协程的定义"></a>协程的定义</h2><p>协程: Coroutine<br>协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。</p>
+<p>定义<a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">Wiki</a>:  :</p>
+<blockquote>
+<p><strong>Coroutines</strong> are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. Coroutines are well-suited for implementing familiar program components such as cooperative tasks, exceptions, event loops, iterators, infinite lists and pipes    </p>
+</blockquote>
+<blockquote>
+<p>译: 协程时计算机程序的一类组件，通过允许挂起和恢复执行概括了非抢占式（即协作式）多任务的子程序。协程非常适合用于实现一些常见的程序组件，如协作式多任务，异常，事件循环，迭代器，无限列表以及管道</p>
+</blockquote>
+<p>Wiki中对于协程的定义还是挺难理解的，其中的关键词</p>
+<ul>
+<li>子程序（subroutine）  </li>
+<li>挂起（suspend）和恢复（resume）</li>
+<li>抢占式（preemptive）和协作式（cooperative or non-preemptive）  </li>
+</ul>
+<p>如果不先理解这几个关键词的话，是很难搞清楚协程的</p>
+<h4 id="首先是子程序"><a href="#首先是子程序" class="headerlink" title="首先是子程序"></a>首先是子程序</h4><p>《The Art of Computer Programming》(计算机程序设计艺术)一书中对subroutine有详细的解释，以下是原文</p>
+<blockquote>
+<p>When a certain task is to be performed at severial different places in a program, it is usually undesirable to repeat the coding in each place. To avoid this situation, the coding (called a subroutine) can be put into one place only, and a few extra instructions can be added and to restart the outer program properly after the subroutine is finished    </p>
+</blockquote>
+<blockquote>
+<p>译: 当一项确定的任务再程序的不同位置多次执行时，通常重复的代码不是我们想看到的。为了避免这种情况，这段代码（叫做一个子程序）可以被单独放在一个位置，通过少量额外的指令在每个需要执行该此程序的位置添加并执行子程序，并在子程序执行完成后，自动的重启外部程序</p>
+</blockquote>
+<p>这段对于子程序的描述还是很容易理解的，从高级语言的角度来看，子程序就相当于一个函数或方法，对子程序的引用即为对函数或方法的调用。</p>
+<p>子程序的用途书中也有描述，这里简单提一下：子程序的主要优势是避免重复代码，节省程序空间。也间接的节省了时间，如：加载程序需要的时间减少等。子程序也会让构思大型程序变得更容易，debug也会更容易。封装出来的子程序也可以作为开放库对外暴露给其他开发者使用。</p>
+<p>理解了子程序，那么子程序跟协程又有什么关系呢？或者说两者有什么区别呢？同样引用原文给出答案</p>
+<blockquote>
+<p>Subroutines are special case of more general program components, called coroutines. In contrast to the unsymmetric relationship between a main routine and a subroutine, there is complete symmetry between coroutines, which on call each other.    </p>
+<p>We may consider the main program and subroutines as a team of programs, each member of the team having a certain job to do. The main program, in the course of doing its job, will activate the subprogram; the subprogram will perform its own function and then activate the main program. We may stretch our imagination to believe that, from the subroutine’s point of view, when it exits it is calling the main routine; the main routine continues to performs its duty, then ‘exits’ to the subroutine. the subroutine acts, then call the main routine again.</p>
+</blockquote>
+<p>译:     </p>
+<blockquote>
+<p>子程序是通用程序组件（即协程）的一种特例。与主程序与子程序间非对等关系（调用者与被调用者）对比，协程间是完全对等的，他们可以互相调用 </p>
+</blockquote>
+<blockquote>
+<p>我们可以将主程序和子程序看作是程序组，程序组中的每个成员都要完成特定的任务。主程序在完成其任务的过程中，会激活子程序，然后子程序会执行完成它自己的任务，随后再激活主程序让主程序继续执行。拓展下我们的想象力，从子程序的视角出发，在子程序出口位置调用主程序，主程序继续执行其任务，接着主程序’退出’并在出口位置调用子程序，子程序执行，而后再调用主程序</p>
+</blockquote>
+<p>上面第二段的意思是，子程序只有一个入口和出口，而协程可以有多个入口和出口。即子程序被主程序调用后只能从头开始执行（入口）直到执行完成然后退出（出口），而后主程序继续执行。而协程在被调用后，在中途可能会有一个或多个出口（出口点之后仍然有代码待执行），当执行中途遇到出口时，当前协程交出执行权让其他协程执行，当下次再调用该协程时，会从上次的出口点位置继续开始执行后续的代码（上次的出口点即为下次执行的入口点）。这也就解释了第一段中子程序和主程序关系与协程间关系的差别了</p>
+<blockquote>
+<p>Wiki中子程序与协程的比较</p>
+<ul>
+<li>子例程可以调用其他子例程，调用者等待被调用者结束后继续执行，故而子例程的生命期遵循后进先出，即最后一个被调用的子例程最先结束返回。协程的生命期完全由对它们的使用需要来决定</li>
+<li>子例程的起始处是惟一的入口点，每当子例程被调用时，执行都从被调用子例程的起始处开始。协程可以有多个入口点，协程的起始处是第一个入口点，每个yield返回出口点都是再次被调用执行时的入口点。</li>
+<li>子例程只在结束时一次性的返回全部结果值。协程可以在yield时不调用其他协程，而是每次返回一部分的结果值，这种协程常称为生成器或迭代器。</li>
+<li>现代的指令集架构通常提供对调用栈的指令支持，便于实现可递归调用的子例程。在以Scheme为代表的提供续体的语言环境下，恰好可用此控制状态抽象表示来实现协程。</li>
+</ul>
+</blockquote>
+<h4 id="挂起和恢复"><a href="#挂起和恢复" class="headerlink" title="挂起和恢复"></a>挂起和恢复</h4><p>其实在子程序那一部分中已经对挂起和恢复做出了解释。协程拥有多个出口和入口，所谓挂起就是在执行途中遇到出口，当前协程让出执行权，跳转到其他协程继续执行，而恢复就是当再次调用该协程时从上次出口点继续执行后续任务。出口对应挂起，入口对应恢复</p>
+<h4 id="抢占式和协作式"><a href="#抢占式和协作式" class="headerlink" title="抢占式和协作式"></a>抢占式和协作式</h4><p>首先，无论是抢占式还是协作式，都意味着当前Task都不再继续拥有执行权，而两者区别是，抢占式多任务中，当前任务被动的系统剥夺执行权，协作式多任务中，当前任务在不需要系统资源时主动让出执行权    </p>
+<p>抢占式多任务涉及到了中断机制的使用，中断机制可以挂起当前进程并唤起调度器以决定接下来应该调度执行哪个进程。因此，所有进程在一段时间内都会获得一定数量的CPU时间</p>
+<p>抢占式多任务依赖于 CPU 的硬件支持。 因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有 CPU 支持了执行权限后，抢占式调度才成为可能</p>
+<p>不同于抢占式由系统调度进程切换，协作式进程在空闲（idel）或阻塞（block）时会主动的让出执行权（yield）</p>
+<h2 id="协程能解决什么问题呢"><a href="#协程能解决什么问题呢" class="headerlink" title="协程能解决什么问题呢"></a>协程能解决什么问题呢</h2><p>如果从早先协程的设计理念来看，协程是设计用来处理单内核下多任务并发的。协程最本质的特性是可挂起和恢复的特性，拥有多入口多出口。<br>相较于子程序的从头运行至尾，协程有更丰富的过程（有一个或多个运行阶段）,多个任务可以交替执行，使得多任务协作提供成为可能，即协程拥有并发的能力。</p>
+<p>而对于现代的高级语言来说，协程更像是任务，运行在线程之上，在语言级别进行调度。许多语言的也都是多线程 + 协程的的实现，以达到像写同步代码那样处理异步问题。通常异步需要多线程来实现，但是弊端就是多线程调度时，切换上下文较为耗时，而如果通过多线程 + 协程方式来处理异步的话，相当于将系统级的线程调度替换为语言级别的协程调度，一定程度上减少了多线程调度切换上下文的开销。另一方面，多线程方式实现异步最可能面临异步回调，而最熟悉的应该是JS中的回调地狱问题了，而有了协程之后，就可以完美的消除该问题。</p>
+<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>协程从本质上讲依然是一种程序，运行与线程之上。名称以及它表现出来的特征与线程有相似之处，但与线程不同的是，他的调度并不需要系统参与，而是直接在语言级别完成。这也是许多人称协程为用户级线程的原因</p>
+]]></content>
+      <categories>
+        <category>Coroutine</category>
+      </categories>
+      <tags>
+        <tag>coroutine</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>转载--计算机语言协程的历史、现在和未来</title>
+    <url>/2020/05/05/history-of-coroutine/</url>
+    <content><![CDATA[<p>本文原发于《程序员》2014年11月刊。好文章备份一份</p>
+<p>计算机科学是一门应用科学，几乎所有概念都是为了理解或解决实际问题而生的。协程 (Coroutine) 的出现也不例外。协程的概念，最早可以追溯到写作 COBOL 语言编译器中的技术难题。</p>
+<h2 id="从磁带到协程"><a href="#从磁带到协程" class="headerlink" title="从磁带到协程"></a>从磁带到协程</h2><p>COBOL是最早的高级语言之一，编译器则是高级语言必不可少的一部分。现如今，我们对编译器的了解，已经到了可以把核心内容浓缩成一本教科书的程度。然而在二十世纪六十年代，如何写作高效的语言编译器还是绕不过的现实问题。例如，1960年夏天，D. E. Knuth就是利用开车横穿美国去加州理工读研究生的时间，对着<a href="https://www.cs.virginia.edu/brochure/images/manuals/b205/central/central.html" target="_blank" rel="noopener">Burroughs 205</a>机器指令集手写COBOL编译器。最早提出“协程”概念的Melvin Conway，也是从如何写一个只扫描一遍程序（one-pass）的COBOL编译器出发。众多的“高手”纷纷投入编译器开发，可见一门新科学发展之初也是筚路蓝缕。</p>
+<p>以现代眼光来看，高级语言编译实际由多个步骤组合而成：词法解析、语法解析、语法树构建，以及优化和目标代码生成等。编译实质上就是从源程序出发，依次将这些步骤的输出作为下一步的输入，最终输出目标代码。在现代计算机上实现这种管道式的架构毫无困难：只需要依次运行，中间结果存为中间文件或放入内存即可。GCC和Clang编译器，以及<a href="http://www.antlr.org/" target="_blank" rel="noopener">ANTLR</a>构建的编译器，都遵循这种设计。</p>
+<p>在Conway的设计里，词法和语法解析不再是独立运行的步骤，而是交织在一起。编译器的控制流在词法和语法解析之间来回切换：当词法模块读入足够多的token时，控制流交给语法分析；当语法分析消化完所有token后，控制流交给词法分析。词法和语法分别独立维护自身的运行状态。Conway构建的这种协同工作机制，需要参与者“让出（yield）”控制流时，记住自身状态，以便在控制流返回时能从上次让出的位置恢复（resume）执行。简言之，协程的全部精神就在于控制流的主动让出和恢复。我们熟悉的子过程调用可以看作在返回时让出控制流的一种特殊协程，其内部状态在返回时被丢弃了，因此不存在“恢复”这个操作。</p>
+<p>以现在眼光来看，编译器的实现并非必需协程。然而，Conway用协程实现COBOL编译器在当时绝不是舍近求远。首先，从原理上，因为COBOL并不是<a href="https://en.wikipedia.org/wiki/LL_parser" target="_blank" rel="noopener">LL(1)</a>型语法，无法简单构建一个以词法分析为子过程的自动机。其次，当年计算机依赖于磁带存储设备，只支持顺序存储。也就是说，依次执行编译步骤并依靠中间文件通信的设计是不现实的，各步骤必须同步前进。正是这样的现实局限和设计需要，催生了协程的概念。</p>
+<h2 id="自顶向下，无需协同"><a href="#自顶向下，无需协同" class="headerlink" title="自顶向下，无需协同"></a>自顶向下，无需协同</h2><p>虽然协程伴随着高级语言诞生，却没有能像子过程那样成为通用编程语言的基本元素。</p>
+<p>从1963年首次提出到上世纪九十年代，我们在ALOGL、Pascal、C、FORTRAN等主流的命令式编程语言中都没有看到原生的协程支持。协程只稀疏地出现在Simula、Modular-2（Pascal升级版）和Smalltalk等相对小众的语言中。作为一个比子进程更加通用的概念，在实际编程中却没有取代子进程，不得不说出乎意外。但如果结合当时的程序设计思想看，又在意料之中：协程不符合那个时代所崇尚的“自顶向下”的程序设计思想，自然也就不会成为当时主流的命令式编程语言的一部分。</p>
+<p>正如面向对象的语言是围绕面向对象的开发理念设计一样，命令式编程语言是围绕自顶向下的开发理念设计的。在这种理念的指导下，程序被切分为一个主程序和大大小小的子模块，每个子模块又可能调用更多子模块。C家族语言的main()函数就是这种自顶向下思想的体现。在这种理念指导下，各模块形成层次调用关系，而程序设计就是制作这些子过程。</p>
+<p>在“自顶向下”这种层次化的理念下，具有鲜明层次的子过程调用成为软件系统最自然的组织方式，也是理所当然。相较之下，具有执行中让出和恢复功能的协程在这种架构下无用武之地。可以说，自顶向下的设计思想从一开始就排除了对协程的需求。其后的结构化编程思想，更进一步强化了“子过程调用作为唯一控制结构”的基本假设。在这样的指导思想下，协程没有成为当时编程语言的一等公民。</p>
+<p>但作为一种易于理解的控制结构，协程的概念渗入到了软件设计的许多方面。在结构化编程思想一统天下之时，Knuth曾专门写过一篇<a href="http://c2.com/cgi/wiki?StructuredProgrammingWithGoToStatements" target="_blank" rel="noopener">《Structured Programming with GOTO》</a>来为GOTO语句辩护。在他列出的几条GOTO可以方便编程且不破坏程序结构的例子中，有一个（例子7b）就是用GOTO实现协程控制结构。相较之下，不用GOTO的“结构化”代码反而失去了良好的结构。当然，追求实际结果的工业界对于学界这场要不要剔除GOTO的争论并不感冒。当时许多语言都附带了不建议使用的GOTO语句，显得左右逢源。这方面一个最明显的例子就是Java——语言本身预留了goto关键字，而编译器却没提供任何支持，在这场争论中做足了中间派。</p>
+<p>实践中，协程的思想频繁应用于任务调度和流处理。例如，Unix管道就可以看成是众多命令间的协同操作。当然，管道的现代实现都以pipe()系统调用和进程间的通信为基础，而非简单遵循协程的yield/resume语法。</p>
+<p>许多协同式多任务操作系统，也可以看成协程运行系统。说到协同式多任务系统，一个常见的误区是认为协同式调度比抢占式调度“低级”，因为我们所熟悉的桌面操作系统，都是从协同式调度（如Windows 3.2、Mac OS 9等）过渡到抢占式多任务系统的。实际上，调度方式并无高下，完全取决于应用场景。抢占式系统允许操作系统剥夺进程执行权限，抢占控制流，因而天然适合服务器和图形操作系统，因为调度器可以优先保证对用户交互和网络事件的快速响应。当年Windows 95刚推出时，抢占式多任务就被作为一大卖点大加宣传。协同式调度则等到进程时间片用完或系统调用时转移执行权限，因此适合实时或分时等对运行时间有保障的系统。</p>
+<p>另外，抢占式系统依赖于CPU的硬件支持。因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有CPU支持了执行权限后，抢占式调度才成为可能。x86系统从80386处理器开始引入Ring机制支持执行权限，这也是为何Windows 95和Linux其实只能运行在80386之后的x86处理器上的原因。而协同式多任务适用于那些没有处理器权限支持的场景，这些场景包括资源受限的嵌入式系统和实时系统。在这些系统中，程序均以协程的方式运行。调度器负责控制流的让出和恢复。通过协程的模型，无需硬件支持，我们就可以在一个“简陋”的处理器上实现多任务系统。许多常见的智能设备，如运动手环，受硬件所限，都采用协同调度架构。</p>
+<h2 id="协程的复兴和现代形式"><a href="#协程的复兴和现代形式" class="headerlink" title="协程的复兴和现代形式"></a>协程的复兴和现代形式</h2><p>编程思想能否普及开来，很大程度上在于应用场景。协程没有能在自顶向下的世界里立足，却在动态语言世界中大放光彩，这里最显著的例子莫过于Python的迭代器和生成器。<br>回想一下在C的世界里，循环的标准写法是<br><code>for (i = 0; i &lt; n; ++i) { ... }</code><br>这行代码包含两个独立的逻辑：for循环控制了i的边界条件，++i控制了i的自增逻辑。这行代码适用于C世界里的数组即内存位移的范式，因此适合大多数访问场景。对于STL和复杂数据结构，因为往往只支持顺序访问，循环大多写成：<code>for (i = A.first(); i.hasNext(); i = i.next()) { ... }</code></p>
+<p>这种设计抽象出了一个独立于数据结构的迭代器，专门负责数据结构上元素的访问顺序。迭代器把访问逻辑从数据结构中分离出来，是一个常用的设计模式（GoF 23个设计模式之一），我们在STL和Java Collection中也常常看到迭代器的身影。在适当的时候，我们可以更进一步引入一个语法糖，将循环写成：<code>for i in A.Iterator() {func(i)}</code></p>
+<p>事实上，许多现代语言都支持类似的语法。这种语法抛弃了以i变量作为迭代指针的功能，要求迭代器自身能记住当前迭代位置，调用时返回下一个元素。读者不难看到，这就是我们在文章开始提到的语法分析器的架构。正因为如此，我们可以从协程的角度来理解迭代器：当控制流转换到迭代器时，迭代器负责生成和返回下一个元素。一旦准备就绪，迭代器就让出控制流。在Python中，这种特殊的迭代器实现又被成为生成器。以协程角度切入的好处在于设计大大精简。实际上，在Python中，生成器本身就是一个普通函数，和其他普通函数的唯一不同，在于它的返回语句是协程风格的yield。这里，yield一语双关，既是让出控制流，也是生成迭代器的返回值。</p>
+<p>前文我们仅讨论了生成器最基本的特性。实际上，生成器的强大之处在于我们可以像Unix管道一样串联起来，组成所谓的生成器表达式。如果我们有一个可以生成1，2，3 …的生成器N，则square = (i *<em>2 for i in N)就是一个生成平方数的生成器表达式。注意这里圆括号语法和<a href="http://en.wikipedia.org/wiki/List_comprehension" target="_blank" rel="noopener">list comprehansion</a>方括号语法的区别，square = [i *</em>2 for i in N]是生成一个具体的列表。我们可以串联这些生成器表达式，最终的控制流会在这些串联的部分间转换，无需编写复杂的嵌套调用。当然，yield只是冰山的一角，现代的Python语言还充分利用了yield关键字构建<a href="https://www.python.org/dev/peps/pep-0380/" target="_blank" rel="noopener">yield from</a>语句、(yield)语法等，让我们毫无困难地将协程的思想融入到Python编程中，限于篇幅这里不再展开。</p>
+<p>我们前面说过，协程的思想本质上就是控制流的主动让出和恢复机制。在现代语言中，可以实现协程思想的方法很多，这些实现间并无高下之分，所区别的就是是否适合应用场景。理解这一点，我们对于各种协程的分类，如半对称/对称协程、有栈与无栈协程等具体实现就能提纲挈领，无需在实现细节上纠结。</p>
+<p>协程在实践中的实现方式千差万别，一个简单的原因是，协程本身可以通过许多基本元素构建。基本元素的选取方式不一样，构建出来的协程抽象也就有差别。例如，Lua语言选取了create、resume和yield作为基本构建元素，从调度器层面构建出所谓的“非对程”协程系统；而Julia语言绕过调度器，通过在协程内调用yieldto函数完成了同样的功能，构建出了一个所谓的对称协程系统。尽管这两种语言使用了同样的setjmp库，构造出来的原语却不一样。又如，许多C语言的协程库都使用了ucontext库实现，这是因为POSIX本身提供了ucontext库，不少协程实现是以ucontext为蓝本实现的。这些实现，都不可避免地带上了ucontext系统的一些基本假设，如协程间是平等的，一般带有调度器来协调协程等（如<a href="http://swtch.com/libtask/" target="_blank" rel="noopener">libtask</a>实现，以及云风的<a href="http://blog.codingnow.com/2012/07/c_coroutine.html" target="_blank" rel="noopener">coroutine</a>库）。Go语言的一个鲜明特色就是通道（channel）作为一级对象。因此，resume和yield等在其他语言里的原语在Go中都以通道方式构建。我们还可以举出诸多近似的例子。其风格差异往往和语言的历史、演化路径、要解决的问题相关，我们不必苛求其协程模型一定要如此这般。</p>
+<p>总的来说，协程为协同任务提供了一种运行时抽象。这种抽象非常适合于协同多任务调度和数据流处理。在现代操作系统和编程语言中，因为用户态线程切换代价比内核态线程小，协程成为了一种轻量级的多任务模型。我们无法预测未来，但可以看到，协程已成为许多擅长数据处理语言的一级对象。随着计算机并行性能的提升，用户态任务调度已成为一种标准的多任务模型。在这样的大趋势下，协程这个简单且有效的模型就显得更加引人注目。</p>
+]]></content>
+      <tags>
+        <tag>coroutine</tag>
       </tags>
   </entry>
   <entry>
@@ -1067,211 +1322,6 @@
       </categories>
       <tags>
         <tag>scala</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什么是协程？</title>
-    <url>/2020/05/05/coroutine/</url>
-    <content><![CDATA[<p>Kotlin中的协程虽然会用，但也一直停留在表层Api。没有仔细探究过其思想以及实现，使用起来也会比较虚，心里没底。所以很有必要对其一探究竟，揭一揭它的面纱</p>
-<h2 id="协程的定义"><a href="#协程的定义" class="headerlink" title="协程的定义"></a>协程的定义</h2><p>协程: Coroutine<br>协程的出现，可以追溯到1958年，它由马尔文·康威提出用于构建汇编程序，而且它的出现要早于线程。</p>
-<p>定义<a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">Wiki</a>:  :</p>
-<blockquote>
-<p><strong>Coroutines</strong> are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. Coroutines are well-suited for implementing familiar program components such as cooperative tasks, exceptions, event loops, iterators, infinite lists and pipes    </p>
-</blockquote>
-<blockquote>
-<p>译: 协程时计算机程序的一类组件，通过允许挂起和恢复执行概括了非抢占式（即协作式）多任务的子程序。协程非常适合用于实现一些常见的程序组件，如协作式多任务，异常，事件循环，迭代器，无限列表以及管道</p>
-</blockquote>
-<p>Wiki中对于协程的定义还是挺难理解的，其中的关键词</p>
-<ul>
-<li>子程序（subroutine）  </li>
-<li>挂起（suspend）和恢复（resume）</li>
-<li>抢占式（preemptive）和协作式（cooperative or non-preemptive）  </li>
-</ul>
-<p>如果不先理解这几个关键词的话，是很难搞清楚协程的</p>
-<h4 id="首先是子程序"><a href="#首先是子程序" class="headerlink" title="首先是子程序"></a>首先是子程序</h4><p>《The Art of Computer Programming》(计算机程序设计艺术)一书中对subroutine有详细的解释，以下是原文</p>
-<blockquote>
-<p>When a certain task is to be performed at severial different places in a program, it is usually undesirable to repeat the coding in each place. To avoid this situation, the coding (called a subroutine) can be put into one place only, and a few extra instructions can be added and to restart the outer program properly after the subroutine is finished    </p>
-</blockquote>
-<blockquote>
-<p>译: 当一项确定的任务再程序的不同位置多次执行时，通常重复的代码不是我们想看到的。为了避免这种情况，这段代码（叫做一个子程序）可以被单独放在一个位置，通过少量额外的指令在每个需要执行该此程序的位置添加并执行子程序，并在子程序执行完成后，自动的重启外部程序</p>
-</blockquote>
-<p>这段对于子程序的描述还是很容易理解的，从高级语言的角度来看，子程序就相当于一个函数或方法，对子程序的引用即为对函数或方法的调用。</p>
-<p>子程序的用途书中也有描述，这里简单提一下：子程序的主要优势是避免重复代码，节省程序空间。也间接的节省了时间，如：加载程序需要的时间减少等。子程序也会让构思大型程序变得更容易，debug也会更容易。封装出来的子程序也可以作为开放库对外暴露给其他开发者使用。</p>
-<p>理解了子程序，那么子程序跟协程又有什么关系呢？或者说两者有什么区别呢？同样引用原文给出答案</p>
-<blockquote>
-<p>Subroutines are special case of more general program components, called coroutines. In contrast to the unsymmetric relationship between a main routine and a subroutine, there is complete symmetry between coroutines, which on call each other.    </p>
-<p>We may consider the main program and subroutines as a team of programs, each member of the team having a certain job to do. The main program, in the course of doing its job, will activate the subprogram; the subprogram will perform its own function and then activate the main program. We may stretch our imagination to believe that, from the subroutine’s point of view, when it exits it is calling the main routine; the main routine continues to performs its duty, then ‘exits’ to the subroutine. the subroutine acts, then call the main routine again.</p>
-</blockquote>
-<p>译:     </p>
-<blockquote>
-<p>子程序是通用程序组件（即协程）的一种特例。与主程序与子程序间非对等关系（调用者与被调用者）对比，协程间是完全对等的，他们可以互相调用 </p>
-</blockquote>
-<blockquote>
-<p>我们可以将主程序和子程序看作是程序组，程序组中的每个成员都要完成特定的任务。主程序在完成其任务的过程中，会激活子程序，然后子程序会执行完成它自己的任务，随后再激活主程序让主程序继续执行。拓展下我们的想象力，从子程序的视角出发，在子程序出口位置调用主程序，主程序继续执行其任务，接着主程序’退出’并在出口位置调用子程序，子程序执行，而后再调用主程序</p>
-</blockquote>
-<p>上面第二段的意思是，子程序只有一个入口和出口，而协程可以有多个入口和出口。即子程序被主程序调用后只能从头开始执行（入口）直到执行完成然后退出（出口），而后主程序继续执行。而协程在被调用后，在中途可能会有一个或多个出口（出口点之后仍然有代码待执行），当执行中途遇到出口时，当前协程交出执行权让其他协程执行，当下次再调用该协程时，会从上次的出口点位置继续开始执行后续的代码（上次的出口点即为下次执行的入口点）。这也就解释了第一段中子程序和主程序关系与协程间关系的差别了</p>
-<blockquote>
-<p>Wiki中子程序与协程的比较</p>
-<ul>
-<li>子例程可以调用其他子例程，调用者等待被调用者结束后继续执行，故而子例程的生命期遵循后进先出，即最后一个被调用的子例程最先结束返回。协程的生命期完全由对它们的使用需要来决定</li>
-<li>子例程的起始处是惟一的入口点，每当子例程被调用时，执行都从被调用子例程的起始处开始。协程可以有多个入口点，协程的起始处是第一个入口点，每个yield返回出口点都是再次被调用执行时的入口点。</li>
-<li>子例程只在结束时一次性的返回全部结果值。协程可以在yield时不调用其他协程，而是每次返回一部分的结果值，这种协程常称为生成器或迭代器。</li>
-<li>现代的指令集架构通常提供对调用栈的指令支持，便于实现可递归调用的子例程。在以Scheme为代表的提供续体的语言环境下，恰好可用此控制状态抽象表示来实现协程。</li>
-</ul>
-</blockquote>
-<h4 id="挂起和恢复"><a href="#挂起和恢复" class="headerlink" title="挂起和恢复"></a>挂起和恢复</h4><p>其实在子程序那一部分中已经对挂起和恢复做出了解释。协程拥有多个出口和入口，所谓挂起就是在执行途中遇到出口，当前协程让出执行权，跳转到其他协程继续执行，而恢复就是当再次调用该协程时从上次出口点继续执行后续任务。出口对应挂起，入口对应恢复</p>
-<h4 id="抢占式和协作式"><a href="#抢占式和协作式" class="headerlink" title="抢占式和协作式"></a>抢占式和协作式</h4><p>首先，无论是抢占式还是协作式，都意味着当前Task都不再继续拥有执行权，而两者区别是，抢占式多任务中，当前任务被动的系统剥夺执行权，协作式多任务中，当前任务在不需要系统资源时主动让出执行权    </p>
-<p>抢占式多任务涉及到了中断机制的使用，中断机制可以挂起当前进程并唤起调度器以决定接下来应该调度执行哪个进程。因此，所有进程在一段时间内都会获得一定数量的CPU时间</p>
-<p>抢占式多任务依赖于 CPU 的硬件支持。 因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有 CPU 支持了执行权限后，抢占式调度才成为可能</p>
-<p>不同于抢占式由系统调度进程切换，协作式进程在空闲（idel）或阻塞（block）时会主动的让出执行权（yield）</p>
-<h2 id="协程能解决什么问题呢"><a href="#协程能解决什么问题呢" class="headerlink" title="协程能解决什么问题呢"></a>协程能解决什么问题呢</h2><p>如果从早先协程的设计理念来看，协程是设计用来处理单内核下多任务并发的。协程最本质的特性是可挂起和恢复的特性，拥有多入口多出口。<br>相较于子程序的从头运行至尾，协程有更丰富的过程（有一个或多个运行阶段）,多个任务可以交替执行，使得多任务协作提供成为可能，即协程拥有并发的能力。</p>
-<p>而对于现代的高级语言来说，协程更像是任务，运行在线程之上，在语言级别进行调度。许多语言的也都是多线程 + 协程的的实现，以达到像写同步代码那样处理异步问题。通常异步需要多线程来实现，但是弊端就是多线程调度时，切换上下文较为耗时，而如果通过多线程 + 协程方式来处理异步的话，相当于将系统级的线程调度替换为语言级别的协程调度，一定程度上减少了多线程调度切换上下文的开销。另一方面，多线程方式实现异步最可能面临异步回调，而最熟悉的应该是JS中的回调地狱问题了，而有了协程之后，就可以完美的消除该问题。</p>
-<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>协程从本质上讲依然是一种程序，运行与线程之上。名称以及它表现出来的特征与线程有相似之处，但与线程不同的是，他的调度并不需要系统参与，而是直接在语言级别完成。这也是许多人称协程为用户级线程的原因</p>
-]]></content>
-      <categories>
-        <category>Coroutine</category>
-      </categories>
-      <tags>
-        <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GitHub Pages + Hexo搭建博客汇总</title>
-    <url>/2019/08/18/hexo_github_pages/</url>
-    <content><![CDATA[<p>网上关于GitHub Pages + Hexo搭建博客的教程较多，因此此文旨在查缺补漏，记录整个流程，汇总一些参考的优质blog，以及梳理我在搭建过程中遇到的问题。</p>
-<h2 id="如何搭建个人blog"><a href="#如何搭建个人blog" class="headerlink" title="如何搭建个人blog"></a>如何搭建个人blog</h2><p>在开始之前，我先想了下如何搭建个人blog。既然blog是个网站，那么首先能想到的是，需要自己开发一个网站出来啊，有了网站，还需要服务器来部署我们的网站，然后还需要一个域名，方便访问我们的网站。    </p>
-<h4 id="因此我们要做的工作有"><a href="#因此我们要做的工作有" class="headerlink" title="因此我们要做的工作有"></a>因此我们要做的工作有</h4><ul>
-<li>开发自己的网站（网站设计，UI开发，评论统计系统集成维护等）</li>
-<li>搭建服务器（部署网站，维护等）</li>
-<li>购买域名（绑定域名）</li>
-</ul>
-<p>首先开发网赚需要耗费巨大精力，其次购买服务器和域名都需要花钱，而我的初衷只是写blog啊，然而却需要做这么多，那岂不是舍本逐末了。好在已经有现成且免费的框架和工具，GitHub Pages<br>和Hexo帮我们做了上面几乎所有的事儿</p>
-<h4 id="GitHub-Pages介绍"><a href="#GitHub-Pages介绍" class="headerlink" title="GitHub Pages介绍"></a>GitHub Pages介绍</h4><p>GitHub Pages是Github提供的一个免费静态网站的托管服务，旨在直接从GitHub仓库托管个人/组织/项目的页面，并且为站点提供了默认域名github.io<br>。也就是说GitHub Pages帮我们解决了 <strong>服务器和域名</strong> 这两大难题</p>
-<p>详细介绍：<a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages官网</a></p>
-<h4 id="Hexo介绍"><a href="#Hexo介绍" class="headerlink" title="Hexo介绍"></a>Hexo介绍</h4><p>Hexo是一款基于Node.js的静态博客框架。通过Hexo，用户可以定制自己喜欢的网站主题，专注与使用Markdown编写blog，它会帮用户生成静态网站并托管在GitHub，相当的简便。因此Hexo帮我们解决了** 开发网站 ** 的难题</p>
-<p>详细介绍：<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>  </p>
-<h2 id="搭建个人blog的流程"><a href="#搭建个人blog的流程" class="headerlink" title="搭建个人blog的流程"></a>搭建个人blog的流程</h2><p>在使用Hexo极力推荐阅读** <a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a> ** ,文档里的说明要比许多blog里清晰的多</p>
-<h4 id="搭建前的准备工作"><a href="#搭建前的准备工作" class="headerlink" title="搭建前的准备工作"></a>搭建前的准备工作</h4><p>安装流程在上文中的<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo中文文档</a>里有详细说明</p>
-<ul>
-<li>安装Git</li>
-<li>安装Node.js</li>
-<li>安装Hexo  </li>
-</ul>
-<h4 id="搭建流程"><a href="#搭建流程" class="headerlink" title="搭建流程"></a>搭建流程</h4><p>这里只列出简单流程，定制主题，及git分支设置在后面介绍</p>
-<ol>
-<li><p>GitHub上创建新仓库，仓库名为 ** GitHub用户名.github.io **</p>
-<blockquote>
-<p>这里需要注意，仓库的名字必须为上面的格式，否则部署后将无法访问blog</p>
-</blockquote>
-</li>
-<li><p>GitHub新建分支hexo，并设置为默认分支</p>
-</li>
-<li><p>使用Git克隆新建仓库到本地（此时为hexo分支）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/github_user_name/github_user_name.github.io.git</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在仓库根目录使用hexo init命令初始化（此时为hexo分支）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>上一步完成后依次使用hexo g 与 hexo s（此时为hexo分支），其中g为generator，s为server</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>打开浏览器输入localhost:4000查看本地blog效果，如下图</p>
-<img src="/2019/08/18/hexo_github_pages/hexo_landscape.jpeg" title="Hexo默认主题"></li>
-<li><p>修改仓库根目录下的_config.yml文件，修改deploy中的以下字段并保存，注意branch要设置为master</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span>    </span><br><span class="line"><span class="attr">    type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">    repo:</span> <span class="attr">https://github.com/github_user_name/github_user_name.github.io.git</span></span><br><span class="line"><span class="attr">    branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>提交本地变更至hexo分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">'commit msg'</span></span><br><span class="line">$ git push origin hexo</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用hexo d命令完成blog部署</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h4 id="blog目录结构"><a href="#blog目录结构" class="headerlink" title="blog目录结构"></a>blog目录结构</h4><p>在上面流程的第4步中，执行完hexo init命令后，会在文件夹下生成hexo工程，以下简要展示生成的目录结构及各个目录的作用，更为详细的解释见<a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">Hexo目录结构</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|-- _config.yml      // 网站全局配置文件，详细说明见</span><br><span class="line">|-- package.json     //</span><br><span class="line">|-- scaffolds        //</span><br><span class="line">|-- source           // 网站资源文件夹，存放网站图片，文章等</span><br><span class="line">   |-- _drafts</span><br><span class="line">   |-- _posts        // 我们的Markdown和HTML文件存放在次文件夹</span><br><span class="line">|-- themes</span><br><span class="line">   |-- landscape     // 官方默认的主题</span><br><span class="line">   |-- next          // next主题</span><br></pre></td></tr></table></figure>
-
-<p>经过第4步之后，通过修改_config.yml文件进行网站的配置,如网站title，author等，详情见<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="noopener">Hexo网站配置</a>。其中最应该注意的是deploy字段，该字段用于配置网站的部署，如网站部署到git的xxx仓库的xxx分支，或是地址为xxx.xxx.xxx.xxx的服务器，详情见<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">Hexo deploy</a>    </p>
-<h4 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h4><p>Hexo允许用户自定义主题，下面展示主题的设置方式</p>
-<ol>
-<li><p>挑选自己喜欢的主题，找到其仓库地址</p>
-</li>
-<li><p>命令行cd 定位到themes文件夹，将主题clone至该文件夹</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes</span><br><span class="line">$ git <span class="built_in">clone</span> &lt;theme repo&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在clone完成后，新添加的文件夹名称即为主题名称xxx，打开_config.yml将theme字段的landscape修改为xxx</p>
-</li>
-</ol>
-<p>关于主题的挑选，如果没有web前段经验，最好挑选那些star数计较高，社区比较活跃，经常迭代维护的主题，如我自己使用的next主题，下面是我在挑选主题时参考的资料   </p>
-<p><a href="https://www.zhihu.com/question/24422335/answer/46357100" target="_blank" rel="noopener">知乎-有哪些好看的Hexo主题</a></p>
-<blockquote>
-<p>高赞回答用python爬虫爬出来的主题star排行榜 ,推荐参考这个挑选主题     </p>
-</blockquote>
-<p><a href="https://hexo.io/themes/index.html" target="_blank" rel="noopener">官方主题列表</a></p>
-<blockquote>
-<p>官方没有对主题进行排名，挑选时稍微麻烦些</p>
-</blockquote>
-<p><a href="https://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">推荐NexT主题</a></p>
-<blockquote>
-<p>NexT主题外观比较简洁利落，并且社区活跃，有详尽的中文文档，主题的外观也可进行各种灵活的配置，是前段盲的必备良药。对于该主题的详细用法，其官方文档中有详细的说明，也就不再赘述了</p>
-</blockquote>
-<h4 id="关于git仓库的说明"><a href="#关于git仓库的说明" class="headerlink" title="关于git仓库的说明"></a>关于git仓库的说明</h4><p>在搭建流程中的前两步，建立完仓库后，又新建了一个hexo分支，并且设置为默认分支。这是因为我们在维护我们的网站时，要维护以下两部分内容</p>
-<ul>
-<li><p>Hexo工程</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo init之后生成的部分</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>生成的静态网站</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">之前在_config.yml中配置了deploy的git仓库及分支，这里我配置的是master分支，在执行了hexo deploy命令之后，Hexo就会生成静态静态网站提交至master分支并自动部署</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>这两部分都需要提交至git仓库的，第一部分提交至git，我们就可以随时随地只要有电脑网络就可以clone工程，写blog并更新网站。第二部分是GitHub Pages部署网站必须的部分。这两部分的内容互不相干，因此建议新建hexo分支，用于存储我们的Hexo工程，master分支用于部署网站</p>
-<p>参考的文档：<a href="https://www.zhihu.com/question/21193762" target="_blank" rel="noopener">知乎-使用Hexo，如果换了电脑怎么更新博客</a></p>
-<h4 id="关于NexT主题个人签名不显示的问题"><a href="#关于NexT主题个人签名不显示的问题" class="headerlink" title="关于NexT主题个人签名不显示的问题"></a>关于NexT主题个人签名不显示的问题</h4><p>在NexT主题配置文件_config.yml中，如果设置seo字段为true，则网站配置文件_config.yml中的description字段会被用于seo，而不会显示为签名，这时如果想要显示个人签名，需要额外添加signature字段</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="string">随行、随记</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo-SEO优化"><a href="#Hexo-SEO优化" class="headerlink" title="Hexo SEO优化"></a>Hexo SEO优化</h2><p>辛辛苦苦搭好了blog，写了文章，最后发现浏览器里搜不到啊，根本没人看啊，怎么办啊，好没有成就感。这时候就需要SEO出马了，那么什么是SEO呢？</p>
-<blockquote>
-<p>SEO 英文全称Search Engine Optimization 即搜索引擎优化。是一种利用搜索引擎规则提高网站在有关引擎内的自然排名</p>
-</blockquote>
-<p>既然是针对搜索引擎的优化，那么也就是针对Baidu和Google的优化了。相关blog有很多，并且都是死套路，所以这里就挑选几篇比较新比较好的blog列出来</p>
-<p><a href="https://hoxis.github.io/Hexo+Next%20SEO%E4%BC%98%E5%8C%96.html" target="_blank" rel="noopener">Hexo博客Next主题SEO优化方法</a><br><a href="https://juejin.im/post/5ae7f8a2f265da0ba266c5c6" target="_blank" rel="noopener">Hexo个人博客SEO优化系列</a></p>
-]]></content>
-      <categories>
-        <category>Web前端</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>GitHub Pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>转载--计算机语言协程的历史、现在和未来</title>
-    <url>/2020/05/05/history-of-coroutine/</url>
-    <content><![CDATA[<p>本文原发于《程序员》2014年11月刊。好文章备份一份</p>
-<p>计算机科学是一门应用科学，几乎所有概念都是为了理解或解决实际问题而生的。协程 (Coroutine) 的出现也不例外。协程的概念，最早可以追溯到写作 COBOL 语言编译器中的技术难题。</p>
-<h2 id="从磁带到协程"><a href="#从磁带到协程" class="headerlink" title="从磁带到协程"></a>从磁带到协程</h2><p>COBOL是最早的高级语言之一，编译器则是高级语言必不可少的一部分。现如今，我们对编译器的了解，已经到了可以把核心内容浓缩成一本教科书的程度。然而在二十世纪六十年代，如何写作高效的语言编译器还是绕不过的现实问题。例如，1960年夏天，D. E. Knuth就是利用开车横穿美国去加州理工读研究生的时间，对着<a href="https://www.cs.virginia.edu/brochure/images/manuals/b205/central/central.html" target="_blank" rel="noopener">Burroughs 205</a>机器指令集手写COBOL编译器。最早提出“协程”概念的Melvin Conway，也是从如何写一个只扫描一遍程序（one-pass）的COBOL编译器出发。众多的“高手”纷纷投入编译器开发，可见一门新科学发展之初也是筚路蓝缕。</p>
-<p>以现代眼光来看，高级语言编译实际由多个步骤组合而成：词法解析、语法解析、语法树构建，以及优化和目标代码生成等。编译实质上就是从源程序出发，依次将这些步骤的输出作为下一步的输入，最终输出目标代码。在现代计算机上实现这种管道式的架构毫无困难：只需要依次运行，中间结果存为中间文件或放入内存即可。GCC和Clang编译器，以及<a href="http://www.antlr.org/" target="_blank" rel="noopener">ANTLR</a>构建的编译器，都遵循这种设计。</p>
-<p>在Conway的设计里，词法和语法解析不再是独立运行的步骤，而是交织在一起。编译器的控制流在词法和语法解析之间来回切换：当词法模块读入足够多的token时，控制流交给语法分析；当语法分析消化完所有token后，控制流交给词法分析。词法和语法分别独立维护自身的运行状态。Conway构建的这种协同工作机制，需要参与者“让出（yield）”控制流时，记住自身状态，以便在控制流返回时能从上次让出的位置恢复（resume）执行。简言之，协程的全部精神就在于控制流的主动让出和恢复。我们熟悉的子过程调用可以看作在返回时让出控制流的一种特殊协程，其内部状态在返回时被丢弃了，因此不存在“恢复”这个操作。</p>
-<p>以现在眼光来看，编译器的实现并非必需协程。然而，Conway用协程实现COBOL编译器在当时绝不是舍近求远。首先，从原理上，因为COBOL并不是<a href="https://en.wikipedia.org/wiki/LL_parser" target="_blank" rel="noopener">LL(1)</a>型语法，无法简单构建一个以词法分析为子过程的自动机。其次，当年计算机依赖于磁带存储设备，只支持顺序存储。也就是说，依次执行编译步骤并依靠中间文件通信的设计是不现实的，各步骤必须同步前进。正是这样的现实局限和设计需要，催生了协程的概念。</p>
-<h2 id="自顶向下，无需协同"><a href="#自顶向下，无需协同" class="headerlink" title="自顶向下，无需协同"></a>自顶向下，无需协同</h2><p>虽然协程伴随着高级语言诞生，却没有能像子过程那样成为通用编程语言的基本元素。</p>
-<p>从1963年首次提出到上世纪九十年代，我们在ALOGL、Pascal、C、FORTRAN等主流的命令式编程语言中都没有看到原生的协程支持。协程只稀疏地出现在Simula、Modular-2（Pascal升级版）和Smalltalk等相对小众的语言中。作为一个比子进程更加通用的概念，在实际编程中却没有取代子进程，不得不说出乎意外。但如果结合当时的程序设计思想看，又在意料之中：协程不符合那个时代所崇尚的“自顶向下”的程序设计思想，自然也就不会成为当时主流的命令式编程语言的一部分。</p>
-<p>正如面向对象的语言是围绕面向对象的开发理念设计一样，命令式编程语言是围绕自顶向下的开发理念设计的。在这种理念的指导下，程序被切分为一个主程序和大大小小的子模块，每个子模块又可能调用更多子模块。C家族语言的main()函数就是这种自顶向下思想的体现。在这种理念指导下，各模块形成层次调用关系，而程序设计就是制作这些子过程。</p>
-<p>在“自顶向下”这种层次化的理念下，具有鲜明层次的子过程调用成为软件系统最自然的组织方式，也是理所当然。相较之下，具有执行中让出和恢复功能的协程在这种架构下无用武之地。可以说，自顶向下的设计思想从一开始就排除了对协程的需求。其后的结构化编程思想，更进一步强化了“子过程调用作为唯一控制结构”的基本假设。在这样的指导思想下，协程没有成为当时编程语言的一等公民。</p>
-<p>但作为一种易于理解的控制结构，协程的概念渗入到了软件设计的许多方面。在结构化编程思想一统天下之时，Knuth曾专门写过一篇<a href="http://c2.com/cgi/wiki?StructuredProgrammingWithGoToStatements" target="_blank" rel="noopener">《Structured Programming with GOTO》</a>来为GOTO语句辩护。在他列出的几条GOTO可以方便编程且不破坏程序结构的例子中，有一个（例子7b）就是用GOTO实现协程控制结构。相较之下，不用GOTO的“结构化”代码反而失去了良好的结构。当然，追求实际结果的工业界对于学界这场要不要剔除GOTO的争论并不感冒。当时许多语言都附带了不建议使用的GOTO语句，显得左右逢源。这方面一个最明显的例子就是Java——语言本身预留了goto关键字，而编译器却没提供任何支持，在这场争论中做足了中间派。</p>
-<p>实践中，协程的思想频繁应用于任务调度和流处理。例如，Unix管道就可以看成是众多命令间的协同操作。当然，管道的现代实现都以pipe()系统调用和进程间的通信为基础，而非简单遵循协程的yield/resume语法。</p>
-<p>许多协同式多任务操作系统，也可以看成协程运行系统。说到协同式多任务系统，一个常见的误区是认为协同式调度比抢占式调度“低级”，因为我们所熟悉的桌面操作系统，都是从协同式调度（如Windows 3.2、Mac OS 9等）过渡到抢占式多任务系统的。实际上，调度方式并无高下，完全取决于应用场景。抢占式系统允许操作系统剥夺进程执行权限，抢占控制流，因而天然适合服务器和图形操作系统，因为调度器可以优先保证对用户交互和网络事件的快速响应。当年Windows 95刚推出时，抢占式多任务就被作为一大卖点大加宣传。协同式调度则等到进程时间片用完或系统调用时转移执行权限，因此适合实时或分时等对运行时间有保障的系统。</p>
-<p>另外，抢占式系统依赖于CPU的硬件支持。因为调度器需要“剥夺”进程的执行权，就意味着调度器需要运行在比普通进程高的权限上，否则任何“流氓（rogue）”进程都可以去剥夺其他进程了。只有CPU支持了执行权限后，抢占式调度才成为可能。x86系统从80386处理器开始引入Ring机制支持执行权限，这也是为何Windows 95和Linux其实只能运行在80386之后的x86处理器上的原因。而协同式多任务适用于那些没有处理器权限支持的场景，这些场景包括资源受限的嵌入式系统和实时系统。在这些系统中，程序均以协程的方式运行。调度器负责控制流的让出和恢复。通过协程的模型，无需硬件支持，我们就可以在一个“简陋”的处理器上实现多任务系统。许多常见的智能设备，如运动手环，受硬件所限，都采用协同调度架构。</p>
-<h2 id="协程的复兴和现代形式"><a href="#协程的复兴和现代形式" class="headerlink" title="协程的复兴和现代形式"></a>协程的复兴和现代形式</h2><p>编程思想能否普及开来，很大程度上在于应用场景。协程没有能在自顶向下的世界里立足，却在动态语言世界中大放光彩，这里最显著的例子莫过于Python的迭代器和生成器。<br>回想一下在C的世界里，循环的标准写法是<br><code>for (i = 0; i &lt; n; ++i) { ... }</code><br>这行代码包含两个独立的逻辑：for循环控制了i的边界条件，++i控制了i的自增逻辑。这行代码适用于C世界里的数组即内存位移的范式，因此适合大多数访问场景。对于STL和复杂数据结构，因为往往只支持顺序访问，循环大多写成：<code>for (i = A.first(); i.hasNext(); i = i.next()) { ... }</code></p>
-<p>这种设计抽象出了一个独立于数据结构的迭代器，专门负责数据结构上元素的访问顺序。迭代器把访问逻辑从数据结构中分离出来，是一个常用的设计模式（GoF 23个设计模式之一），我们在STL和Java Collection中也常常看到迭代器的身影。在适当的时候，我们可以更进一步引入一个语法糖，将循环写成：<code>for i in A.Iterator() {func(i)}</code></p>
-<p>事实上，许多现代语言都支持类似的语法。这种语法抛弃了以i变量作为迭代指针的功能，要求迭代器自身能记住当前迭代位置，调用时返回下一个元素。读者不难看到，这就是我们在文章开始提到的语法分析器的架构。正因为如此，我们可以从协程的角度来理解迭代器：当控制流转换到迭代器时，迭代器负责生成和返回下一个元素。一旦准备就绪，迭代器就让出控制流。在Python中，这种特殊的迭代器实现又被成为生成器。以协程角度切入的好处在于设计大大精简。实际上，在Python中，生成器本身就是一个普通函数，和其他普通函数的唯一不同，在于它的返回语句是协程风格的yield。这里，yield一语双关，既是让出控制流，也是生成迭代器的返回值。</p>
-<p>前文我们仅讨论了生成器最基本的特性。实际上，生成器的强大之处在于我们可以像Unix管道一样串联起来，组成所谓的生成器表达式。如果我们有一个可以生成1，2，3 …的生成器N，则square = (i *<em>2 for i in N)就是一个生成平方数的生成器表达式。注意这里圆括号语法和<a href="http://en.wikipedia.org/wiki/List_comprehension" target="_blank" rel="noopener">list comprehansion</a>方括号语法的区别，square = [i *</em>2 for i in N]是生成一个具体的列表。我们可以串联这些生成器表达式，最终的控制流会在这些串联的部分间转换，无需编写复杂的嵌套调用。当然，yield只是冰山的一角，现代的Python语言还充分利用了yield关键字构建<a href="https://www.python.org/dev/peps/pep-0380/" target="_blank" rel="noopener">yield from</a>语句、(yield)语法等，让我们毫无困难地将协程的思想融入到Python编程中，限于篇幅这里不再展开。</p>
-<p>我们前面说过，协程的思想本质上就是控制流的主动让出和恢复机制。在现代语言中，可以实现协程思想的方法很多，这些实现间并无高下之分，所区别的就是是否适合应用场景。理解这一点，我们对于各种协程的分类，如半对称/对称协程、有栈与无栈协程等具体实现就能提纲挈领，无需在实现细节上纠结。</p>
-<p>协程在实践中的实现方式千差万别，一个简单的原因是，协程本身可以通过许多基本元素构建。基本元素的选取方式不一样，构建出来的协程抽象也就有差别。例如，Lua语言选取了create、resume和yield作为基本构建元素，从调度器层面构建出所谓的“非对程”协程系统；而Julia语言绕过调度器，通过在协程内调用yieldto函数完成了同样的功能，构建出了一个所谓的对称协程系统。尽管这两种语言使用了同样的setjmp库，构造出来的原语却不一样。又如，许多C语言的协程库都使用了ucontext库实现，这是因为POSIX本身提供了ucontext库，不少协程实现是以ucontext为蓝本实现的。这些实现，都不可避免地带上了ucontext系统的一些基本假设，如协程间是平等的，一般带有调度器来协调协程等（如<a href="http://swtch.com/libtask/" target="_blank" rel="noopener">libtask</a>实现，以及云风的<a href="http://blog.codingnow.com/2012/07/c_coroutine.html" target="_blank" rel="noopener">coroutine</a>库）。Go语言的一个鲜明特色就是通道（channel）作为一级对象。因此，resume和yield等在其他语言里的原语在Go中都以通道方式构建。我们还可以举出诸多近似的例子。其风格差异往往和语言的历史、演化路径、要解决的问题相关，我们不必苛求其协程模型一定要如此这般。</p>
-<p>总的来说，协程为协同任务提供了一种运行时抽象。这种抽象非常适合于协同多任务调度和数据流处理。在现代操作系统和编程语言中，因为用户态线程切换代价比内核态线程小，协程成为了一种轻量级的多任务模型。我们无法预测未来，但可以看到，协程已成为许多擅长数据处理语言的一级对象。随着计算机并行性能的提升，用户态任务调度已成为一种标准的多任务模型。在这样的大趋势下，协程这个简单且有效的模型就显得更加引人注目。</p>
-]]></content>
-      <tags>
-        <tag>coroutine</tag>
       </tags>
   </entry>
 </search>

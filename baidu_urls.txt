@@ -1,3 +1,3 @@
+https://hcendless.ink/2020/09/06/different-kind-of-dependencies/
 https://hcendless.ink/2020/09/03/what-is-dependency-configurations/
 https://hcendless.ink/2020/08/22/Gradle-dependency-management/
-https://hcendless.ink/2020/08/16/Gradle-task-details/
